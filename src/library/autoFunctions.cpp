@@ -19,7 +19,7 @@ void setVoltage(double left, double right){
 //one PID of many
 double PID(double destination, double current, double *pLastError){
     unsigned int elapsedTime = 0;
-	  static unsigned int previousTime = pros::millis();
+	static unsigned int previousTime = pros::millis();
 
     double Kp = 0.01;
 	  double Ki = 0.01;
