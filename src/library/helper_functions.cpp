@@ -26,6 +26,15 @@ inline double get_heading() {
     return heading;
 }
 
+/** Gets the speed of the robot's drive train
+ * 
+ * @return the speed in RPM of the robot's drive train
+ */
+constexpr double move_speed() {
+    return (leftBackMotor.get_actual_velocity() + rightBackMotor.get_actual_velocity()
+         + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity()) / 4
+}
+
 double PID(double destination, double current, double *pLastError){
     unsigned int elapsedTime = 0;
 	static unsigned int previousTime = pros::millis();

@@ -1,6 +1,7 @@
 #include "../include/main.h"
 #include "../globals/globals.hpp"
 #include "helper_functions.hpp"
+#include <math.h>
 
 //returns the distance of the wheel inputted, this allows better PID and odometry
 double distance(wheel){
@@ -13,16 +14,16 @@ double distance(wheel){
  * value moves the robot forwards. A higher left than right
  * value turns the robot right, and vice versa.
  * 
- * @param left the voltage of the motors on the left side
+ * @param leftVolt the voltage of the motors on the left side
  * of the drive train, from -127 to 127 volts
- * @param right the voltage of the motors on the right side
+ * @param rightVolt the voltage of the motors on the right side
  * of the drive train, from -127 to 127 volts
  */
-void move(double left, double right){
-    leftFrontMotor = left;
-    leftBackMotor = left;
-    rightFrontMotor = right;
-    rightBackMotor = right;
+void move(double leftVolt, double rightVolt){
+    leftFrontMotor = leftVolt;
+    leftBackMotor = leftVolt;
+    rightFrontMotor = rightVolt;
+    rightBackMotor = rightVolt;
 }
 
 //closed loop movement using PID
@@ -40,29 +41,45 @@ void move_closed_loop(double distanceLeft, double distanceRight){
 
 /** Turns the robot using the gyro sensor
  * 
- * @param leftVoltage the voltage for the motors on the left side 
+ * @param leftVolt the voltage for the motors on the left side 
  * of the drive train in volts, from -127 to 127
- * @param rightVoltage the voltage for the motors on the right side 
+ * @param rightVolt the voltage for the motors on the right side 
  * of the drive train in volts, from -127 to 127
  * @param angle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
  * and a postive angle turns the robot clockwise
  */
-void turn(double leftVoltage, double rightVoltage, float angle) {
-    // if (abs(leftVoltage) > 127 || abs(rightVoltage) > 127)
+void turn(double leftVolt, double rightVolt, float desiredAngle) {
+    // if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
     //     throw ;
     
     float currentAngle = get_heading();
-    angle += currentAngle;
+    desiredAngle += currentAngle;
 
     if (angle > 0)
-        while (currentAngle <= angle) {
+        while (currentAngle <= desiredAngle) {
             currentAngle = get_heading();
-            move(leftVoltage, rightVoltage);
+            move(leftVolt, rightVolt);
             pros::delay(30);
     else
-        while (currentAngle >= angle) {
+        while (currentAngle >= desiredAngle) {
             currentAngle = get_heading();
-            move(leftVoltage, rightVoltage);
+            move(leftVolt, rightVolt);
             pros::delay(30);
+    }
+}
+
+/** Accelerates or decelerates the robot to a desired speed
+ * 
+ * @param desiredSpeed the desired RPM for the robot to accelerate or decelerate to
+ * @param scaleFactor the scale factor of the exponential function in acceleration.
+ * A scale factor > 1 achieves acceleration. A scale factor < 1 achieves deceleration.
+ */
+void accelerate(double desiredSpeed, float scaleFactor) {
+    unsigned numPeriods = 0;
+    double initialSpeed = move_speed(), currentSpeed = initialSpeed;
+    while (currentSpeed < desiredSpeed) {
+        move(currentSpeed, currentSpeed);
+        currentSpeed = initialSpeed * pow(scaleFactor, numPeriods);
+        pros::delay(30);
     }
 }
