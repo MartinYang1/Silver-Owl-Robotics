@@ -2,36 +2,15 @@
 #include "pros/adi.hpp"
 #include "pros/motors.hpp"
 
-using namespace pros;
-
 #ifndef GLOBALS
 #define GLOBALS
 
 extern pros::Controller master;
-
-extern pros::Motor left_front;
-extern pros::Motor right_front;
-extern pros::Motor left_back;
-extern pros::Motor right_back;
-extern pros::Motor left_mid;
-extern pros::Motor right_mid;
-
-extern pros::Motor lift;
-extern pros::Motor indexer1;
-extern pros::Motor indexer2;
-extern pros::Motor indexer3;
-extern pros::Motor indexer4;
-extern pros::Motor indexer;
-extern pros::ADIDigitalOut front_goal_grappler;
-extern pros::ADIDigitalOut back_goal_grappler;
-extern pros::ADIDigitalOut expander;
-extern pros::ADIDigitalOut expander2;
-
-extern pros::Imu imu_sensor;
-
-extern pros::ADIUltrasonic sonar;
-
-
+extern pros::Imu inertialSensor;
+extern pros::Motor leftFrontMotor;
+extern pros::Motor rightFrontMotor;
+extern pros::Motor leftBackMotor;
+extern pros::Motor rightBackMotor;
 
 extern int autonSelection;
 
