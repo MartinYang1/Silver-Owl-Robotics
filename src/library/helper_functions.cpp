@@ -32,26 +32,26 @@ inline double get_heading() {
  */
 constexpr double move_speed() {
     return (leftBackMotor.get_actual_velocity() + rightBackMotor.get_actual_velocity()
-         + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity()) / 4
+         + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity()) / 4;
 }
 
-double PID(double destination, double current, double *pLastError){
-    unsigned int elapsedTime = 0;
-	static unsigned int previousTime = pros::millis();
+/** A general-purpose PID function that provides the correction
+ * needed for a given system
+ * 
+ * @param input the input from the system
+ * @param target the value the system is trying to achieve
+ * @param Kp the proportional constant
+ * @param Ki the integral constant
+ * @param Kd the derivative constant
+ * @return the correction feedback for the system
+ */
+double PID(double input, double target, double Kp, double Ki, double Kd) {
+    static int prevError = 0, integral = 0;
+    
+    double error = target - input;
+    double derivative = error - prevError;  // only an approximation
+    integral = 0.5 * integral + error;  // only an approximation
+    prevError = error;
 
-    double Kp = 0.01;
-    double Ki = 0.01;
-    double Kd = 0.01;
-
-    double error = destination - current;
-    double culmanativeError = error * elapsedTime;
-    double rateError = (error - *pLastError)/elapsedTime;
-
-    double output = Kp * error + Ki * culmanativeError + Kd * rateError;
-
-    //cleanup for next thing
-    *pLastError = error;
-    previousTime = pros::millis();
-
-    return output;
+    return Kp * error + Kd * derivative + Ki * integral;
 }

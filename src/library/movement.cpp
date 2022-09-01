@@ -2,6 +2,7 @@
 #include "../globals/globals.hpp"
 #include "helper_functions.hpp"
 #include <math.h>
+#include <vector>
 
 //returns the distance of the wheel inputted, this allows better PID and odometry
 double distance(wheel){
@@ -39,7 +40,7 @@ void move_closed_loop(double distanceLeft, double distanceRight){
     }
 }
 
-/** Turns the robot using the gyro sensor
+/** Turns the robot to a desired angle
  * 
  * @param leftVolt the voltage for the motors on the left side 
  * of the drive train in volts, from -127 to 127
@@ -66,9 +67,10 @@ void turn(double leftVolt, double rightVolt, float desiredAngle) {
             move(leftVolt, rightVolt);
             pros::delay(30);
     }
+    move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }
 
-/** Accelerates or decelerates the robot to a desired speed
+/** Accelerates or decelerates the robot to a desired speed, then stops the robot
  * 
  * @param desiredSpeed the desired RPM for the robot to accelerate or decelerate to
  * @param scaleFactor the scale factor of the exponential function in acceleration.
@@ -82,4 +84,5 @@ void accelerate(double desiredSpeed, float scaleFactor) {
         currentSpeed = initialSpeed * pow(scaleFactor, numPeriods);
         pros::delay(30);
     }
+    move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }
