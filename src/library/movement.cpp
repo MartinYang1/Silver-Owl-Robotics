@@ -68,21 +68,25 @@ void turn(double leftVolt, double rightVolt, float desiredAngle) {
             pros::delay(30);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
-}
+ }
 
-/** Accelerates or decelerates the robot to a desired speed, then stops the robot
- * 
- * @param desiredSpeed the desired RPM for the robot to accelerate or decelerate to
- * @param scaleFactor the scale factor of the exponential function in acceleration.
- * A scale factor > 1 achieves acceleration. A scale factor < 1 achieves deceleration.
- */
-void accelerate(double desiredSpeed, float scaleFactor) {
-    unsigned numPeriods = 0;
-    double initialSpeed = move_speed(), currentSpeed = initialSpeed;
-    while (currentSpeed < desiredSpeed) {
-        move(currentSpeed, currentSpeed);
-        currentSpeed = initialSpeed * pow(scaleFactor, numPeriods);
+// need to test this out first. if it works, will add it for going backwards.
+// rn it can only go straight
+void move_straight(double desiredSpeed, double desiredDist) {
+    double currDist = 0;
+    while (currDist < desiredDist * 2/3) {
+        double currSpeed = move_speed();
+        double volt = PID(currSpeed, desiredSpeed, 1, 0, 0);
+        move(volt, volt);
+
+        currDist = distance();
         pros::delay(30);
     }
-    move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+    while (currDist < desiredDist) {
+        double currDist = distance();
+        double volt = PID(currDist, desiredDist, 1, 0, 0);
+        move(volt, volt);
+
+        pros::delay(30);
+    }
 }
