@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Mall of Baltimore",
+    "project_name": "Minneapolis Speedway",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -306,9 +306,9 @@
       }
     },
     "upload_options": {
-      "slot": 3,
+      "slot": 8,
       "icon": "clawbot",
-      "description": "Mall of America program, all autonomous and driver"
+      "description": "if this program uploads then Martin has an IQ above 150"
     }
   }
 }

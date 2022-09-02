@@ -5,6 +5,7 @@
 
 #include "../include/main.h"
 #include "../globals/globals.hpp"
+#include "helper_functions.hpp"
 
 struct vector {
     double heading;
@@ -30,7 +31,7 @@ inline double get_heading() {
  * 
  * @return the speed in RPM of the robot's drive train
  */
-constexpr double move_speed() {
+inline double move_speed() {
     return (leftBackMotor.get_actual_velocity() + rightBackMotor.get_actual_velocity()
          + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity()) / 4;
 }

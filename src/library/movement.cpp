@@ -1,15 +1,16 @@
 #include "../include/main.h"
 #include "../globals/globals.hpp"
 #include "helper_functions.hpp"
+#include "movement.hpp"
+
 #include <math.h>
 #include <vector>
 
 //returns the distance of the wheel inputted, this allows better PID and odometry
-double distance(wheel){
-    double distConst = 22.305; //tune this number
-    pros::Motor::get_position(leftBackMotor);
-    return wheel.get_position()/distConst;
-}
+// double distance(wheel){
+//     double distConst = 22.305; //tune this number
+//     return wheel.get_position()/distConst;
+// }
 
 /** Moves the robot continuously based on voltage. A negative
  * value moves the robot backwards, while a positive
@@ -32,12 +33,12 @@ void move(double leftVolt, double rightVolt){
 void move_closed_loop(double distanceLeft, double distanceRight){
     double lastErrorLeft = 0.1;
     double lastErrorRight = 0.1;
-    double startLeft = distance(left_back);
-    double startRight = distance(right_back);
+    double startLeft = distance(leftBackMotor);
+    double startRight = distance(rightBackMotor);
 
     while (lastErrorLeft + lastErrorRight != 0){
-        PID(distanceLeft, distance(left_back) - startLeft, &lastErrorLeft);
-        PID(distanceRight, distance(right_back) - startRight, &lastErrorRight);
+        PID(distanceLeft, distance(leftBackMotor) - startLeft, &lastErrorLeft);
+        PID(distanceRight, distance(rightBackMotor) - startRight, &lastErrorRight);
     }
 }
 
@@ -61,7 +62,7 @@ void turn(double leftVolt, double rightVolt, float desiredAngle) {
         currentAngle = get_heading();
         move(leftVolt, rightVolt);
         pros::delay(30);
-
+    }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
  }
 

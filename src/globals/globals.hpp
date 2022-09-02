@@ -5,18 +5,12 @@
 #include "pros/adi.hpp"
 #include "pros/motors.hpp"
 
-<<<<<<< Updated upstream
-=======
-#ifndef GLOBALS
-#define GLOBALS
-using namespace pros;
->>>>>>> Stashed changes
 extern pros::Controller master;
 extern pros::Imu inertialSensor;
-extern pros::Motor left_front;
-extern pros::Motor right_front;
-extern pros::Motor left_back;
-extern pros::Motor right_back;
+extern pros::Motor leftFrontMotor;
+extern pros::Motor rightFrontMotor;
+extern pros::Motor leftBackMotor;
+extern pros::Motor rightBackMotor;
 extern pros::Motor right_middle;
 extern pros::Motor left_middle;
 extern pros::Motor intake;

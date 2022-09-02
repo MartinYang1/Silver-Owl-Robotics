@@ -4,8 +4,6 @@
 
 static const char *btnmMap[] = {"alliance auto far", "solo AWP", "prog skills", "\n", "alliance auto close", "just_shoot", "\n", "Do Nothing", ""};
 
-
-
 lv_res_t redBtnmAction(lv_obj_t *btnm, const char *txt){
 	printf("red button: %s released\n", txt);
 	lv_theme_t *th = lv_theme_nemo_init(0, NULL);
