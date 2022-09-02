@@ -1,9 +1,9 @@
+#ifndef GLOBALS_H
+#define GLOBALS_H
+
 #include "main.h"
 #include "pros/adi.hpp"
 #include "pros/motors.hpp"
-
-#ifndef GLOBALS
-#define GLOBALS
 
 extern pros::Controller master;
 extern pros::Imu inertialSensor;

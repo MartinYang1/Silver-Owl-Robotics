@@ -7,6 +7,7 @@
 //returns the distance of the wheel inputted, this allows better PID and odometry
 double distance(wheel){
     double distConst = 22.305; //tune this number
+    pros::Motor::get_position(leftBackMotor);
     return wheel.get_position()/distConst;
 }
 
@@ -56,17 +57,11 @@ void turn(double leftVolt, double rightVolt, float desiredAngle) {
     float currentAngle = get_heading();
     desiredAngle += currentAngle;
 
-    if (angle > 0)
-        while (currentAngle <= desiredAngle) {
-            currentAngle = get_heading();
-            move(leftVolt, rightVolt);
-            pros::delay(30);
-    else
-        while (currentAngle >= desiredAngle) {
-            currentAngle = get_heading();
-            move(leftVolt, rightVolt);
-            pros::delay(30);
-    }
+    while (abs(currentAngle) <= abs(desiredAngle)) {
+        currentAngle = get_heading();
+        move(leftVolt, rightVolt);
+        pros::delay(30);
+
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
  }
 
