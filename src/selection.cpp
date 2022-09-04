@@ -2,7 +2,7 @@
 #include "selection.h"
 #include "globals/globals.hpp"
 
-static const char *btnmMap[] = {"alliance auto far", "solo AWP", "prog skills", "\n", "alliance auto close", "just_shoot", "\n", "Do Nothing", ""};
+static const char *btnmMap[] = {"test", "solo AWP", "prog skills", "\n", "alliance auto close", "just_shoot", "\n", "Do Nothing", ""};
 
 
 
@@ -10,7 +10,7 @@ lv_res_t redBtnmAction(lv_obj_t *btnm, const char *txt){
 	printf("red button: %s released\n", txt);
 	lv_theme_t *th = lv_theme_nemo_init(0, NULL);
 	lv_theme_set_current(th);
-	if (strcmp(txt, "alliance auto far") == 0) // side that requires strafing
+	if (strcmp(txt, "test") == 0)
 	{
 		autonSelection = S_RED5;
 	}
@@ -45,7 +45,7 @@ lv_res_t blueBtnmAction(lv_obj_t *btnm, const char *txt)
 	lv_theme_t *th = lv_theme_nemo_init(230, NULL);
 	lv_theme_set_current(th);
 
-	if (strcmp(txt, "alliance auto far") == 0)
+	if (strcmp(txt, "test") == 0)
 	{
 		autonSelection = S_BLUE5;
 	}

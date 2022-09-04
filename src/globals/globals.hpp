@@ -6,11 +6,28 @@
 #include "pros/motors.hpp"
 
 extern pros::Controller master;
-extern pros::Imu inertialSensor;
+
 extern pros::Motor leftFrontMotor;
 extern pros::Motor rightFrontMotor;
 extern pros::Motor leftBackMotor;
 extern pros::Motor rightBackMotor;
+extern pros::Motor leftMidMotor;
+extern pros::Motor rightMidMotor;
+
+extern pros::Motor lift;
+extern pros::Motor indexer1;
+extern pros::Motor indexer2;
+extern pros::Motor indexer3;
+extern pros::Motor indexer4;
+extern pros::Motor indexer;
+extern pros::ADIDigitalOut front_goal_grappler;
+extern pros::ADIDigitalOut back_goal_grappler;
+extern pros::ADIDigitalOut expander;
+extern pros::ADIDigitalOut expander2;
+
+extern pros::Imu imu_sensor;
+
+extern pros::ADIUltrasonic sonar;
 
 extern int autonSelection;
 
@@ -19,7 +36,6 @@ enum AutonEnum {S_BLUE5 = -1, B_BLUE3 = -2, S_BLUE7 = -3, S_BLUE8 = -4, B_BLUE6_
 template<typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));
 }
-
 
 #endif
 

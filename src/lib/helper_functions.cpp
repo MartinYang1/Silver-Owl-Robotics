@@ -5,6 +5,7 @@
 
 #include "../include/main.h"
 #include "../globals/globals.hpp"
+#include "helper_functions.hpp"
 
 struct vector {
     double heading;
@@ -20,7 +21,7 @@ struct vector {
  * in the range (-180, 180]
  */
 inline double get_heading() {
-    double heading = inertialSensor.get_heading();
+    double heading = imu_sensor.get_heading();
     if (heading > 180)
         heading -= 360;  // sets the heading to a neg val if the robot's heading is counterclockwise
     return heading;
@@ -30,7 +31,7 @@ inline double get_heading() {
  * 
  * @return the speed in RPM of the robot's drive train
  */
-constexpr double move_speed() {
+inline double move_speed() {
     return (leftBackMotor.get_actual_velocity() + rightBackMotor.get_actual_velocity()
          + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity()) / 4;
 }
