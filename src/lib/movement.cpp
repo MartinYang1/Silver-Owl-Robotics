@@ -6,16 +6,9 @@
 #include <math.h>
 #include <vector>
 
-//returns the distance of the wheel inputted, this allows better PID and odometry
-// double distance(wheel){
-//     double distConst = 22.305; //tune this number
-//     return wheel.get_position()/distConst;
-// }
-
 /** Moves the robot continuously based on voltage. A negative
  * value moves the robot backwards, while a positive
- * value moves the robot forwards. A higher left than right
- * value turns the robot right, and vice versa.
+ * value moves the robot forwards.
  * 
  * @param leftVolt the voltage of the motors on the left side
  * of the drive train, from -127 to 127 volts
@@ -29,20 +22,21 @@ void move(double leftVolt, double rightVolt){
     rightBackMotor = rightVolt;
 }
 
-//closed loop movement using PID
-void move_closed_loop(double distanceLeft, double distanceRight){
-    double lastErrorLeft = 0.1;
-    double lastErrorRight = 0.1;
-    double startLeft = distance(leftBackMotor);
-    double startRight = distance(rightBackMotor);
+// //closed loop movement using PID
+// void move_closed_loop(double distanceLeft, double distanceRight){
+//     double lastErrorLeft = 0.1;
+//     double lastErrorRight = 0.1;
+//     double startLeft = distance(leftBackMotor);
+//     double startRight = distance(rightBackMotor);
 
-    while (lastErrorLeft + lastErrorRight != 0){
-        PID(distanceLeft, distance(leftBackMotor) - startLeft, &lastErrorLeft);
-        PID(distanceRight, distance(rightBackMotor) - startRight, &lastErrorRight);
-    }
-}
+//     while (lastErrorLeft + lastErrorRight != 0){
+//         PID(distanceLeft, distance(leftBackMotor) - startLeft, &lastErrorLeft);
+//         PID(distanceRight, distance(rightBackMotor) - startRight, &lastErrorRight);
+//     }
+// }
 
-/** Turns the robot to a desired angle
+/** Turns the robot to a desired angle,
+ * relative to its starting pos when the gyro sensor was calibrated
  * 
  * @param leftVolt the voltage for the motors on the left side 
  * of the drive train in volts, from -127 to 127
@@ -69,20 +63,25 @@ void turn(double leftVolt, double rightVolt, float desiredAngle) {
 // need to test this out first. if it works, will add it for going backwards.
 // rn it can only go straight
 void move_straight(double desiredSpeed, double desiredDist) {
+    leftBackMotor.tare_position(); rightBackMotor.tare_position();
+    leftMidMotor.tare_position(); rightMidMotor.tare_position();
+    leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
     double currDist = 0;
+
     while (currDist < desiredDist * 2/3) {
         double currSpeed = move_speed();
         double volt = PID(currSpeed, desiredSpeed, 1, 0, 0);
         move(volt, volt);
 
-        currDist = distance();
-        pros::delay(30);
+        currDist = get_dist_travelled();
+        pros::delay(15);
     }
     while (currDist < desiredDist) {
-        double currDist = distance();
+        double currDist = get_dist_travelled();
         double volt = PID(currDist, desiredDist, 1, 0, 0);
         move(volt, volt);
 
-        pros::delay(30);
+        pros::delay(15);
     }
+    move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }
