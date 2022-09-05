@@ -31,7 +31,7 @@ double get_dist_travelled() {
  * @returns the heading of the robot in degrees,
  * in the range (-180, 180]
  */
-inline double get_heading() {
+double get_heading() {
     double heading = imu_sensor.get_heading();
     if (heading > 180)
         heading -= 360;  // sets the heading to a neg val if the robot's heading is counterclockwise

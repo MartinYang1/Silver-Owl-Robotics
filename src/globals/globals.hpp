@@ -13,17 +13,13 @@ extern pros::Motor leftBackMotor;
 extern pros::Motor rightBackMotor;
 extern pros::Motor leftMidMotor;
 extern pros::Motor rightMidMotor;
+extern pros::Motor flywheel;
 
-extern pros::Motor lift;
-extern pros::Motor indexer1;
-extern pros::Motor indexer2;
-extern pros::Motor indexer3;
-extern pros::Motor indexer4;
-extern pros::Motor indexer;
-extern pros::ADIDigitalOut front_goal_grappler;
-extern pros::ADIDigitalOut back_goal_grappler;
-extern pros::ADIDigitalOut expander;
+extern pros::Vision vision_sensor;
+extern pros::Motor intake;
+extern pros::ADIDigitalOut expander1;
 extern pros::ADIDigitalOut expander2;
+extern pros::ADIDigitalOut pusher;
 
 extern pros::Imu imu_sensor;
 

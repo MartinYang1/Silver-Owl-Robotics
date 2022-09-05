@@ -78,7 +78,7 @@ void move_straight(double desiredSpeed, double desiredDist) {
     while (currDist < desiredDist) {
         double currDist = get_dist_travelled();
         double volt = static_cast<int>(get_move_voltage());
-        volt *= 1.0 / PID(currDist, desiredDist, 0.0005, 0, 0, -1);
+        volt *= 1.0 / PID(currDist, desiredDist, 0.00005, 0, 0, -1);
         move(volt, volt);
 
         pros::delay(15);
