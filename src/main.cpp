@@ -1,4 +1,4 @@
-#include "main.h"
+#include "../include/main.h"
 #include "selection.h"
 #include "globals/globals.hpp"
 #include "routes/routes.hpp"
@@ -68,16 +68,16 @@ void autonomous() {
   switch (autonSelection)
 	{
 		case S_RED5: //autoroute 2
-			auto_route2();
+
 			break;
 		case S_BLUE5:
-		auto_route2();
+
 			break;
 		case S_RED7:
-		auto_route1();
+
 		break;
 		case S_BLUE7: //autoroute 1
-		auto_route1();
+
 		break;
 		case S_RED8:
 		martin_stupid();
@@ -86,21 +86,21 @@ void autonomous() {
 		martin_stupid();
 			break;	
 		case B_RED3:
-		auto_route3();
+
 		break;
 		case B_BLUE3:
-		auto_route3();
+
 		break;
 			
 		case B_RED6_C:
-		just_shoot();
+
 		case B_BLUE6_C:
-		low_shot();
+
 		case SKILLS:
 		martin_stupid();
 			break;
 		case NOTHING:
-		blank();
+break;
 
 	}
 

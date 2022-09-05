@@ -6,13 +6,14 @@
 #include "pros/motors.hpp"
 
 extern pros::Controller master;
-extern pros::Imu inertialSensor;
+extern pros::Imu imu_sensor;
 extern pros::Motor leftFrontMotor;
 extern pros::Motor rightFrontMotor;
 extern pros::Motor leftBackMotor;
 extern pros::Motor rightBackMotor;
 extern pros::Motor right_middle;
 extern pros::Motor left_middle;
+extern pros::Motor flywheel;
 extern pros::Motor intake;
 extern pros::ADIDigitalOut pusher;
 extern pros::ADIDigitalOut expander_1;
