@@ -16,10 +16,8 @@
  * of the drive train, from -127 to 127 volts
  */
 void move(double leftVolt, double rightVolt){
-    leftFrontMotor = leftVolt;
-    leftBackMotor = leftVolt;
-    rightFrontMotor = rightVolt;
-    rightBackMotor = rightVolt;
+    leftFrontMotor = leftVolt; leftMidMotor = leftVolt; leftBackMotor = leftVolt;
+    rightFrontMotor = rightVolt; rightMidMotor = rightVolt; rightBackMotor = rightVolt;
 }
 
 // //closed loop movement using PID
@@ -69,19 +67,21 @@ void move_straight(double desiredSpeed, double desiredDist) {
     double currDist = 0;
 
     while (currDist < desiredDist * 2/3) {
-        double currSpeed = move_speed();
-        double volt = PID(currSpeed, desiredSpeed, 1, 0, 0);
+        double currSpeed = get_move_speed();
+        double volt = PID(currSpeed, desiredSpeed, 0.5, 0, 0);
         move(volt, volt);
 
         currDist = get_dist_travelled();
         pros::delay(15);
     }
+
     while (currDist < desiredDist) {
         double currDist = get_dist_travelled();
-        double volt = PID(currDist, desiredDist, 1, 0, 0);
+        double volt = static_cast<int>(get_move_voltage());
+        volt *= 1.0 / PID(currDist, desiredDist, 0.0005, 0, 0, -1);
         move(volt, volt);
 
         pros::delay(15);
     }
-    move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+    //move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }

@@ -9,15 +9,18 @@
 
 #include <math.h>
 
+const unsigned wheelDiam = 4;
+const double motorToWheelRatio = 600.0 / 360;
+
 /** Gets the distance travelled in the x-y plane by the robot
  * 
  * @return the distance travelled by the motors, in inches
  */
-inline double get_dist_travelled() {
-    return (leftBackMotor.get_position() + rightBackMotor.get_position()
+double get_dist_travelled() {
+    double degreesTravelled = (leftBackMotor.get_position() + rightBackMotor.get_position()
             + leftMidMotor.get_position() + rightMidMotor.get_position()
-            + leftFrontMotor.get_position() + rightFrontMotor.get_position())/6 / (M_PI*wheelDiam);
-
+            + leftFrontMotor.get_position() + rightFrontMotor.get_position()) / 6;
+    return degreesTravelled / 360 * (M_PI*wheelDiam);
 }
 
 /** Gets the heading of the robot from its gyro sensor
@@ -39,9 +42,16 @@ inline double get_heading() {
  * 
  * @return the speed in RPM of the robot's drive train
  */
-inline double move_speed() {
+double get_move_speed() {
     return (leftBackMotor.get_actual_velocity() + rightBackMotor.get_actual_velocity()
-         + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity()) / 4;
+            + leftMidMotor.get_actual_velocity() + rightMidMotor.get_actual_velocity()
+            + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity())/4 * (1.0/motorToWheelRatio);
+}
+
+double get_move_voltage() {
+    return (leftBackMotor.get_voltage() + rightBackMotor.get_voltage()
+            + leftMidMotor.get_voltage() + rightMidMotor.get_voltage()
+            + leftFrontMotor.get_voltage() + rightFrontMotor.get_voltage())/6.0 / 1000;
 }
 
 /** A general-purpose PID function that provides the correction
@@ -52,12 +62,13 @@ inline double move_speed() {
  * @param Kp the proportional constant
  * @param Ki the integral constant
  * @param Kd the derivative constant
+ * @param direction the direction of the correction
  * @return the correction feedback for the system
  */
-double PID(double input, double target, double Kp, double Ki, double Kd) {
+double PID(double input, double target, double Kp, double Ki, double Kd, int direction) {
     static int prevError = 0, integral = 0;
     
-    double error = target - input;
+    double error = (target - input) * direction;
     double derivative = error - prevError;  // only an approximation
     integral = 0.5 * integral + error;  // only an approximation
     prevError = error;

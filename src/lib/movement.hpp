@@ -7,4 +7,6 @@ struct vector {
 };
 
 extern void move(double leftVolt, double rightVolt);
+extern void move_straight(double desiredSpeed, double desiredDist);
+
 #endif
