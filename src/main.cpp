@@ -68,6 +68,7 @@ void autonomous() {
   switch (autonSelection)
 	{
 		case S_RED5: //autoroute 2
+<<<<<<< HEAD
 
 			break;
 		case S_BLUE5:
@@ -102,6 +103,13 @@ void autonomous() {
 		case NOTHING:
 break;
 
+=======
+			test();
+			break;
+		case S_BLUE5:
+			test();
+			break;
+>>>>>>> 847f87f39db393a1a3f81b4968b4afafd4833c67
 	}
 
 }

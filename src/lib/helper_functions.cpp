@@ -7,10 +7,18 @@
 #include "../globals/globals.hpp"
 #include "helper_functions.hpp"
 
-struct vector {
-    double heading;
-    double dist;
-};
+#include <math.h>
+
+/** Gets the distance travelled in the x-y plane by the robot
+ * 
+ * @return the distance travelled by the motors, in inches
+ */
+inline double get_dist_travelled() {
+    return (leftBackMotor.get_position() + rightBackMotor.get_position()
+            + leftMidMotor.get_position() + rightMidMotor.get_position()
+            + leftFrontMotor.get_position() + rightFrontMotor.get_position())/6 / (M_PI*wheelDiam);
+
+}
 
 /** Gets the heading of the robot from its gyro sensor
  * relative to its initial direction. A clockwise turn
@@ -21,7 +29,7 @@ struct vector {
  * in the range (-180, 180]
  */
 inline double get_heading() {
-    double heading = inertialSensor.get_heading();
+    double heading = imu_sensor.get_heading();
     if (heading > 180)
         heading -= 360;  // sets the heading to a neg val if the robot's heading is counterclockwise
     return heading;
