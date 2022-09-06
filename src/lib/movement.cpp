@@ -15,7 +15,7 @@
  * @param rightVolt the voltage of the motors on the right side
  * of the drive train, from -127 to 127 volts
  */
-void move(double leftVolt, double rightVolt){
+void move(const int leftVolt, const int rightVolt){
     leftFrontMotor = leftVolt; leftMidMotor = leftVolt; leftBackMotor = leftVolt;
     rightFrontMotor = rightVolt; rightMidMotor = rightVolt; rightBackMotor = rightVolt;
 }
@@ -43,48 +43,36 @@ void move(double leftVolt, double rightVolt){
  * @param angle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
  * and a postive angle turns the robot clockwise
  */
-void turn(const int leftVolt, const int rightVolt, float desiredAngle) {
+void turn(const int leftVolt, const int rightVolt, const float desiredAngle) {
     //  if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
     //      throw std::out_of_range;
     
-    float currentAngle = get_heading();
-    desiredAngle += currentAngle;
+    float currentAngle = get_heading(), targetAngle = currentAngle + desiredAngle;
 
-    while (abs(currentAngle) <= abs(desiredAngle)) {
+    while (abs(currentAngle) <= abs(targetAngle)) {
         currentAngle = get_heading();
         move(leftVolt, rightVolt);
-        pros::delay(30);
+        pros::delay(15);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
  }
 
 // need to test this out first. if it works, will add it for going backwards.
 // rn it can only go straight
-void move_straight(const int desiredVel, double desiredDist) {
+void move_straight(const double desiredDist, pros::motor_brake_mode_e stopType) {
     leftBackMotor.tare_position(); rightBackMotor.tare_position();
     leftMidMotor.tare_position(); rightMidMotor.tare_position();
     leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
-    double currDist = 0;
-
-    while (currDist < desiredDist * 2/3) {
-        double currSpeed = get_move_speed();
-        double volt = PID(currSpeed, desiredVel, 0.5, 0, 0);
-        move(volt, volt);
-
+    
+    double currDist = 0; const unsigned baseVolt = 20;
+    while (currDist < desiredDist) {
+        const double volt = (desiredDist < 0) ? PID(currDist, desiredDist, 1, 0.1, 0.5) - baseVolt
+                                            : PID(currDist, desiredDist, 1, 0.1, 0.5) + baseVolt;
+        move(volt + PID(get_heading(), 0, 1, 0.02, 0.5), volt - PID(get_heading(), 0, 1, 0.02, 0.5));
         currDist = get_dist_travelled();
         pros::delay(15);
     }
-
-    while (currDist < desiredDist) {
-        double currDist = abs(get_dist_travelled());
-        double volt = static_cast<int>(get_move_voltage());
-        volt *= 1.0 / PID(currDist, desiredDist, 0.00005, 0, 0, -1);
-        volt = (desiredVel < 0) ? -volt : volt;
-        move(volt, volt);
-
-        pros::delay(15);
-    }
-    //move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+    move(stopType, stopType);
 }
 
 void move_straight(const unsigned time) {

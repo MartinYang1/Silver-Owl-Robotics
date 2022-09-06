@@ -10,7 +10,7 @@
 #include <math.h>
 
 const unsigned wheelDiam = 4;
-const double motorToWheelRatio = 600.0 / 360;
+const double motorToWheelRatio = 200.0 / 360;
 
 /** Gets the distance travelled in the x-y plane by the robot
  * 
@@ -20,7 +20,9 @@ double get_dist_travelled() {
     double degreesTravelled = (leftBackMotor.get_position() + rightBackMotor.get_position()
             + leftMidMotor.get_position() + rightMidMotor.get_position()
             + leftFrontMotor.get_position() + rightFrontMotor.get_position()) / 6;
-    return degreesTravelled / 360 * (M_PI*wheelDiam);
+    degreesTravelled /= 2;  // for some reason the motor encoder values are exactly 2 times less than how far the motor moves,
+                            // so we are dividing by 2. This needs to be fixed when we have time.
+    return degreesTravelled * (1/motorToWheelRatio) / 360 * (M_PI*wheelDiam);
 }
 
 /** Gets the heading of the robot from its gyro sensor
