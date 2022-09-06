@@ -43,9 +43,9 @@ void move(double leftVolt, double rightVolt){
  * @param angle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
  * and a postive angle turns the robot clockwise
  */
-void turn(double leftVolt, double rightVolt, float desiredAngle) {
-    // if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
-    //     throw ;
+void turn(const int leftVolt, const int rightVolt, float desiredAngle) {
+    //  if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
+    //      throw std::out_of_range;
     
     float currentAngle = get_heading();
     desiredAngle += currentAngle;
@@ -60,7 +60,7 @@ void turn(double leftVolt, double rightVolt, float desiredAngle) {
 
 // need to test this out first. if it works, will add it for going backwards.
 // rn it can only go straight
-void move_straight(double desiredSpeed, double desiredDist) {
+void move_straight(const int desiredVel, double desiredDist) {
     leftBackMotor.tare_position(); rightBackMotor.tare_position();
     leftMidMotor.tare_position(); rightMidMotor.tare_position();
     leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
@@ -68,7 +68,7 @@ void move_straight(double desiredSpeed, double desiredDist) {
 
     while (currDist < desiredDist * 2/3) {
         double currSpeed = get_move_speed();
-        double volt = PID(currSpeed, desiredSpeed, 0.5, 0, 0);
+        double volt = PID(currSpeed, desiredVel, 0.5, 0, 0);
         move(volt, volt);
 
         currDist = get_dist_travelled();
@@ -76,12 +76,17 @@ void move_straight(double desiredSpeed, double desiredDist) {
     }
 
     while (currDist < desiredDist) {
-        double currDist = get_dist_travelled();
+        double currDist = abs(get_dist_travelled());
         double volt = static_cast<int>(get_move_voltage());
         volt *= 1.0 / PID(currDist, desiredDist, 0.00005, 0, 0, -1);
+        volt = (desiredVel < 0) ? -volt : volt;
         move(volt, volt);
 
         pros::delay(15);
     }
     //move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+}
+
+void move_straight(const unsigned time) {
+    
 }

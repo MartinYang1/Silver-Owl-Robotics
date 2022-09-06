@@ -6,7 +6,8 @@ struct vector {
     float dist = 0, heading = 0;
 };
 
-extern void move(double leftVolt, double rightVolt);
-extern void move_straight(double desiredSpeed, double desiredDist);
+extern void move(const int leftVolt, const int rightVolt);
+extern void move_straight(const int desiredSpeed, double desiredDist);
+extern void move_straight(const unsigned time);
 extern void turn(double leftVolt, double rightVolt, float desiredAngle);
 #endif
