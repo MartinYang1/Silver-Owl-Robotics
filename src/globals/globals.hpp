@@ -17,11 +17,13 @@ extern pros::Motor flywheel;
 
 extern pros::Vision vision_sensor;
 extern pros::Motor intake;
+extern pros::Motor &roller;
 extern pros::ADIDigitalOut expander1;
 extern pros::ADIDigitalOut expander2;
 extern pros::ADIDigitalOut pusher;
 
 extern pros::Imu imu_sensor;
+extern pros::Optical optical_sensor;
 
 extern pros::ADIUltrasonic sonar;
 

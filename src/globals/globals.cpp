@@ -9,13 +9,15 @@ pros::Motor leftBackMotor(12);
 pros::Motor rightBackMotor(19,1);
 pros::Motor leftMidMotor(4); 
 pros::Motor rightMidMotor(9,1); 
-pros::Motor intake(5); 
+
+pros::Motor intake(5);
+pros::Motor &roller = intake;
 pros::Motor flywheel(20); 
 
-
 pros::Vision vision_sensor(13);
-
 pros::Imu imu_sensor(17);
+pros::Optical optical_sensor(18);
+
 pros::ADIDigitalOut expander1(2);
 pros::ADIDigitalOut expander2(3);
 pros::ADIDigitalOut pusher(1);

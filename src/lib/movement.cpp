@@ -43,15 +43,16 @@ void move(const int leftVolt, const int rightVolt){
  * @param angle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
  * and a postive angle turns the robot clockwise
  */
-void turn(const int leftVolt, const int rightVolt, const float desiredAngle) {
+void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAngle) {
     //  if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
     //      throw std::out_of_range;
     
     float currentAngle = get_heading(), targetAngle = currentAngle + desiredAngle;
 
-    while (abs(currentAngle) <= abs(targetAngle)) {
+    while (abs(currentAngle) <= abs(targetAngle)) { 
         currentAngle = get_heading();
-        move(leftVolt, rightVolt);
+        move(baseLeftVolt + PID(currentAngle, targetAngle, 0.5, 0, 0), 
+                baseRightVolt - PID(currentAngle, targetAngle, 0.5, 0, 0));
         pros::delay(15);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
@@ -59,7 +60,7 @@ void turn(const int leftVolt, const int rightVolt, const float desiredAngle) {
 
 // need to test this out first. if it works, will add it for going backwards.
 // rn it can only go straight
-void move_straight(const double desiredDist, pros::motor_brake_mode_e stopType) {
+void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopType) {
     leftBackMotor.tare_position(); rightBackMotor.tare_position();
     leftMidMotor.tare_position(); rightMidMotor.tare_position();
     leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
@@ -68,7 +69,8 @@ void move_straight(const double desiredDist, pros::motor_brake_mode_e stopType) 
     while (currDist < desiredDist) {
         const double volt = (desiredDist < 0) ? PID(currDist, desiredDist, 1, 0.1, 0.5) - baseVolt
                                             : PID(currDist, desiredDist, 1, 0.1, 0.5) + baseVolt;
-        move(volt + PID(get_heading(), 0, 1, 0.02, 0.5), volt - PID(get_heading(), 0, 1, 0.02, 0.5));
+        move(volt + PID(get_heading(), 0, 1, 0.02, 0.5), 
+                volt - PID(get_heading(), 0, 1, 0.02, 0.5));
         currDist = get_dist_travelled();
         pros::delay(15);
     }
