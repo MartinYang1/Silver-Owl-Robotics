@@ -7,6 +7,12 @@
 
 const unsigned redHue = 55; const unsigned blueHue = 78;
 
+/** Turns the roller to its opposite colour side
+ * 
+ * @param rate the voltage for the motor, from -127 to 127
+ * 
+ * @return the hue of the new colour that the roller has turned to
+ */
 const unsigned turn_roller(const int rate) {
     const unsigned tolerance = 10;
     
@@ -15,16 +21,17 @@ const unsigned turn_roller(const int rate) {
     while (currHue - tolerance < optical_sensor.get_hue() &&
             optical_sensor.get_hue() < currHue + tolerance) {
         roller = rate;
-        master.print(0, 0, "%s", "hi");
+        master.print(0, 0, "%f", optical_sensor.get_hue());
+        pros::delay(15);
     }
     roller = MOTOR_BRAKE_BRAKE;
     master.print(0, 0, "%s", "hello");
     return (currHue == redHue) ? redHue : blueHue;
 }
 
-void aim_shot()
-{ bool aimed = false;
-    while (aimed == false) {
+void aim_shot() { 
+    bool isAiming = false;
+    while (!isAiming) {
         pros::vision_object_s_t goal = vision_sensor.get_by_size(0);
         double centre = goal.x_middle_coord;
         if (centre > 10){
@@ -34,8 +41,8 @@ void aim_shot()
             move(-50, 50);
         }
         else{
-            aimed = true;
+            isAiming = true;
         }
-           }
-           move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+    }
+    move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }

@@ -7,25 +7,28 @@
 
 extern pros::Controller master;
 
+// drive train
 extern pros::Motor leftFrontMotor;
 extern pros::Motor rightFrontMotor;
 extern pros::Motor leftBackMotor;
 extern pros::Motor rightBackMotor;
 extern pros::Motor leftMidMotor;
 extern pros::Motor rightMidMotor;
-extern pros::Motor flywheel;
 
-extern pros::Vision vision_sensor;
+// disc mechanisms
+extern pros::Motor flywheel;
 extern pros::Motor intake;
 extern pros::Motor &roller;
-extern pros::ADIDigitalOut expander1;
-extern pros::ADIDigitalOut expander2;
-extern pros::ADIDigitalOut pusher;
 
+// sensors
+extern pros::Vision vision_sensor;
 extern pros::Imu imu_sensor;
 extern pros::Optical optical_sensor;
 
-extern pros::ADIUltrasonic sonar;
+// pneumatics
+extern pros::ADIDigitalOut expander1_piston;
+extern pros::ADIDigitalOut expander2_piston;
+extern pros::ADIDigitalOut pusher_piston;
 
 extern int autonSelection;
 

@@ -36,11 +36,11 @@ void move(const int leftVolt, const int rightVolt){
 /** Turns the robot to a desired angle,
  * relative to its starting pos when the gyro sensor was calibrated
  * 
- * @param leftVolt the voltage for the motors on the left side 
+ * @param baseLeftVolt the base voltage for the motors on the left side 
  * of the drive train in volts, from -127 to 127
- * @param rightVolt the voltage for the motors on the right side 
+ * @param baseRightVolt the voltage for the motors on the right side 
  * of the drive train in volts, from -127 to 127
- * @param angle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
+ * @param desiredAngle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
  * and a postive angle turns the robot clockwise
  */
 void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAngle) {
@@ -51,15 +51,18 @@ void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAn
 
     while (abs(currentAngle) <= abs(targetAngle)) { 
         currentAngle = get_heading();
-        move(baseLeftVolt + PID(currentAngle, targetAngle, 0.5, 0, 0), 
-                baseRightVolt - PID(currentAngle, targetAngle, 0.5, 0, 0));
+        move(baseLeftVolt + PID(currentAngle, targetAngle, 0.3, 0, 0), 
+                baseRightVolt - PID(currentAngle, targetAngle, 0.3, 0, 0));
         pros::delay(15);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
  }
 
-// need to test this out first. if it works, will add it for going backwards.
-// rn it can only go straight
+/** Moves the robot a given distance forwards or backwards
+ * 
+ * @param desiredDist the distance to travel, in inches
+ * @param stopType the type of brake mechanism the robot uses
+ */
 void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopType) {
     leftBackMotor.tare_position(); rightBackMotor.tare_position();
     leftMidMotor.tare_position(); rightMidMotor.tare_position();

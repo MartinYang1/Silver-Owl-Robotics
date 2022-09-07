@@ -50,6 +50,10 @@ double get_move_speed() {
             + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity())/4 * (1.0/motorToWheelRatio);
 }
 
+/** Gets the voltage that the drive train motors are running at
+ * 
+ * @return the voltage, in volts
+ */
 double get_move_voltage() {
     return (leftBackMotor.get_voltage() + rightBackMotor.get_voltage()
             + leftMidMotor.get_voltage() + rightMidMotor.get_voltage()

@@ -12,7 +12,7 @@ void test() {
     // pros::delay(2000);
     // imu_sensor.tare_heading();
     // // move_straight(80.0, MOTOR_BRAKE_COAST);
-    //  turn(50, -50, 90);
+    //  turn(10, -10, 90);
     // // aim_shot();
     // pros::delay(2000);
     turn_roller(80);

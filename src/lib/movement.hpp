@@ -10,7 +10,7 @@ struct vector {
 };
 
 extern void move(const int leftVolt, const int rightVolt);
-extern void move_straight(const double desiredDist, pros::motor_brake_mode_e_t stopType = pros::E_MOTOR_BRAKE_BRAKE);
+extern void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopType = MOTOR_BRAKE_BRAKE);
 extern void move_straight(const unsigned time);
 extern void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAngle);
 
