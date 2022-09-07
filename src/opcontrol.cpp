@@ -32,17 +32,17 @@ int y=master.get_analog(ANALOG_RIGHT_X);
 		if(master.get_digital_new_press(DIGITAL_L1))
 		{
 			auto_fire = 1;
-			pusher.set_value(1);
+			pusher_piston.set_value(1);
 			pros::delay(150);
-			pusher.set_value(0);
+			pusher_piston.set_value(0);
 			pros::delay(150);
-			pusher.set_value(1);
+			pusher_piston.set_value(1);
 			pros::delay(150);
-			pusher.set_value(0);
+			pusher_piston.set_value(0);
 			pros::delay(160);
-			pusher.set_value(1);
+			pusher_piston.set_value(1);
 			pros::delay(150);
-			pusher.set_value(0);
+			pusher_piston.set_value(0);
 			pros::delay(100);
 			auto_fire = 0;
 		}
@@ -51,11 +51,11 @@ int y=master.get_analog(ANALOG_RIGHT_X);
 {
 		if(master.get_digital_new_press(DIGITAL_L2))
 		{
-			pusher.set_value(1);
+			pusher_piston.set_value(1);
 		}
 		else if (master.get_digital(DIGITAL_L2) == 0)
 		{
-			pusher.set_value(0);
+			pusher_piston.set_value(0);
 		}
 }
 
@@ -96,14 +96,14 @@ int y=master.get_analog(ANALOG_RIGHT_X);
 		}
 	if (master.get_digital(DIGITAL_RIGHT))//expander
 	{
-			expander1.set_value(1);
-			expander2.set_value(1);
+			expander1_piston.set_value(1);
+			expander2_piston.set_value(1);
 			pros::delay(50);
 	}
 	else //expander
 	{
-			expander1.set_value(0);
-			expander2.set_value(0);
+			expander1_piston.set_value(0);
+			expander2_piston.set_value(0);
 			pros::delay(25);
 	}
 
