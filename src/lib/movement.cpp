@@ -49,14 +49,18 @@ void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAn
     
     float currentAngle = get_heading(), targetAngle = currentAngle + desiredAngle;
 
-    while (abs(currentAngle) <= abs(targetAngle)) { 
-        currentAngle = get_heading();
-        move(baseLeftVolt + PID(currentAngle, targetAngle, 0.3, 0, 0), 
-                baseRightVolt - PID(currentAngle, targetAngle, 0.3, 0, 0));
-        pros::delay(15);
+    int numUTurns = abs(targetAngle / 180);  // needed because get_heading() doesn't return a value higher than 180.
+    for (int i = 0; i <= numUTurns; ++i) {
+        targetAngle = static_cast<int>(targetAngle) % 180 + (targetAngle - floor(targetAngle));     
+        while (abs(currentAngle) <= targetAngle) { 
+            currentAngle = get_heading();
+            move(baseLeftVolt + PID(currentAngle, targetAngle, 0.6, 0, 0.2), 
+                    baseRightVolt - PID(currentAngle, targetAngle, 0.6, 0, 0.2));
+            pros::delay(15);
+        }
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
- }
+}
 
 /** Moves the robot a given distance forwards or backwards
  * 

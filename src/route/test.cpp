@@ -8,14 +8,14 @@
 void test() {
     // pros::vision_zero_e_t oof{pros::E_VISION_ZERO_CENTER};
     // vision_sensor.set_zero_point(oof);
-    // imu_sensor.reset();
-    // pros::delay(2000);
-    // imu_sensor.tare_heading();
+     imu_sensor.reset();
+     pros::delay(2000);
+     imu_sensor.tare_heading();
     // // move_straight(80.0, MOTOR_BRAKE_COAST);
-    //  turn(10, -10, 90);
+      turn(30, -30, 170);
     // // aim_shot();
     // pros::delay(2000);
-    turn_roller(80);
+    //turn_roller(80);
     //master.print(0, 0, "%f", imu_sensor.get_heading());
 
     
