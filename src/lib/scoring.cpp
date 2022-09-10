@@ -5,7 +5,6 @@
 #include "helper_functions.hpp"
 #include "movement.hpp"
 
-const unsigned redHue = 55; const unsigned blueHue = 78;
 
 /** Turns the roller to its opposite colour side
  * 
@@ -13,11 +12,8 @@ const unsigned redHue = 55; const unsigned blueHue = 78;
  * 
  * @return the hue of the new colour that the roller has turned to
  */
-const unsigned turn_roller(const int rate) {
-    const unsigned tolerance = 10;
-    
-    const unsigned currHue = (redHue-tolerance < optical_sensor.get_hue() 
-        && optical_sensor.get_hue() < redHue+tolerance) ? redHue : blueHue;
+const unsigned turn_roller(const int rate, const unsigned tolerance = 10) {    
+    const unsigned currHue = optical_sensor.get_hue();
     while (currHue - tolerance < optical_sensor.get_hue() &&
             optical_sensor.get_hue() < currHue + tolerance) {
         roller = rate;
@@ -26,7 +22,7 @@ const unsigned turn_roller(const int rate) {
     }
     roller = MOTOR_BRAKE_BRAKE;
     master.print(0, 0, "%s", "hello");
-    return (currHue == redHue) ? redHue : blueHue;
+    return optical_sensor.get_hue();
 }
 
 void aim_shot() { 

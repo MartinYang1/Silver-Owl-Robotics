@@ -48,16 +48,18 @@ void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAn
     //      throw std::out_of_range;
     
     float currentAngle = get_heading(), targetAngle = currentAngle + desiredAngle;
-
-    int numUTurns = abs(targetAngle / 180);  // needed because get_heading() doesn't return a value higher than 180.
-    for (int i = 0; i <= numUTurns; ++i) {
-        targetAngle = static_cast<int>(targetAngle) % 180 + (targetAngle - floor(targetAngle));     
-        while (abs(currentAngle) <= targetAngle) { 
-            currentAngle = get_heading();
-            move(baseLeftVolt + PID(currentAngle, targetAngle, 0.6, 0, 0.2), 
-                    baseRightVolt - PID(currentAngle, targetAngle, 0.6, 0, 0.2));
-            pros::delay(15);
+    int totalCurrAngle = 0;  // needed because get_heading() doesn't return a value higher than 180.
+    short headingReversed = 1;
+    while (abs(currentAngle) <= abs(targetAngle)) { 
+        currentAngle = headingReversed * get_heading() + totalCurrAngle;
+        move(baseLeftVolt + PID(currentAngle, targetAngle, 0.6, 0, 0.2), 
+                baseRightVolt - PID(currentAngle, targetAngle, 0.6, 0, 0.2));
+        
+        if (abs(currentAngle) >= 177) {
+            headingReversed *= -1;
+            totalCurrAngle = currentAngle;
         }
+        pros::delay(15);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }
