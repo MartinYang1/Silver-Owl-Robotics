@@ -3,8 +3,8 @@
 #include "pros/misc.h"
 
 void opcontrol() {
-	int intake_state = 1;
-    flywheel = 105;
+	int intake_state = -1;
+    flywheel = 84;
 	while(true)
 	{
 		leftBackMotor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);

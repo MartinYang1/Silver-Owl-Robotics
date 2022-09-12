@@ -22,8 +22,8 @@ pros::Imu imu_sensor(17);
 pros::Optical optical_sensor(18);
 
 // pneumatics pistons
-pros::ADIDigitalOut expander1_piston(2);
-pros::ADIDigitalOut expander2_piston(3);
+pros::ADIDigitalOut expander1_piston(3);
+pros::ADIDigitalOut expander2_piston(4);
 pros::ADIDigitalOut flywheel_piston(1);
 
 int autonSelection = SKILLS; // default auton selected

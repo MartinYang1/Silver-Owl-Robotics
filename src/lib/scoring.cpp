@@ -12,7 +12,7 @@
  * 
  * @return the hue of the new colour that the roller has turned to
  */
-const unsigned turn_roller(const int rate, const unsigned tolerance = 10) {    
+const unsigned turn_roller(const int rate, const unsigned tolerance) {    
     const unsigned currHue = optical_sensor.get_hue();
     while (currHue - tolerance < optical_sensor.get_hue() &&
             optical_sensor.get_hue() < currHue + tolerance) {
@@ -41,4 +41,17 @@ void aim_shot() {
         }
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+}
+
+void shoot(const unsigned desiredSpeed, bool actuatePiston) {
+    const unsigned currSpeed = flywheel.get_actual_velocity();
+    while (currSpeed < desiredSpeed - 5) {
+        const unsigned currSpeed = flywheel.get_actual_velocity();
+        flywheel = PID(currSpeed, desiredSpeed, 2, 0, 0);
+    }
+    if (actuatePiston) {
+        flywheel_piston.set_value(1);
+        pros::delay(200);
+        flywheel_piston.set_value(0);
+    }
 }

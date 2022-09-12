@@ -57,7 +57,7 @@ void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAn
         
         if (abs(currentAngle) >= 177) {
             headingReversed *= -1;
-            totalCurrAngle = currentAngle;
+            totalCurrAngle += (desiredAngle < 0) ? -currentAngle: currentAngle;
         }
         pros::delay(15);
     }

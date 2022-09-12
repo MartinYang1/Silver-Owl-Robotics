@@ -2,5 +2,5 @@
 #define SCORING_H
 
 extern void aim_shot();
-extern const unsigned turn_roller(const int rate);
+extern const unsigned turn_roller(const int rate, const unsigned tolerance = 10);
 #endif
