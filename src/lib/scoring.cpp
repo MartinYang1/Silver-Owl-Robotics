@@ -1,3 +1,6 @@
+#include <vector>
+#include <algorithm>
+
 #include "../include/main.h"
 #include "../globals/globals.hpp"
 
@@ -5,6 +8,7 @@
 #include "helper_functions.hpp"
 #include "movement.hpp"
 
+const unsigned redHue[4] = {330, 360, 0, 30}; const unsigned blueHue[2] = {160, 290};
 
 /** Turns the roller to its opposite colour side
  * 
@@ -12,20 +16,26 @@
  * 
  * @return the hue of the new colour that the roller has turned to
  */
-const unsigned turn_roller(const int rate, const unsigned tolerance) {    
-    const unsigned currHue = optical_sensor.get_hue();
-    while (currHue - tolerance < optical_sensor.get_hue() &&
-            optical_sensor.get_hue() < currHue + tolerance) {
-        roller = rate;
-        master.print(0, 0, "%f", optical_sensor.get_hue());
+const unsigned turn_roller(const int rate) {
+    optical_sensor.set_led_pwm(100);
+    pros::delay(50);
+
+    unsigned short currHue = optical_sensor.get_hue();
+    float newhue = optical_sensor.get_hue();
+    while (currHue - 30 <= newhue && newhue <= currHue + 30) {
+        roller = rate; roller2 = rate;
+        //move(10, 10);
+        newhue = optical_sensor.get_hue();
+        master.print(0, 0, "%s", "hi");
         pros::delay(15);
     }
-    roller = MOTOR_BRAKE_BRAKE;
-    master.print(0, 0, "%s", "hello");
+    roller = MOTOR_BRAKE_BRAKE; roller2 = MOTOR_BRAKE_BRAKE;
+    optical_sensor.set_led_pwm(0);
+    pros::delay(50);
     return optical_sensor.get_hue();
 }
 
-void aim_shot() { 
+void aim_shot() {
     bool isAiming = false;
     while (!isAiming) {
         pros::vision_object_s_t goal = vision_sensor.get_by_size(0);

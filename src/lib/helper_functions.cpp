@@ -18,8 +18,7 @@ const double motorToWheelRatio = 200.0 / 360;
  */
 double get_dist_travelled() {
     double degreesTravelled = (leftBackMotor.get_position() + rightBackMotor.get_position()
-            + leftMidMotor.get_position() + rightMidMotor.get_position()
-            + leftFrontMotor.get_position() + rightFrontMotor.get_position()) / 6;
+            + leftFrontMotor.get_position() + rightFrontMotor.get_position()) / 4;
     degreesTravelled /= 2;  // for some reason the motor encoder values are exactly 2 times less than how far the motor moves,
                             // so we are dividing by 2. This needs to be fixed when we have time.
     return degreesTravelled * (1/motorToWheelRatio) / 360 * (M_PI*wheelDiam);
@@ -46,7 +45,6 @@ double get_heading() {
  */
 double get_move_speed() {
     return (leftBackMotor.get_actual_velocity() + rightBackMotor.get_actual_velocity()
-            + leftMidMotor.get_actual_velocity() + rightMidMotor.get_actual_velocity()
             + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity())/4 * (1.0/motorToWheelRatio);
 }
 
@@ -56,8 +54,7 @@ double get_move_speed() {
  */
 double get_move_voltage() {
     return (leftBackMotor.get_voltage() + rightBackMotor.get_voltage()
-            + leftMidMotor.get_voltage() + rightMidMotor.get_voltage()
-            + leftFrontMotor.get_voltage() + rightFrontMotor.get_voltage())/6.0 / 1000;
+            + leftFrontMotor.get_voltage() + rightFrontMotor.get_voltage())/4.0 / 1000;
 }
 
 /** A general-purpose PID function that provides the correction
