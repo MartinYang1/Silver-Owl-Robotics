@@ -16,8 +16,8 @@
  * of the drive train, from -127 to 127 volts
  */
 void move(const int leftVolt, const int rightVolt){
-    leftFrontMotor = leftVolt; leftMidMotor = leftVolt; leftBackMotor = leftVolt;
-    rightFrontMotor = rightVolt; rightMidMotor = rightVolt; rightBackMotor = rightVolt;
+    leftFrontMotor = leftVolt; leftBackMotor = leftVolt;
+    rightFrontMotor = rightVolt; rightBackMotor = rightVolt;
 }
 
 // //closed loop movement using PID
@@ -52,14 +52,15 @@ void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAn
     short headingReversed = 1;
     while (abs(currentAngle) <= abs(targetAngle)) { 
         currentAngle = headingReversed * get_heading() + totalCurrAngle;
+        master.print(0, 0, "%f", headingReversed * get_heading(), totalCurrAngle);
         move(baseLeftVolt + PID(currentAngle, targetAngle, 0.6, 0, 0.2), 
                 baseRightVolt - PID(currentAngle, targetAngle, 0.6, 0, 0.2));
         
-        if (abs(currentAngle) >= 177) {
+        if (abs(currentAngle) >= 179) {
             headingReversed *= -1;
-            totalCurrAngle += (desiredAngle < 0) ? -currentAngle: currentAngle;
+            totalCurrAngle += ((desiredAngle < 0) ? -currentAngle: currentAngle);
         }
-        pros::delay(15);
+        pros::delay(1);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }
@@ -71,7 +72,7 @@ void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAn
  */
 void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopType) {
     leftBackMotor.tare_position(); rightBackMotor.tare_position();
-    leftMidMotor.tare_position(); rightMidMotor.tare_position();
+    //leftMidMotor.tare_position(); rightMidMotor.tare_position();
     leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
     
     double currDist = 0; const unsigned baseVolt = 20;
@@ -86,6 +87,14 @@ void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopTyp
     move(stopType, stopType);
 }
 
-void move_straight(const unsigned time) {
+void move_straight(const float time) {
     
+}
+
+void move_straight(const int volt) {
+    while (optical_sensor.get_proximity() < 255) {
+        move(volt + PID(get_heading(), 0, 1, 0.02, 0.5), 
+                volt - PID(get_heading(), 0, 1, 0.02, 0.5));
+    }
+    move(MOTOR_BRAKE_HOLD, MOTOR_BRAKE_HOLD);
 }
