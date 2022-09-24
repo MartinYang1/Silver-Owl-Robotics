@@ -8,14 +8,22 @@
 void test() {
     // pros::vision_zero_e_t oof{pros::E_VISION_ZERO_CENTER};
     // vision_sensor.set_zero_point(oof);
+    // while (true) {
+    //     master.print(0, 0, "%d", optical_sensor.get_proximity());
+    //     pros::delay(20);
+    // }
+    move_straight(50);
+    turn_roller(-100);
     //  imu_sensor.reset();
     //  pros::delay(2000);
     //  imu_sensor.tare_heading();
     // // move_straight(80.0, MOTOR_BRAKE_COAST);
-    //turn(30, -30, 360);
+    // pros::delay(100);
+    // turn(30, -30, 360);
     // // aim_shot();
     // pros::delay(2000);x
-    turn_roller(80);
+    //turn_roller(80);
+    //shoot(200, 1);
     //master.print(0, 0, "%f", imu_sensor.get_heading());
 
     
