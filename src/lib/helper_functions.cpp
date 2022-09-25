@@ -12,7 +12,7 @@
 
 const double wheelDiam = 4;
 const double motorToWheelRatio = 200.0 / 360;
-const double robotWidth = 10;
+const double robotWidth = 14;
 
 /** Gets the distance travelled in a linear path by the robot
  * 
@@ -82,10 +82,13 @@ double PID(double input, double target, double Kp, double Ki, double Kd, int dir
 }
 
 void odometry(vector *pCentre) {
+    float robotWidth =14;
     double L = leftMidMotor.get_position()/motorToWheelRatio;
     double R = rightMidMotor.get_position()/motorToWheelRatio;
     // the angle turned
     float alpha = (R - L) / robotWidth;
+    master.print(0, 0, "%f", alpha);
+    pros::delay(50);
     double hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
     double deltaX = hypotenuse * cos(pCentre->heading + alpha/2);

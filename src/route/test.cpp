@@ -5,6 +5,12 @@
 #include "../lib/scoring.hpp"
 #include "pros/vision.h"
 
+	vector center =
+	{
+		.x = 0,
+		.y = 0,
+		.heading = 0
+	};
 void test() {
     // pros::vision_zero_e_t oof{pros::E_VISION_ZERO_CENTER};
     // vision_sensor.set_zero_point(oof);
@@ -29,7 +35,10 @@ void test() {
      imu_sensor.tare_heading();
     // // move_straight(80.0, MOTOR_BRAKE_COAST);
     pros::delay(100);
-    turn(30, -30, 250);
+    turn(30, -30, 90, &center);
+
+
+    
     // // aim_shot();
     // pros::delay(2000);x
     //turn_roller(80);

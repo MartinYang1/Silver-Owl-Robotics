@@ -43,13 +43,14 @@ void move(const int leftVolt, const int rightVolt){
  * @param desiredAngle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
  * and a postive angle turns the robot clockwise
  */
-void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAngle) {
+void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAngle, vector *pCentre) {
     //  if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
     //      throw std::out_of_range;
     float prevAngle = 0;
     float currentAngle = get_heading(), targetAngle = currentAngle + desiredAngle;
     short headingReversed = 1;
     while (abs(currentAngle) <= abs(targetAngle)) { 
+        odometry(pCentre);
         currentAngle = get_heading();
         move(baseLeftVolt + PID(currentAngle, targetAngle, 0.6, 0, 0.2), 
                 baseRightVolt - PID(currentAngle, targetAngle, 0.6, 0, 0.2));
