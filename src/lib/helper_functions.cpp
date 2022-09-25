@@ -6,6 +6,7 @@
 #include "../include/main.h"
 #include "../globals/globals.hpp"
 #include "helper_functions.hpp"
+#include "movement.hpp"
 
 #include <math.h>
 
@@ -80,8 +81,16 @@ double PID(double input, double target, double Kp, double Ki, double Kd, int dir
     return Kp * error + Kd * derivative + Ki * integral;
 }
 
-void odometry() {
+void odometry(vector *pCentre) {
+    double L = leftMidMotor.get_position()/motorToWheelRatio;
+    double R = rightMidMotor.get_position()/motorToWheelRatio;
+    // the angle turned
+    float alpha = (R - L) / robotWidth;
+    double hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
-    float alpha = (rightMidMotor.get_position()/motorToWheelRatio
-                    - leftMidMotor.get_position()/motorToWheelRatio) / ;    // the angle turned
+    double deltaX = hypotenuse * cos(pCentre->heading + alpha/2);
+    double deltaY = hypotenuse * sin(pCentre->heading + alpha/2);
+
+    pCentre->heading += alpha;
+    pCentre->x += deltaX; pCentre->y += deltaY;
 }

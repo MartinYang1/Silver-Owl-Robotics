@@ -48,23 +48,17 @@ void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAn
     //      throw std::out_of_range;
     float prevAngle = 0;
     float currentAngle = get_heading(), targetAngle = currentAngle + desiredAngle;
-    int totalCurrAngle = 0;  // needed because get_heading() doesn't return a value higher than 180.
     short headingReversed = 1;
     while (abs(currentAngle) <= abs(targetAngle)) { 
-        currentAngle = headingReversed * get_heading() + totalCurrAngle;
-        master.print(0, 0, "%f", headingReversed * get_heading(), totalCurrAngle);
+        currentAngle = get_heading();
         move(baseLeftVolt + PID(currentAngle, targetAngle, 0.6, 0, 0.2), 
                 baseRightVolt - PID(currentAngle, targetAngle, 0.6, 0, 0.2));
         
-        if (desiredAngle > 179) and (abs(currentAngle - prevAngle) > 170){
-            move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BREAK);
-            break
+        if (targetAngle > 179 && abs(currentAngle - prevAngle) > 170){
+            move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+            break;
         }
-        else if (abs(currentAngle) >= 179) {
-            headingReversed *= -1;
-            totalCurrAngle += ((desiredAngle < 0) ? -currentAngle: currentAngle);
-        }
-        orevAngle = currentAngle;
+        prevAngle = currentAngle;
         pros::delay(1);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
@@ -95,13 +89,15 @@ void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopTyp
 void move_straight(const float time, const int volt) {
     double timeElapsed = 0;
     pros::Task stopwatch{[=] {
-        ++timeElapsed; pros::delay(1);
+        pros::delay(1000);
+        timeElapsed += 0.001;
     }}
     
     while (timeElapsed < time) {
         move(volt, volt);
         pros::delay(15);
     }
+    stopwatch
 }
 
 /** Moves the robot until the light sensor
