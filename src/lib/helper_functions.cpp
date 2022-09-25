@@ -9,10 +9,11 @@
 
 #include <math.h>
 
-const unsigned wheelDiam = 4;
+const double wheelDiam = 4;
 const double motorToWheelRatio = 200.0 / 360;
+const double robotWidth = 10;
 
-/** Gets the distance travelled in the x-y plane by the robot
+/** Gets the distance travelled in a linear path by the robot
  * 
  * @return the distance travelled by the motors, in inches
  */
@@ -77,4 +78,10 @@ double PID(double input, double target, double Kp, double Ki, double Kd, int dir
     prevError = error;
 
     return Kp * error + Kd * derivative + Ki * integral;
+}
+
+void odometry() {
+
+    float alpha = (rightMidMotor.get_position()/motorToWheelRatio
+                    - leftMidMotor.get_position()/motorToWheelRatio) / ;    // the angle turned
 }
