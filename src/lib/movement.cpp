@@ -46,7 +46,7 @@ void move(const int leftVolt, const int rightVolt){
 void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAngle) {
     //  if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
     //      throw std::out_of_range;
-    
+    float prevAngle = 0;
     float currentAngle = get_heading(), targetAngle = currentAngle + desiredAngle;
     int totalCurrAngle = 0;  // needed because get_heading() doesn't return a value higher than 180.
     short headingReversed = 1;
@@ -56,10 +56,15 @@ void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAn
         move(baseLeftVolt + PID(currentAngle, targetAngle, 0.6, 0, 0.2), 
                 baseRightVolt - PID(currentAngle, targetAngle, 0.6, 0, 0.2));
         
-        if (abs(currentAngle) >= 179) {
+        if (desiredAngle > 179) and (abs(currentAngle - prevAngle) > 170){
+            move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BREAK);
+            break
+        }
+        else if (abs(currentAngle) >= 179) {
             headingReversed *= -1;
             totalCurrAngle += ((desiredAngle < 0) ? -currentAngle: currentAngle);
         }
+        orevAngle = currentAngle;
         pros::delay(1);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
