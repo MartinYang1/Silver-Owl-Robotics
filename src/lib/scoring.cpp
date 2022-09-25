@@ -8,7 +8,7 @@
 #include "helper_functions.hpp"
 #include "movement.hpp"
 
-const unsigned redHue[4] = {330, 360, 0, 30}; const unsigned blueHue[2] = {160, 290};
+motorToFlywheel = 5;
 
 /** Turns the roller to its opposite colour side
  * 
@@ -53,12 +53,13 @@ void aim_shot() {
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }
 
-void shoot(const unsigned desiredSpeed, bool actuatePiston) {
-    const unsigned currSpeed = flywheel.get_actual_velocity();
-    while (currSpeed < desiredSpeed - 5) {
-        const unsigned currSpeed = flywheel.get_actual_velocity();
-        flywheel = PID(currSpeed, desiredSpeed, 2, 0, 0);
+void shoot(const unsigned desiredVel, bool actuatePiston) {
+    const unsigned currVel = flywheel.get_actual_velocity() * motorToWheelRatio;
+    while (abs(currVel) < abs(desiredVel) - 5) {
+        const unsigned currVel = flywheel.get_actual_velocity() * motorToWheelRatio;
+        flywheel = PID(currVel, desiredVel, 2, 0, 0);
     }
+
     if (actuatePiston) {
         flywheel_piston.set_value(1);
         pros::delay(200);
