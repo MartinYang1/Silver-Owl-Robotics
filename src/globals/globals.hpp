@@ -17,6 +17,7 @@ extern pros::Motor rightMidMotor;
 
 // disc mechanisms
 extern pros::Motor flywheel;
+extern pros::Motor flywheel2;
 extern pros::Motor intake;
 extern pros::Motor intake2;
 extern pros::Motor &roller;

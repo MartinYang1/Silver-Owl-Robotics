@@ -86,19 +86,19 @@ void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopTyp
     move(stopType, stopType);
 }
 
-void move_straight(const float time, const int volt) {
-    double timeElapsed = 0;
-    pros::Task stopwatch{[=] {
-        pros::delay(1000);
-        timeElapsed += 0.001;
-    }}
+// void move_straight(const float time, const int volt) {
+//     double timeElapsed = 0;
+//     pros::Task stopwatch{[=] {
+//         pros::delay(1000);
+//         timeElapsed += 0.001;
+//     }}
     
-    while (timeElapsed < time) {
-        move(volt, volt);
-        pros::delay(15);
-    }
-    stopwatch
-}
+//     while (timeElapsed < time) {
+//         move(volt, volt);
+//         pros::delay(15);
+//     }
+//     stopwatch
+// }
 
 /** Moves the robot until the light sensor
  * detects the roller.
@@ -107,6 +107,7 @@ void move_straight(const float time, const int volt) {
  */
 void move_straight(const int volt) {
     while (optical_sensor.get_proximity() < 255) {
+        master.print(0, 0, "f", optical_sensor.get_proximity());
         move(volt + PID(get_heading(), 0, 1, 0.02, 0.5), 
                 volt - PID(get_heading(), 0, 1, 0.02, 0.5));
         pros::delay(15);

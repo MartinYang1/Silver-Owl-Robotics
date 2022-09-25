@@ -16,7 +16,8 @@ pros::Motor intake(19);
 pros::Motor intake2(20, 1);
 pros::Motor &roller = intake;
 pros::Motor &roller2 = intake2;
-pros::Motor flywheel(20); 
+pros::Motor flywheel(1, MOTOR_GEAR_BLUE, 1); 
+pros::Motor flywheel2(2, MOTOR_GEAR_BLUE);
 
 // sensors
 pros::Vision vision_sensor(13);
