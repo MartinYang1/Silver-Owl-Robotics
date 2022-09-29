@@ -10,17 +10,14 @@ void opcontrol() {
 		leftBackMotor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
 		rightBackMotor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
 
-
-int x=master.get_analog(ANALOG_LEFT_Y);
-int y=master.get_analog(ANALOG_RIGHT_X);
-//int z=master.get_analog(ANALOG_LEFT_X);
-		leftFrontMotor = (x+y);
-		leftBackMotor = (x+y);
-		rightFrontMotor = (x-y);
-		rightBackMotor = x-y;
-		leftMidMotor=x+y;
-		rightMidMotor =x-y;
-
+		int x=master.get_analog(ANALOG_LEFT_Y);
+		int y=master.get_analog(ANALOG_RIGHT_X);
+		int z=master.get_analog(ANALOG_LEFT_X);
+		leftFrontMotor = (x+y+z);
+		leftBackMotor = (x+y-z);
+		rightFrontMotor = (x-y-z);
+		rightBackMotor = x-y+z;
+	int flywheels = 1;
 
 
 		int auto_fire = 0;
@@ -59,6 +56,15 @@ int y=master.get_analog(ANALOG_RIGHT_X);
 		}
 }
 
+		if(master.get_digital_new_press(DIGITAL_R2))
+		{
+		flywheels = 1;	
+		}
+		else if (master.get_digital(DIGITAL_R1))
+		{
+		flywheels = 0;
+		}
+
  		
 		if(master.get_digital_new_press(DIGITAL_LEFT))
 		{
@@ -93,6 +99,16 @@ int y=master.get_analog(ANALOG_RIGHT_X);
 			case 1:
 			intake = 127;
 			break;
+		}
+		switch(flywheels)
+		{
+			case 1:
+			flywheel = 54;
+			break;
+			case 0:
+			flywheel = 110;
+			break;
+
 		}
 	if (master.get_digital(DIGITAL_RIGHT))//expander
 	{
