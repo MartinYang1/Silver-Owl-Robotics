@@ -5,6 +5,7 @@
 void opcontrol() {
 	int intake_state = -1;
     flywheel = 84;
+	int flywheels = 1;
 	while(true)
 	{
 		leftBackMotor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
@@ -17,7 +18,7 @@ void opcontrol() {
 		leftBackMotor = (x+y-z);
 		rightFrontMotor = (x-y-z);
 		rightBackMotor = x-y+z;
-	int flywheels = 1;
+	
 
 
 		int auto_fire = 0;
@@ -60,7 +61,7 @@ void opcontrol() {
 		{
 		flywheels = 1;	
 		}
-		else if (master.get_digital(DIGITAL_R1))
+		else if (master.get_digital_new_press(DIGITAL_R1))
 		{
 		flywheels = 0;
 		}
