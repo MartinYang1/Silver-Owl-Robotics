@@ -88,7 +88,6 @@ void odometry(vector *pCentre) {
     // the angle turned
     float alpha = (R - L) / robotWidth;
     master.print(0, 0, "%f", alpha);
-    pros::delay(50);
     double hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
     double deltaX = hypotenuse * cos(pCentre->heading + alpha/2);

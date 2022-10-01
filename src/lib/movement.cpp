@@ -60,7 +60,7 @@ void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAn
             break;
         }
         prevAngle = currentAngle;
-        pros::delay(1);
+        pros::delay(15);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }
@@ -108,7 +108,6 @@ void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopTyp
  */
 void move_straight(const int volt) {
     while (optical_sensor.get_proximity() < 255) {
-        master.print(0, 0, "f", optical_sensor.get_proximity());
         move(volt + PID(get_heading(), 0, 1, 0.02, 0.5), 
                 volt - PID(get_heading(), 0, 1, 0.02, 0.5));
         pros::delay(15);
