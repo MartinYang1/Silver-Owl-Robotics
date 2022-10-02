@@ -83,8 +83,8 @@ double PID(double input, double target, double Kp, double Ki, double Kd, int dir
 
 void odometry(vector *pCentre) {
     float robotWidth =14;
-    double L = leftMidMotor.get_position()/motorToWheelRatio;
-    double R = rightMidMotor.get_position()/motorToWheelRatio;
+    double L = leftMidMotor.get_position() / motorToWheelRatio;
+    double R = rightMidMotor.get_position() / motorToWheelRatio;
     // the angle turned
     float alpha = (R - L) / robotWidth;
     master.print(0, 0, "%f", alpha);
@@ -95,4 +95,5 @@ void odometry(vector *pCentre) {
 
     pCentre->heading += alpha;
     pCentre->x += deltaX; pCentre->y += deltaY;
+    pros::delay(2);
 }

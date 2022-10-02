@@ -2,7 +2,7 @@
 #include "selection.h"
 #include "globals/globals.hpp"
 #include "route/route.hpp"
-
+#include "helper_functions.hpp"
 
 /**
  * A callback function for LLEMU's center button.
@@ -30,7 +30,6 @@ void initialize() {
 	imu_sensor.reset();
 	pros::lcd::register_btn1_cb(on_center_button);
 	selectorInit();
-
 }
 
 /**
