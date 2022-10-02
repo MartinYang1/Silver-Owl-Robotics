@@ -13,6 +13,7 @@ extern double get_move_speed();
 extern double get_move_voltage();
 
 extern double PID(double input, double target, double Kp, double Ki, double Kd, int direction = 1);
-extern void odometry(vector *pCentre);
- 
+extern void odometry(void *param);
+extern void stopwatch(void *param);
+
 #endif

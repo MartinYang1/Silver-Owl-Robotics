@@ -14,6 +14,6 @@ extern void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) 
 extern void move_straight(const float time, const int volt);
 extern void move_straight(const int volt);
 
-extern void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAngle, vector *pCentre);
+extern void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre);
 
 #endif

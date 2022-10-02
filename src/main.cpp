@@ -2,7 +2,6 @@
 #include "selection.h"
 #include "globals/globals.hpp"
 #include "route/route.hpp"
-#include "helper_functions.hpp"
 
 /**
  * A callback function for LLEMU's center button.

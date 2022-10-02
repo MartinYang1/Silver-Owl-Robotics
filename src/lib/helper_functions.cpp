@@ -81,19 +81,24 @@ double PID(double input, double target, double Kp, double Ki, double Kd, int dir
     return Kp * error + Kd * derivative + Ki * integral;
 }
 
-void odometry(vector *pCentre) {
-    float robotWidth =14;
+void stopwatch(void *param) {
+    pros::delay(1);
+    *static_cast<unsigned*>(param) += 1;
+}
+
+void odometry(void* param) {
+    vector *pCentre = static_cast<vector*>(param);
+
     double L = leftMidMotor.get_position() / motorToWheelRatio;
     double R = rightMidMotor.get_position() / motorToWheelRatio;
     // the angle turned
     float alpha = (R - L) / robotWidth;
-    master.print(0, 0, "%f", alpha);
     double hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
     double deltaX = hypotenuse * cos(pCentre->heading + alpha/2);
     double deltaY = hypotenuse * sin(pCentre->heading + alpha/2);
-
+    master.print(0, 0, "%f", alpha);
     pCentre->heading += alpha;
-    pCentre->x += deltaX; pCentre->y += deltaY;
-    pros::delay(2);
+    pCentre->x = pCentre->x + deltaX; pCentre->y += deltaY;
+    pros::delay(15);
 }

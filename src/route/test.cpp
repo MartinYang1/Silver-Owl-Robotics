@@ -32,19 +32,33 @@ void test() {
     // shoot(4000, 1);
     //     shoot(4000, 1);
     // shoot(4000, 1);
-
-     imu_sensor.reset();
-     pros::delay(2000);
-     imu_sensor.tare_heading();
-    // // move_straight(80.0, MOTOR_BRAKE_COAST);
-    int a = 5;
-    int *b = &a;
-    pros::Task track_position(odometry, (&center));
+    imu_sensor.reset();
+    pros::delay(2000);
+    imu_sensor.tare_heading();
     pros::delay(100);
-    turn(30, -30, 90, &center);
+     //void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre)
+    turn(80, 80, 80, &center);
+    master.print(0, 0, "%d", imu_sensor.get_heading());
+    pros::delay(1000);
 
-    
+    //  imu_sensor.reset();
+    //  pros::delay(2000);
+    //  imu_sensor.tare_heading();
+    // // // move_straight(80.0, MOTOR_BRAKE_COAST);
+    // int a = 5;
+    // int *b = &a;
+    // pros::Task track_position(odometry, (&center));
+    // pros::delay(100);
+    // turn(30, -30, 90, &center);
+    // track_position.remove();
+    // pros::delay(500);
+    // master.print(0, 0, "%f", center.x);
+    // unsigned timeElapsed = 10;
+    // pros::Task track_time(stopwatch, &timeElapsed);
+    // move_straight(4, 80);
+    // master.print(0, 0, "%d", timeElapsed);
     // // aim_shot();
+    
     // pros::delay(2000);x
     //turn_roller(80);
     //shoot(200, 1);

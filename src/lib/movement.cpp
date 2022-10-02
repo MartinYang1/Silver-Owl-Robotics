@@ -2,6 +2,7 @@
 #include "../globals/globals.hpp"
 #include "helper_functions.hpp"
 #include "movement.hpp"
+#include "pros/motors.h"
 
 #include <math.h>
 #include <vector>
@@ -43,26 +44,52 @@ void move(const int leftVolt, const int rightVolt){
  * @param desiredAngle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
  * and a postive angle turns the robot clockwise
  */
-void turn(const int baseLeftVolt, const int baseRightVolt, const float desiredAngle, vector *pCentre) {
-    //  if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
-    //      throw std::out_of_range;
-    float prevAngle = 0;
-    float currentAngle = get_heading(), targetAngle = currentAngle + desiredAngle;
-    short headingReversed = 1;
-    while (abs(currentAngle) <= abs(targetAngle)) { 
-        odometry(pCentre);
-        currentAngle = get_heading();
-        move(baseLeftVolt + PID(currentAngle, targetAngle, 0.6, 0, 0.2), 
-                baseRightVolt - PID(currentAngle, targetAngle, 0.6, 0, 0.2));
-        
-        if (targetAngle > 179 && abs(currentAngle - prevAngle) > 170){
-            move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
-            break;
-        }
-        prevAngle = currentAngle;
-        pros::delay(15);
+void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre){
+    int pos = 0;
+    int R = desiredAngle / 360;
+    int r = desiredAngle % 360;
+    float p = imu_sensor.get_heading();
+    int s = sgn(desiredAngle);
+    float current_angle = imu_sensor.get_heading();
+    float target_angleoof = current_angle + desiredAngle;
+    float target_angle;
+    if (target_angleoof > 360){
+        float target_angle = target_angleoof - 360;
     }
-    move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+    else{
+        float target_angle = target_angleoof;
+    }
+   
+    int revolutions = 0;
+    while (revolutions < R){
+        move(s*baseLeftVolt, -s*baseRightVolt);
+        p = imu_sensor.get_heading();
+        if (pos == 0) {
+            if (current_angle - 9 < p && p < current_angle + 9){
+                pos = 0;
+            }
+            else{
+                pos = 1;
+            }
+        }
+        if (pos == 1){
+            if (current_angle - 9 < p && p < current_angle + 9){
+                    revolutions ++;
+                    pos = 0 ;
+            }
+            else{
+                  pos = 1;
+            }
+        }
+    }
+    move(0, 0);
+   
+    while (target_angle - 8 < p && p < target_angle + 8){
+        move(s*baseLeftVolt, -s*baseRightVolt);
+        p = imu_sensor.get_heading();
+           
+    }
+    move(0, 0);
 }
 
 /** Moves the robot a given distance forwards or backwards
@@ -87,19 +114,15 @@ void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopTyp
     move(stopType, stopType);
 }
 
-// void move_straight(const float time, const int volt) {
-//     double timeElapsed = 0;
-//     pros::Task stopwatch{[=] {
-//         pros::delay(1000);
-//         timeElapsed += 0.001;
-//     }}
-    
-//     while (timeElapsed < time) {
-//         move(volt, volt);
-//         pros::delay(15);
-//     }
-//     stopwatch
-// }
+void move_straight(const float time, const int volt) {
+    static unsigned timeElapsed = 0;    // in milliseconds
+    while (timeElapsed < time * 1000) {
+        move(volt, volt);
+        ++timeElapsed;
+        pros::delay(1);
+    }
+    move(MOTOR_BRAKE_HOLD, MOTOR_BRAKE_HOLD);
+}
 
 /** Moves the robot until the light sensor
  * detects the roller.
