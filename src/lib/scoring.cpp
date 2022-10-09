@@ -36,10 +36,10 @@ void aim_shot() {
     while (!isAiming) {
         pros::vision_object_s_t goal = vision_sensor.get_by_size(0);
         double centre = goal.x_middle_coord;
-        if (centre > 10){
+        if (centre > 5){
             move(50, -50);
         }
-        else if (centre < -10){
+        else if (centre < -5){
             move(-50, 50);
         }
         else{

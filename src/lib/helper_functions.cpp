@@ -82,23 +82,36 @@ double PID(double input, double target, double Kp, double Ki, double Kd, int dir
 }
 
 void stopwatch(void *param) {
-    pros::delay(1);
-    *static_cast<unsigned*>(param) += 1;
+    while (true) {
+        *static_cast<unsigned*>(param) += 1;
+        pros::delay(1);
+    }
 }
 
 void odometry(void* param) {
     vector *pCentre = static_cast<vector*>(param);
+    double L, R, deltaX, deltaY, alpha, hypotenuse;
+    while (true) {
+        L = leftMidMotor.get_position() / motorToWheelRatio;
+        R = rightMidMotor.get_position() / motorToWheelRatio;
+        if (L==R) {
+            deltaX = L * cos(pCentre->heading); deltaY = R * sin(pCentre->heading);
+            pCentre->x += deltaX; pCentre->y += deltaY;
+            master.print(0, 0, "%f", pCentre->x);
+            pros::delay(1);
+        }
+        else {
+            // the angle turned
+            alpha = (R - L) / robotWidth;
+            hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
-    double L = leftMidMotor.get_position() / motorToWheelRatio;
-    double R = rightMidMotor.get_position() / motorToWheelRatio;
-    // the angle turned
-    float alpha = (R - L) / robotWidth;
-    double hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
-
-    double deltaX = hypotenuse * cos(pCentre->heading + alpha/2);
-    double deltaY = hypotenuse * sin(pCentre->heading + alpha/2);
-    master.print(0, 0, "%f", alpha);
-    pCentre->heading += alpha;
-    pCentre->x = pCentre->x + deltaX; pCentre->y += deltaY;
-    pros::delay(15);
+            deltaX = hypotenuse * cos(pCentre->heading + alpha/2);
+            deltaY = hypotenuse * sin(pCentre->heading + alpha/2);
+            // master.print(0, 0, "%f", alpha);
+            pCentre->heading += alpha;
+            pCentre->x = pCentre->x + deltaX; pCentre->y += deltaY;
+            pros::delay(1);
+            // master.print(0, 0, "%f", pCentre->x);
+        }
+    }
 }

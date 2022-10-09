@@ -3,7 +3,7 @@
 #include "pros/misc.h"
 
 void opcontrol() {
-	int intake_state = -1;
+	int intake_state = 1;
     flywheel = 84;
 	int flywheels = 1;
 	while(true)
@@ -104,10 +104,12 @@ void opcontrol() {
 		switch(flywheels)
 		{
 			case 1:
-			flywheel = 54;
+			flywheel = 108;
+			flywheel2=108;
 			break;
 			case 0:
-			flywheel = 110;
+			flywheel = 127;
+			flywheel2=127;
 			break;
 
 		}

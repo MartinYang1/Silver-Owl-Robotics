@@ -46,51 +46,75 @@ void move(const int leftVolt, const int rightVolt){
  */
 void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre){
     int pos = 0;
-    int R = desiredAngle / 360;
+    int R = abs(desiredAngle) / 360;
     int r = desiredAngle % 360;
     float p = imu_sensor.get_heading();
+        pros::delay(20);
     int s = sgn(desiredAngle);
     float current_angle = imu_sensor.get_heading();
+        pros::delay(40);
     float target_angleoof = current_angle + desiredAngle;
+        pros::delay(20);
     float target_angle;
+        pros::delay(20);
     if (target_angleoof > 360){
-        float target_angle = target_angleoof - 360;
+        target_angle = target_angleoof - 360;
+            pros::delay(50);
+    }
+    else if (target_angleoof < 0){
+        target_angle = target_angleoof + 360;
+            pros::delay(50);
     }
     else{
-        float target_angle = target_angleoof;
+        target_angle = target_angleoof;
+            pros::delay(50);
     }
    
     int revolutions = 0;
     while (revolutions < R){
+            pros::delay(20);
         move(s*baseLeftVolt, -s*baseRightVolt);
         p = imu_sensor.get_heading();
+            pros::delay(20);
         if (pos == 0) {
+                pros::delay(50);
             if (current_angle - 9 < p && p < current_angle + 9){
                 pos = 0;
+                    pros::delay(20);
             }
             else{
                 pos = 1;
+                    pros::delay(20);
             }
         }
         if (pos == 1){
             if (current_angle - 9 < p && p < current_angle + 9){
                     revolutions ++;
                     pos = 0 ;
+                        pros::delay(20);
             }
             else{
                   pos = 1;
+                      pros::delay(20);
             }
         }
     }
+        pros::delay(20);
     move(0, 0);
-   
-    while (target_angle - 8 < p && p < target_angle + 8){
-        move(s*baseLeftVolt, -s*baseRightVolt);
+    p = imu_sensor.get_heading();
+    while (p > target_angle+1 || p < target_angle-1) { 
+        master.print(0, 0, "%f", target_angle);
         p = imu_sensor.get_heading();
-           
-    }
-    move(0, 0);
+        move(baseLeftVolt*s, 
+                baseRightVolt*s*-1);
+ 
 }
+   move(0, 0);
+}
+
+// void turn_scuff(int radius, int desiredAngle) {
+//     
+// }
 
 /** Moves the robot a given distance forwards or backwards
  * 

@@ -6,7 +6,7 @@
 
 struct vector {
     double x = 0, y = 0;
-    float dist = 0, heading = 0;
+    double dist = 0, heading = 0;
 };
 
 extern void move(const int leftVolt, const int rightVolt);
