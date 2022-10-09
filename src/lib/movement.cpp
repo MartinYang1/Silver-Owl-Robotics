@@ -139,6 +139,10 @@ void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopTyp
 }
 
 void move_straight(const float time, const int volt) {
+    leftBackMotor.tare_position(); rightBackMotor.tare_position();
+    //leftMidMotor.tare_position(); rightMidMotor.tare_position();
+    leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
+    
     static unsigned timeElapsed = 0;    // in milliseconds
     while (timeElapsed < time * 1000) {
         move(volt, volt);
