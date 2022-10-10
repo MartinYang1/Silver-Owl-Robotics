@@ -11,7 +11,7 @@
 #include <math.h>
 
 const double wheelDiam = 4;
-const double motorToWheelRatio = 200.0 / 360;
+const double motorToWheelRatio = 7 / 3.0;
 const double robotWidth = 14;
 
 /** Gets the distance travelled in a linear path by the robot
@@ -88,15 +88,21 @@ void stopwatch(void *param) {
     }
 }
 
+inline void reset_drive_train() {
+    leftBackMotor.tare_position(); rightBackMotor.tare_position();
+    leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
+}
+
 void odometry(void* param) {
     vector *pCentre = static_cast<vector*>(param);
     double L, R, deltaX, deltaY, alpha, hypotenuse;
     while (true) {
-        L = leftMidMotor.get_position() / motorToWheelRatio;
-        R = rightMidMotor.get_position() / motorToWheelRatio;
+        L = leftFrontMotor.get_position() * (1/motorToWheelRatio) / 360 * (M_PI*wheelDiam);
+        R = rightFrontMotor.get_position() * (1/motorToWheelRatio) / 360 * (M_PI*wheelDiam);
+        //master.print(0, 0, "%f", L);
         if (L==R) {
             deltaX = L * cos(pCentre->heading); deltaY = R * sin(pCentre->heading);
-            pCentre->x += deltaX; pCentre->y += deltaY;
+            pCentre->x = deltaX; pCentre->y = deltaY;
             master.print(0, 0, "%f", pCentre->x);
             pros::delay(1);
         }
@@ -107,11 +113,10 @@ void odometry(void* param) {
 
             deltaX = hypotenuse * cos(pCentre->heading + alpha/2);
             deltaY = hypotenuse * sin(pCentre->heading + alpha/2);
-            // master.print(0, 0, "%f", alpha);
-            pCentre->heading += alpha;
-            pCentre->x = pCentre->x + deltaX; pCentre->y += deltaY;
+
+            pCentre->heading = alpha;
+            pCentre->x = deltaX; pCentre->y = deltaY;
             pros::delay(1);
-            // master.print(0, 0, "%f", pCentre->x);
         }
     }
 }

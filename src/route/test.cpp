@@ -5,6 +5,8 @@
 #include "../lib/scoring.hpp"
 #include "pros/vision.h"
 
+using namespace pros;
+
 	vector center =
 	{
 		// .x = 0.0,
@@ -40,9 +42,11 @@ void test() {
 //     turn(80,80,-450,&center);
     // unsigned timeElapsed = 0;
     // pros::Task track_time(stopwatch, &timeElapsed);
+    imu_sensor.tare_heading();
+    pros::delay(50);
      pros::Task track_position(odometry, &center);
-     move_straight(4, 80);
-    //master.print(0, 0, "%f", center.x);
+     move_straight(24);
+    master.print(0, 0, "%f", center.x);
     // track_time.remove();
     // // aim_shot();
     

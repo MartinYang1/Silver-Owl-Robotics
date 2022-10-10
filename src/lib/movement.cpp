@@ -142,13 +142,14 @@ void move_straight(const float time, const int volt) {
     leftBackMotor.tare_position(); rightBackMotor.tare_position();
     //leftMidMotor.tare_position(); rightMidMotor.tare_position();
     leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
-    
+
     static unsigned timeElapsed = 0;    // in milliseconds
+    pros::Task track_time(stopwatch, &timeElapsed);
     while (timeElapsed < time * 1000) {
         move(volt, volt);
-        ++timeElapsed;
         pros::delay(1);
     }
+    track_time.remove();
     move(MOTOR_BRAKE_HOLD, MOTOR_BRAKE_HOLD);
 }
 
