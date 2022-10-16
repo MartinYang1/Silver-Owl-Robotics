@@ -21,19 +21,6 @@ void move(const int leftVolt, const int rightVolt){
     rightFrontMotor = rightVolt; rightBackMotor = rightVolt;
 }
 
-// //closed loop movement using PID
-// void move_closed_loop(double distanceLeft, double distanceRight){
-//     double lastErrorLeft = 0.1;
-//     double lastErrorRight = 0.1;
-//     double startLeft = distance(leftBackMotor);
-//     double startRight = distance(rightBackMotor);
-
-//     while (lastErrorLeft + lastErrorRight != 0){
-//         PID(distanceLeft, distance(leftBackMotor) - startLeft, &lastErrorLeft);
-//         PID(distanceRight, distance(rightBackMotor) - startRight, &lastErrorRight);
-//     }
-// }
-
 /** Turns the robot to a desired angle,
  * relative to its starting pos when the gyro sensor was calibrated
  * 
@@ -44,73 +31,85 @@ void move(const int leftVolt, const int rightVolt){
  * @param desiredAngle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
  * and a postive angle turns the robot clockwise
  */
-void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre){
-    int pos = 0;
-    int R = abs(desiredAngle) / 360;
-    int r = desiredAngle % 360;
-    float p = imu_sensor.get_heading();
-        pros::delay(20);
-    int s = sgn(desiredAngle);
-    float current_angle = imu_sensor.get_heading();
-        pros::delay(40);
-    float target_angleoof = current_angle + desiredAngle;
-        pros::delay(20);
-    float target_angle;
-        pros::delay(20);
-    if (target_angleoof > 360){
-        target_angle = target_angleoof - 360;
-            pros::delay(50);
+ void turn(const int baseLeftVolt, const int baseRightVolt, const int desiredAngle, vector *pCentre) {
+    //  if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
+    //      throw std::out_of_range;
+    float currentAngle = get_heading(), targetAngle = currentAngle + desiredAngle;
+    while (abs(currentAngle) <= abs(targetAngle)) { 
+        currentAngle = get_heading();
+        move(baseLeftVolt + PID(currentAngle, targetAngle, 5, 0, 0.2), 
+                baseRightVolt - PID(currentAngle, targetAngle, 5, 0, 0.2));
+        pros::delay(15);
     }
-    else if (target_angleoof < 0){
-        target_angle = target_angleoof + 360;
-            pros::delay(50);
-    }
-    else{
-        target_angle = target_angleoof;
-            pros::delay(50);
-    }
+    move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+}
+// void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre){
+//     int pos = 0;
+//     int R = abs(desiredAngle) / 360;
+//     int r = desiredAngle % 360;
+//     float p = imu_sensor.get_heading();
+//         pros::delay(20);
+//     int s = sgn(desiredAngle);
+//     float current_angle = imu_sensor.get_heading();
+//         pros::delay(40);
+//     float target_angleoof = current_angle + desiredAngle;
+//         pros::delay(20);
+//     float target_angle;
+//         pros::delay(20);
+//     if (target_angleoof > 360){
+//         target_angle = target_angleoof - 360;
+//             pros::delay(50);
+//     }
+//     else if (target_angleoof < 0){
+//         target_angle = target_angleoof + 360;
+//             pros::delay(50);
+//     }
+//     else{
+//         target_angle = target_angleoof;
+//             pros::delay(50);
+//     }
    
-    int revolutions = 0;
-    while (revolutions < R){
-            pros::delay(20);
-        move(s*baseLeftVolt, -s*baseRightVolt);
-        p = imu_sensor.get_heading();
-            pros::delay(20);
-        if (pos == 0) {
-                pros::delay(50);
-            if (current_angle - 9 < p && p < current_angle + 9){
-                pos = 0;
-                    pros::delay(20);
-            }
-            else{
-                pos = 1;
-                    pros::delay(20);
-            }
-        }
-        if (pos == 1){
-            if (current_angle - 9 < p && p < current_angle + 9){
-                    revolutions ++;
-                    pos = 0 ;
-                        pros::delay(20);
-            }
-            else{
-                  pos = 1;
-                      pros::delay(20);
-            }
-        }
-    }
-        pros::delay(20);
-    move(0, 0);
-    p = imu_sensor.get_heading();
-    while (p > target_angle+1 || p < target_angle-1) { 
-        master.print(0, 0, "%f", target_angle);
-        p = imu_sensor.get_heading();
-        move(baseLeftVolt*s, 
-                baseRightVolt*s*-1);
+//     int revolutions = 0;
+//     while (revolutions < R){
+//             pros::delay(20);
+//         move(s*baseLeftVolt, -s*baseRightVolt);
+//         p = imu_sensor.get_heading();
+//             pros::delay(20);
+//         if (pos == 0) {
+//                 pros::delay(50);
+//             if (current_angle - 9 < p && p < current_angle + 9){
+//                 pos = 0;
+//                     pros::delay(20);
+//             }
+//             else{
+//                 pos = 1;
+//                     pros::delay(20);
+//             }
+//         }
+//         if (pos == 1){
+//             if (current_angle - 9 < p && p < current_angle + 9){
+//                     revolutions ++;
+//                     pos = 0 ;
+//                         pros::delay(20);
+//             }
+//             else{
+//                   pos = 1;
+//                       pros::delay(20);
+//             }
+//         }
+//     }
+//         pros::delay(20);
+//     move(0, 0);
+//     p = imu_sensor.get_heading();
+//     while (p > target_angle+1 || p < target_angle-1) { 
+//         master.print(0, 0, "%f", target_angle);
+//         p = imu_sensor.get_heading();
+//         move(baseLeftVolt*s, 
+//                 baseRightVolt*s*-1);
  
-}
-   move(0, 0);
-}
+// }
+//    move(0, 0);
+// }
 
 // void turn_scuff(int radius, int desiredAngle) {
 //     

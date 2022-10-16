@@ -11,7 +11,7 @@
 #include <math.h>
 
 const double wheelDiam = 4;
-const double motorToWheelRatio = 7 / 3.0;
+const double motorToWheelRatio = 3 / 7.0;
 const double robotWidth = 14;
 
 /** Gets the distance travelled in a linear path by the robot
@@ -21,9 +21,9 @@ const double robotWidth = 14;
 double get_dist_travelled() {
     double degreesTravelled = (leftBackMotor.get_position() + rightBackMotor.get_position()
             + leftFrontMotor.get_position() + rightFrontMotor.get_position()) / 4;
-    degreesTravelled /= 2;  // for some reason the motor encoder values are exactly 2 times less than how far the motor moves,
+    //degreesTravelled /= 2;  // for some reason the motor encoder values are exactly 2 times less than how far the motor moves,
                             // so we are dividing by 2. This needs to be fixed when we have time.
-    return degreesTravelled * (1/motorToWheelRatio) / 360 * (M_PI*wheelDiam);
+    return degreesTravelled * motorToWheelRatio / 360 * (M_PI*wheelDiam);
 }
 
 /** Gets the heading of the robot from its gyro sensor
@@ -47,7 +47,7 @@ double get_heading() {
  */
 double get_move_speed() {
     return (leftBackMotor.get_actual_velocity() + rightBackMotor.get_actual_velocity()
-            + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity())/4 * (1.0/motorToWheelRatio);
+            + leftFrontMotor.get_actual_velocity() + rightFrontMotor.get_actual_velocity())/4 * motorToWheelRatio;
 }
 
 /** Gets the voltage that the drive train motors are running at
@@ -97,26 +97,27 @@ void odometry(void* param) {
     vector *pCentre = static_cast<vector*>(param);
     double L, R, deltaX, deltaY, alpha, hypotenuse;
     while (true) {
-        L = leftFrontMotor.get_position() * (1/motorToWheelRatio) / 360 * (M_PI*wheelDiam);
-        R = rightFrontMotor.get_position() * (1/motorToWheelRatio) / 360 * (M_PI*wheelDiam);
+        L = leftFrontMotor.get_position() * motorToWheelRatio / 360 * (M_PI*wheelDiam);
+        R = rightFrontMotor.get_position() * motorToWheelRatio / 360 * (M_PI*wheelDiam);
         //master.print(0, 0, "%f", L);
         if (L==R) {
-            deltaX = L * cos(pCentre->heading); deltaY = R * sin(pCentre->heading);
-            pCentre->x = deltaX; pCentre->y = deltaY;
-            master.print(0, 0, "%f", pCentre->x);
-            pros::delay(1);
+            deltaX = L * cos(pCentre->heading) - pCentre->x; deltaY = R * sin(pCentre->heading)-pCentre->y;
+            pCentre->x += deltaX; pCentre->y += deltaY;
+            //master.print(0, 0, "%f", pCentre->x);
+            pros::delay(10);
         }
         else {
             // the angle turned
             alpha = (R - L) / robotWidth;
             hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
-            deltaX = hypotenuse * cos(pCentre->heading + alpha/2);
-            deltaY = hypotenuse * sin(pCentre->heading + alpha/2);
+            deltaX = hypotenuse * cos(pCentre->heading + alpha/2) - pCentre->x;
+            deltaY = hypotenuse * sin(pCentre->heading + alpha/2) - pCentre->y;
 
             pCentre->heading = alpha;
-            pCentre->x = deltaX; pCentre->y = deltaY;
-            pros::delay(1);
+            pCentre->x += deltaX; pCentre->y += deltaY;
+            master.print(0, 10, "%f", pCentre->x);
+            pros::delay(10);
         }
     }
 }

@@ -45,8 +45,9 @@ void test() {
     imu_sensor.tare_heading();
     pros::delay(50);
      pros::Task track_position(odometry, &center);
-     move_straight(24);
-    master.print(0, 0, "%f", center.x);
+     move_straight(24.0);
+   // turn(50, 0, 90, &center);
+   // master.print(0, 0, "%f", center.x);
     // track_time.remove();
     // // aim_shot();
     
