@@ -45,6 +45,7 @@ void aim_shot() {
         else{
             isAiming = true;
         }
+        pros::delay(15);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }
@@ -52,16 +53,16 @@ void aim_shot() {
 void shoot(const unsigned desiredSpeed, bool actuatePiston) {
     double currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
     while (currSpeed < desiredSpeed - 5) {
-        master.print(0, 0, "%f", flywheel.get_actual_velocity());
+        //master.print(0, 0, "%f", flywheel.get_actual_velocity());
         currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
-        flywheel = PID(currSpeed, desiredSpeed, 2, 0, 0), flywheel2 = PID(currSpeed, desiredSpeed, 2, 0, 0);
+        flywheel = PID(currSpeed, desiredSpeed, 3.5, 0, 0), flywheel2 = PID(currSpeed, desiredSpeed, 3.5, 0, 0);
         pros::delay(15);
     }
     flywheel = currSpeed; flywheel2 = currSpeed;
-    pros::delay(200);
     if (actuatePiston) {
+        pros::delay(150);
         flywheel_piston.set_value(1);
-        pros::delay(200);
+        pros::delay(150);
         flywheel_piston.set_value(0);
     }
 }

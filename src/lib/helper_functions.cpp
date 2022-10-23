@@ -10,9 +10,9 @@
 
 #include <math.h>
 
-const double wheelDiam = 4;
-const double motorToWheelRatio = 3 / 7.0;
-const double robotWidth = 14;
+const double wheelDiam = 3.25;
+const double motorToWheelRatio = 3 / 5.0;
+const double robotWidth = 12;
 
 /** Gets the distance travelled in a linear path by the robot
  * 
@@ -94,30 +94,29 @@ inline void reset_drive_train() {
 }
 
 void odometry(void* param) {
-    vector *pCentre = static_cast<vector*>(param);
+    vector *pCenter = static_cast<vector*>(param);
     double L, R, deltaX, deltaY, alpha, hypotenuse;
     while (true) {
         L = leftFrontMotor.get_position() * motorToWheelRatio / 360 * (M_PI*wheelDiam);
         R = rightFrontMotor.get_position() * motorToWheelRatio / 360 * (M_PI*wheelDiam);
         //master.print(0, 0, "%f", L);
         if (L==R) {
-            deltaX = L * cos(pCentre->heading) - pCentre->x; deltaY = R * sin(pCentre->heading)-pCentre->y;
-            pCentre->x += deltaX; pCentre->y += deltaY;
-            //master.print(0, 0, "%f", pCentre->x);
-            pros::delay(10);
+            deltaX = L * cos(pCenter->heading) - pCenter->x; deltaY = R * sin(pCenter->heading)-pCenter->y;
+            pCenter->x += deltaX; pCenter->y += deltaY;
+            //master.print(0, 0, "%f", pCenter->x);
         }
         else {
             // the angle turned
             alpha = (R - L) / robotWidth;
             hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
-            deltaX = hypotenuse * cos(pCentre->heading + alpha/2) - pCentre->x;
-            deltaY = hypotenuse * sin(pCentre->heading + alpha/2) - pCentre->y;
+            deltaX = hypotenuse * cos(pCenter->heading + alpha/2) - pCenter->x;
+            deltaY = hypotenuse * sin(pCenter->heading + alpha/2) - pCenter->y;
 
-            pCentre->heading = alpha;
-            pCentre->x += deltaX; pCentre->y += deltaY;
-            master.print(0, 10, "%f", pCentre->x);
-            pros::delay(10);
+            pCenter->heading = alpha;
+            pCenter->x += deltaX; pCenter->y += deltaY;
+            master.print(0, 10, "%f", pCenter->x);
         }
+        pros::delay(10);
     }
 }

@@ -17,8 +17,8 @@
  * of the drive train, from -127 to 127 volts
  */
 void move(const int leftVolt, const int rightVolt){
-    leftFrontMotor = leftVolt; leftBackMotor = leftVolt;
-    rightFrontMotor = rightVolt; rightBackMotor = rightVolt;
+    leftFrontMotor = leftVolt; leftMidMotor = leftVolt; leftBackMotor = leftVolt;
+    rightFrontMotor = rightVolt; rightMidMotor = rightVolt; rightBackMotor = rightVolt;
 }
 
 /** Turns the robot to a desired angle,
@@ -121,11 +121,7 @@ void move(const int leftVolt, const int rightVolt){
  * @param stopType the type of brake mechanism the robot uses
  */
 void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopType) {
-    leftBackMotor.tare_position(); rightBackMotor.tare_position();
-    //leftMidMotor.tare_position(); rightMidMotor.tare_position();
-    leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
-    
-    double currDist = 0; const unsigned baseVolt = 20;
+    double currDist = (leftFrontMotor.get_position() + rightFrontMotor.get_position()) / 2; const unsigned baseVolt = 20;
     while (currDist < desiredDist) {
         const double volt = (desiredDist < 0) ? PID(currDist, desiredDist, 1, 0.1, 0.5) - baseVolt
                                             : PID(currDist, desiredDist, 1, 0.1, 0.5) + baseVolt;
@@ -138,10 +134,6 @@ void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopTyp
 }
 
 void move_straight(const float time, const int volt) {
-    leftBackMotor.tare_position(); rightBackMotor.tare_position();
-    //leftMidMotor.tare_position(); rightMidMotor.tare_position();
-    leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
-
     static unsigned timeElapsed = 0;    // in milliseconds
     pros::Task track_time(stopwatch, &timeElapsed);
     while (timeElapsed < time * 1000) {

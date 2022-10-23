@@ -14,5 +14,6 @@ extern void big6c();
 extern void runSkills();
 extern void autonTest();
 extern void test();
+extern void solo_awp();
 
 #endif

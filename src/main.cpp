@@ -72,6 +72,8 @@ void autonomous() {
 		case S_BLUE5:
 			test();
 			break;
+		case S_RED7: S_BLUE7:
+			solo_awp(); break;
 	}
 
 }

@@ -5,6 +5,6 @@ extern const double motorToFlywheel;    // the gear ratio from the motor to the 
 
 extern void aim_shot();
 extern const unsigned turn_roller(const int rate);
-extern void shoot(const unsigned desiredVel, bool actuatePiston);
+extern void shoot(const unsigned desiredVel, bool actuatePiston = 0);
 
 #endif

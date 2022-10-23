@@ -7,13 +7,7 @@
 
 using namespace pros;
 
-	vector center =
-	{
-		// .x = 0.0,
-		// .y = 0.0,
-        // .dist = 0.0,
-		// .heading = 0.0
-	};
+vector center = {};
 
 void test() {
     
