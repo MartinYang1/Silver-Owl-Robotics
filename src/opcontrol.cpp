@@ -5,19 +5,23 @@
 #include "lib/scoring.hpp"
 void opcontrol() {
 	expander1_piston.set_value(0);
-	shoot(2000, 0);
+	flywheel_piston.set_value(0);
+	shoot(2400, 0);
 	int intake_state=1;
 	int flywheel_state=0;
 	while (true) {
 		int power = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)*-1;
 		int turnRate = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)*-1;
-		move(power + turnRate, power - turnRate);
+		move(power - turnRate, power + turnRate);
 
-		if (master.get_digital_new_press(DIGITAL_R1) )
+		if (master.get_digital(DIGITAL_R1) )
  {
-			shoot(2000, 1);
-			shoot(2000, 1);
-			shoot(2000, 1);
+			flywheel_piston.set_value(1);
+		
+		}
+		else
+		{
+			flywheel_piston.set_value(0);
 		}
 		if(master.get_digital_new_press(DIGITAL_RIGHT))
 		{

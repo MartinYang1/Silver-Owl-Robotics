@@ -4,12 +4,12 @@
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 // drive train
-pros::Motor leftFrontMotor(11, MOTOR_GEAR_BLUE, 1);
-pros::Motor rightFrontMotor(15, MOTOR_GEAR_BLUE);
+pros::Motor leftFrontMotor(11, MOTOR_GEAR_BLUE,1);
+pros::Motor rightFrontMotor(15, MOTOR_GEAR_BLUE, 0);
 pros::Motor leftBackMotor(14, MOTOR_GEAR_BLUE, 1);
-pros::Motor rightBackMotor(3, MOTOR_GEAR_BLUE);
+pros::Motor rightBackMotor(3, MOTOR_GEAR_BLUE, 0);
 pros::Motor leftMidMotor(12, MOTOR_GEAR_BLUE,1); 
-pros::Motor rightMidMotor(2, MOTOR_GEAR_BLUE); 
+pros::Motor rightMidMotor(2, MOTOR_GEAR_BLUE, 0); 
 
 // disc mechanisms
 pros::Motor intake(4);

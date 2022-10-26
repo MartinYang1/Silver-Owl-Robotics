@@ -62,7 +62,7 @@ void shoot(const unsigned desiredSpeed, bool actuatePiston) {
     if (actuatePiston) {
         pros::delay(150);
         flywheel_piston.set_value(1);
-        pros::delay(150);
+        pros::delay(2000);
         flywheel_piston.set_value(0);
     }
 }
