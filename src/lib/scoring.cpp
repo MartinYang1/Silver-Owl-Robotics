@@ -8,7 +8,7 @@
 #include "helper_functions.hpp"
 #include "movement.hpp"
 
-const double motorToFlywheel = 7 / 1;
+const double motorToFlywheel = 36;
 
 /** Turns the roller to its opposite colour side
  * 
@@ -22,10 +22,10 @@ const unsigned turn_roller(const int rate) {
 
     unsigned short currHue = optical_sensor.get_hue();
     while (currHue - 30 <= optical_sensor.get_hue() && optical_sensor.get_hue() <= currHue + 30) {
-        roller = rate; roller2 = rate;
+        roller = rate;
         pros::delay(15);
     }
-    roller = MOTOR_BRAKE_BRAKE; roller2 = MOTOR_BRAKE_BRAKE;
+    roller = MOTOR_BRAKE_BRAKE;
     optical_sensor.set_led_pwm(0);
     pros::delay(50);
     return optical_sensor.get_hue();
@@ -50,19 +50,13 @@ void aim_shot() {
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
 }
 
-void shoot(const unsigned desiredSpeed, bool actuatePiston) {
-    double currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
-    while (currSpeed < desiredSpeed - 5) {
-        //master.print(0, 0, "%f", flywheel.get_actual_velocity());
+void shoot(void *param) {
+    unsigned desiredSpeed; double currSpeed = 0;
+    while (true) {
+        desiredSpeed = *static_cast<unsigned*>(param);
+        master.print(0, 0, "%f", currSpeed);
         currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
-        flywheel = PID(currSpeed, desiredSpeed, 3.5, 0, 0), flywheel2 = PID(currSpeed, desiredSpeed, 3.5, 0, 0);
-        pros::delay(15);
-    }
-    flywheel = currSpeed; flywheel2 = currSpeed;
-    if (actuatePiston) {
-        pros::delay(150);
-        flywheel_piston.set_value(1);
-        pros::delay(2000);
-        flywheel_piston.set_value(0);
+        flywheel = 110+PID(currSpeed, desiredSpeed, 0.18, 0.04, 0.15);
+        pros::delay(35);
     }
 }

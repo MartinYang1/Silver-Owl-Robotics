@@ -3,10 +3,14 @@
 #include "pros/misc.h"
 #include "lib/movement.hpp"
 #include "lib/scoring.hpp"
+
 void opcontrol() {
+	flywheel = 127;
+    pros::delay(6000);
+	unsigned shootingSpeed = 3000;
+	pros::Task flywheel_regulation(shoot, &shootingSpeed);
 	expander1_piston.set_value(0);
 	flywheel_piston.set_value(0);
-	shoot(2400, 0);
 	int intake_state=1;
 	int flywheel_state=0;
 	while (true) {
@@ -23,10 +27,13 @@ void opcontrol() {
 		{
 			flywheel_piston.set_value(0);
 		}
-		if(master.get_digital_new_press(DIGITAL_RIGHT))
+		if(master.get_digital(DIGITAL_L1))
 		{
-			intake_state = 0;
+				intake_state = 0;
 		}
+		else {
+				intake_state = 1;
+			}
 
 		if(master.get_digital_new_press(DIGITAL_L2))
 		{
@@ -35,14 +42,8 @@ void opcontrol() {
 				intake_state = -1;
 			}
 		}
-		if(master.get_digital_new_press(DIGITAL_R1))
-		{
-			if (intake_state < 1)
-			{
-				intake_state = 1;
-			}
-		}
-		if(master.get_digital(DIGITAL_X) && master.get_digital (DIGITAL_B))
+
+		if(master.get_digital(DIGITAL_X) && master.get_digital (DIGITAL_B) && master.get_digital (DIGITAL_A) && master.get_digital (DIGITAL_Y))
 		{
 			expander1_piston.set_value(1) ;
 			pros::delay(50);

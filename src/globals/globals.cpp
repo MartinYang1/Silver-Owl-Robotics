@@ -13,11 +13,9 @@ pros::Motor rightMidMotor(2, MOTOR_GEAR_BLUE, 0);
 
 // disc mechanisms
 pros::Motor intake(4);
-pros::Motor intake2(20, 1);
 pros::Motor &roller = intake;
-pros::Motor &roller2 = intake2;
-pros::Motor flywheel(10, MOTOR_GEAR_BLUE, 1);    
-pros::Motor flywheel2(6, MOTOR_GEAR_BLUE);
+pros::Motor &indexer = intake;  // the flex wheel indexer for the shooter
+pros::Motor flywheel(10, MOTOR_GEAR_RED, 1);  
 
 // sensors
 pros::Vision vision_sensor(9);
@@ -27,6 +25,6 @@ pros::Optical optical_sensor(17);
 // pneumatics pistons
 pros::ADIDigitalOut expander1_piston(8);
 pros::ADIDigitalOut expander2_piston(1);
-pros::ADIDigitalOut flywheel_piston(6);
+pros::ADIDigitalOut flywheel_piston(6);  // the gate for the flywheel
 
 int autonSelection = SKILLS; // default auton selected

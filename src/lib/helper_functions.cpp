@@ -14,6 +14,22 @@ const double wheelDiam = 3.25;
 const double motorToWheelRatio = 3 / 5.0;
 const double robotWidth = 12;
 
+inline void reset_drive_train() {
+    leftBackMotor.tare_position(); leftMidMotor.tare_position(); rightBackMotor.tare_position();
+    leftFrontMotor.tare_position(); rightMidMotor.tare_position();; rightFrontMotor.tare_position();
+}
+
+void setup_robot(vector &centre) {
+    imu_sensor.reset();
+    pros::delay(2000);
+    imu_sensor.tare_heading();
+    pros::delay(50);
+
+    intake.tare_position(); 
+
+    pros::Task track_position(odometry, &centre);
+}
+
 /** Gets the distance travelled in a linear path by the robot
  * 
  * @return the distance travelled by the motors, in inches
@@ -21,8 +37,6 @@ const double robotWidth = 12;
 double get_dist_travelled() {
     double degreesTravelled = (leftBackMotor.get_position() + rightBackMotor.get_position()
             + leftFrontMotor.get_position() + rightFrontMotor.get_position()) / 4;
-    //degreesTravelled /= 2;  // for some reason the motor encoder values are exactly 2 times less than how far the motor moves,
-                            // so we are dividing by 2. This needs to be fixed when we have time.
     return degreesTravelled * motorToWheelRatio / 360 * (M_PI*wheelDiam);
 }
 
@@ -88,12 +102,8 @@ void stopwatch(void *param) {
     }
 }
 
-inline void reset_drive_train() {
-    leftBackMotor.tare_position(); rightBackMotor.tare_position();
-    leftFrontMotor.tare_position(); rightFrontMotor.tare_position();
-}
-
 void odometry(void* param) {
+    reset_drive_train();
     vector *pCenter = static_cast<vector*>(param);
     double L, R, deltaX, deltaY, alpha, hypotenuse;
     while (true) {
@@ -107,13 +117,13 @@ void odometry(void* param) {
         }
         else {
             // the angle turned
-            alpha = (R - L) / robotWidth;
+            alpha = (R - L) / robotWidth - pCenter->heading;
             hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
             deltaX = hypotenuse * cos(pCenter->heading + alpha/2) - pCenter->x;
             deltaY = hypotenuse * sin(pCenter->heading + alpha/2) - pCenter->y;
 
-            pCenter->heading = alpha;
+            pCenter->heading += alpha;
             pCenter->x += deltaX; pCenter->y += deltaY;
             master.print(0, 10, "%f", pCenter->x);
         }
