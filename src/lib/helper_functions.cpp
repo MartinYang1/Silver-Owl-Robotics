@@ -7,6 +7,7 @@
 #include "../globals/globals.hpp"
 #include "helper_functions.hpp"
 #include "movement.hpp"
+#include "scoring.hpp"
 
 #include <math.h>
 
@@ -19,14 +20,18 @@ inline void reset_drive_train() {
     leftFrontMotor.tare_position(); rightMidMotor.tare_position();; rightFrontMotor.tare_position();
 }
 
-void setup_robot(vector &centre) {
+void setup_robot(unsigned &timeElapsed, vector &centre, unsigned &desiredSpeed) {
+    pros::Task track_time(stopwatch, &timeElapsed);
+
     imu_sensor.reset();
     pros::delay(2000);
     imu_sensor.tare_heading();
     pros::delay(50);
 
-    intake.tare_position(); 
+    reset_drive_train();
+    intake.tare_position(); flywheel.tare_position();
 
+    pros::Task regulate_shooting_speed(shoot, &desiredSpeed);
     pros::Task track_position(odometry, &centre);
 }
 
@@ -103,7 +108,6 @@ void stopwatch(void *param) {
 }
 
 void odometry(void* param) {
-    reset_drive_train();
     vector *pCenter = static_cast<vector*>(param);
     double L, R, deltaX, deltaY, alpha, hypotenuse;
     while (true) {
