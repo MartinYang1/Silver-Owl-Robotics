@@ -18,9 +18,9 @@ pros::Motor &indexer = intake;  // the flex wheel indexer for the shooter
 pros::Motor flywheel(10, MOTOR_GEAR_RED, 1);  
 
 // sensors
-pros::Vision vision_sensor(9);
-pros::Imu imu_sensor(8);
-pros::Optical optical_sensor(17);
+pros::Vision vision_sensor(8);
+pros::Imu imu_sensor(9);
+pros::Optical optical_sensor(6);
 
 // pneumatics pistons
 pros::ADIDigitalOut expander1_piston(8);

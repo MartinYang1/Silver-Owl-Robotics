@@ -31,16 +31,16 @@ const unsigned turn_roller(const int rate) {
     return optical_sensor.get_hue();
 }
 
-void aim_shot() {
+void aim_shot(vector *pCenter) {
     bool isAiming = false;
     while (!isAiming) {
         pros::vision_object_s_t goal = vision_sensor.get_by_size(0);
         double centre = goal.x_middle_coord;
-        if (centre > 5){
-            move(50, -50);
+        if (centre > 200){
+            move(-40, 40);
         }
-        else if (centre < -5){
-            move(-50, 50);
+        else if (centre < 190){
+            move(40, -40);
         }
         else{
             isAiming = true;
@@ -48,15 +48,17 @@ void aim_shot() {
         pros::delay(15);
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+    pCenter->heading = get_heading();
 }
 
 void shoot(void *param) {
     unsigned desiredSpeed; double currSpeed = 0;
+    int prevError = 0, integral = 0;
     while (true) {
         desiredSpeed = *static_cast<unsigned*>(param);
-        master.print(0, 0, "%f", currSpeed);
+        //master.print(0, 0, "%f", currSpeed);
         currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
-        flywheel = 110+PID(currSpeed, desiredSpeed, 0.18, 0.04, 0.15);
+        flywheel = 114+PID(currSpeed, desiredSpeed, 0.26, 0.04, 0.07, prevError, integral);
         pros::delay(35);
     }
 }

@@ -7,7 +7,7 @@
 void opcontrol() {
 	flywheel = 127;
     pros::delay(6000);
-	unsigned shootingSpeed = 3000;
+	unsigned shootingSpeed = 2200;
 	pros::Task flywheel_regulation(shoot, &shootingSpeed);
 	expander1_piston.set_value(0);
 	flywheel_piston.set_value(0);
@@ -21,44 +21,30 @@ void opcontrol() {
 		if (master.get_digital(DIGITAL_R1) )
  {
 			flywheel_piston.set_value(1);
-		
+			intake=127;
 		}
 		else
 		{
 			flywheel_piston.set_value(0);
 		}
-		if(master.get_digital(DIGITAL_L1))
+		if(master.get_digital(DIGITAL_L2))
 		{
-				intake_state = 0;
+			intake=0;
 		}
-		else {
-				intake_state = 1;
-			}
+		else if(master.get_digital(DIGITAL_L1))
+		{
+			intake=-127;
+		}
+		else 
+		{
+			intake=127;
+		}
+	
 
-		if(master.get_digital_new_press(DIGITAL_L2))
+		if(master.get_digital(DIGITAL_UP) && master.get_digital (DIGITAL_DOWN) && master.get_digital (DIGITAL_RIGHT) && master.get_digital (DIGITAL_LEFT))
 		{
-			if (intake_state > -1)
-			{
-				intake_state = -1;
-			}
+			expander1_piston.set_value(1);
 		}
-
-		if(master.get_digital(DIGITAL_X) && master.get_digital (DIGITAL_B) && master.get_digital (DIGITAL_A) && master.get_digital (DIGITAL_Y))
-		{
-			expander1_piston.set_value(1) ;
-			pros::delay(50);
-		}
-		switch(intake_state)
-		{
-			case -1:
-			intake = -127;
-			break;
-			case 0:
-			intake = 0;
-			break;
-			case 1:
-			intake = 127;
-			break;
-		}
+		
 	}
 }

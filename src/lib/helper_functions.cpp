@@ -12,7 +12,7 @@
 #include <math.h>
 
 const double wheelDiam = 3.25;
-const double motorToWheelRatio = 3 / 5.0;
+const double motorToWheelRatio = 3 / 5.0 / 0.8;
 const double robotWidth = 12;
 
 inline void reset_drive_train() {
@@ -20,7 +20,8 @@ inline void reset_drive_train() {
     leftFrontMotor.tare_position(); rightMidMotor.tare_position();; rightFrontMotor.tare_position();
 }
 
-void setup_robot(unsigned &timeElapsed, vector &centre, unsigned &desiredSpeed) {
+void setup_robot(unsigned &timeElapsed, vector &rCenter, unsigned &desiredSpeed) {
+    pros::Task regulate_shooting_speed(shoot, &desiredSpeed);
     pros::Task track_time(stopwatch, &timeElapsed);
 
     imu_sensor.reset();
@@ -29,10 +30,12 @@ void setup_robot(unsigned &timeElapsed, vector &centre, unsigned &desiredSpeed) 
     pros::delay(50);
 
     reset_drive_train();
-    intake.tare_position(); flywheel.tare_position();
+    intake.tare_position();
 
-    pros::Task regulate_shooting_speed(shoot, &desiredSpeed);
-    pros::Task track_position(odometry, &centre);
+    pros::delay(50);
+    //pros::Task track_position(odometry, &rCenter);
+
+    intake = 127;
 }
 
 /** Gets the distance travelled in a linear path by the robot
@@ -89,9 +92,7 @@ double get_move_voltage() {
  * @param direction the direction of the correction
  * @return the correction feedback for the system
  */
-double PID(double input, double target, double Kp, double Ki, double Kd, int direction) {
-    static int prevError = 0, integral = 0;
-    
+double PID(double input, double target, double Kp, double Ki, double Kd, int &prevError, int &integral, int direction) {    
     double error = (target - input) * direction;
     double derivative = error - prevError;  // only an approximation
     integral = 0.5 * integral + error;  // only an approximation
@@ -121,15 +122,17 @@ void odometry(void* param) {
         }
         else {
             // the angle turned
-            alpha = (R - L) / robotWidth - pCenter->heading;
+            alpha = (R - L) / robotWidth;
             hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
             deltaX = hypotenuse * cos(pCenter->heading + alpha/2) - pCenter->x;
             deltaY = hypotenuse * sin(pCenter->heading + alpha/2) - pCenter->y;
 
             pCenter->heading += alpha;
+                        master.print(0, 10, "%f", pCenter->heading);
+
             pCenter->x += deltaX; pCenter->y += deltaY;
-            master.print(0, 10, "%f", pCenter->x);
+
         }
         pros::delay(10);
     }

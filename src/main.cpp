@@ -36,7 +36,10 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+void disabled() {
+
+	
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -74,6 +77,8 @@ void autonomous() {
 			break;
 		case S_RED7: S_BLUE7:
 			solo_awp(); break;
+		case S_RED8: S_BLUE8:
+			prog_skills(); break;
 	}
 
 }

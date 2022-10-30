@@ -15,5 +15,6 @@ extern void runSkills();
 extern void autonTest();
 extern void test();
 extern void solo_awp();
+extern void prog_skills();
 
 #endif

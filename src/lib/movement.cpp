@@ -34,14 +34,26 @@ void move(const int leftVolt, const int rightVolt){
  void turn(const int baseLeftVolt, const int baseRightVolt, const int desiredAngle, vector *pCentre) {
     //  if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
     //      throw std::out_of_range;
-    float currentAngle = get_heading(), targetAngle = currentAngle + desiredAngle;
-    while (abs(currentAngle) <= abs(targetAngle)) { 
-        currentAngle = get_heading();
-        move(baseLeftVolt + PID(currentAngle, targetAngle, 5, 0, 0.2), 
-                baseRightVolt - PID(currentAngle, targetAngle, 5, 0, 0.2));
-        pros::delay(15);
+    int prevErrorHeading = 0, integralHeading = 0;
+    float currentAngle = get_heading(); const int targetAngle = currentAngle + desiredAngle;
+    if (desiredAngle > 0) {
+        while (currentAngle < targetAngle) { 
+            currentAngle = get_heading();
+            move(baseLeftVolt + PID(currentAngle, targetAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
+                    baseRightVolt - PID(currentAngle, targetAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
+            pros::delay(15);
+        }
+    }
+    else {
+        while (currentAngle > targetAngle) { 
+            currentAngle = get_heading();
+            move(baseLeftVolt + PID(currentAngle, targetAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
+                    baseRightVolt - PID(currentAngle, targetAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
+            pros::delay(15);
+        }
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+    pCentre->heading = get_heading(); pCentre->desiredHeading = get_heading();
 }
 // void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre){
 //     int pos = 0;
@@ -52,20 +64,20 @@ void move(const int leftVolt, const int rightVolt){
 //     int s = sgn(desiredAngle);
 //     float current_angle = imu_sensor.get_heading();
 //         pros::delay(40);
-//     float target_angleoof = current_angle + desiredAngle;
+//     float desiredAngleoof = current_angle + desiredAngle;
 //         pros::delay(20);
-//     float target_angle;
+//     float desiredAngle;
 //         pros::delay(20);
-//     if (target_angleoof > 360){
-//         target_angle = target_angleoof - 360;
+//     if (desiredAngleoof > 360){
+//         desiredAngle = desiredAngleoof - 360;
 //             pros::delay(50);
 //     }
-//     else if (target_angleoof < 0){
-//         target_angle = target_angleoof + 360;
+//     else if (desiredAngleoof < 0){
+//         desiredAngle = desiredAngleoof + 360;
 //             pros::delay(50);
 //     }
 //     else{
-//         target_angle = target_angleoof;
+//         desiredAngle = desiredAngleoof;
 //             pros::delay(50);
 //     }
    
@@ -101,18 +113,16 @@ void move(const int leftVolt, const int rightVolt){
 //         pros::delay(20);
 //     move(0, 0);
 //     p = imu_sensor.get_heading();
-//     while (p > target_angle+1 || p < target_angle-1) { 
-//         master.print(0, 0, "%f", target_angle);
+//     int prevErrorHeading = 0, integralHeading = 0;
+//     while (p > desiredAngle+1 || p < desiredAngle-1) { 
+//         //master.print(0, 0, "%f", desiredAngle);
 //         p = imu_sensor.get_heading();
-//         move(baseLeftVolt*s, 
-//                 baseRightVolt*s*-1);
+//         move(baseLeftVolt + PID(p, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
+//                      baseRightVolt - PID(p, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
  
 // }
-//    move(0, 0);
-// }
-
-// void turn_scuff(int radius, int desiredAngle) {
-//     
+//    move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
+//    pCentre -> heading = desiredAngle;
 // }
 
 /** Moves the robot a given distance forwards or backwards
@@ -120,13 +130,30 @@ void move(const int leftVolt, const int rightVolt){
  * @param desiredDist the distance to travel, in inches
  * @param stopType the type of brake mechanism the robot uses
  */
-void move_straight(const double desiredDist, decltype(MOTOR_BRAKE_BRAKE) stopType) {
-    double currDist = (leftFrontMotor.get_position() + rightFrontMotor.get_position()) / 2; const unsigned baseVolt = 20;
-    while (currDist < desiredDist) {
-        const double volt = (desiredDist < 0) ? PID(currDist, desiredDist, 1, 0.1, 0.5) - baseVolt
-                                            : PID(currDist, desiredDist, 1, 0.1, 0.5) + baseVolt;
-        move(volt + PID(get_heading(), 0, 1, 0.02, 0.5), 
-                volt - PID(get_heading(), 0, 1, 0.02, 0.5));
+void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
+    double currDist = get_dist_travelled(); //const double targetDist = currDist + desiredDist;
+    const unsigned baseVolt = 30;
+    int prevErrorDist = 0, integralDist = 0;
+    int prevErrorHeading = 0, integralHeading = 0;
+    while (abs(currDist) < abs(desiredDist)) {
+        const double volt = (desiredDist < 0) ? PID(currDist, desiredDist, 2.2, 0.1, 0.5, prevErrorDist, integralDist) - baseVolt
+                                            : PID(currDist, desiredDist, 2.2, 0.1, 0.5, prevErrorDist, integralDist) + baseVolt;
+        move(volt + PID(get_heading(), pCenter->desiredHeading, 1.1, 0.02, 0.7, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading, 1.1, 0.02, 0.7, prevErrorHeading, integralHeading));
+        currDist = get_dist_travelled();
+        pros::delay(15);
+    }
+    move(stopType, stopType);
+    pCenter->heading = get_heading();
+}
+
+void move_straight(const double desiredDist, const int volt, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
+    double currDist = get_dist_travelled(); const double targetDist = currDist + desiredDist;
+    int prevErrorDist = 0, integralDist = 0;
+    int prevErrorHeading = 0, integralHeading = 0;
+    while (abs(currDist) < abs(targetDist)) {
+        move(volt + PID(get_heading(), pCenter->heading, 1.1, 0.02, 0.7, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->heading, 1.1, 0.02, 0.7, prevErrorHeading, integralHeading));
         currDist = get_dist_travelled();
         pros::delay(15);
     }
@@ -150,9 +177,10 @@ void move_straight(const float time, const int volt) {
  * @param volt the voltage for the motors, from -127 to 127
  */
 void move_straight(const int volt) {
+    int prevErrorDist = 0, integralDist = 0;
     while (optical_sensor.get_proximity() < 255) {
-        move(volt + PID(get_heading(), 0, 1, 0.02, 0.5), 
-                volt - PID(get_heading(), 0, 1, 0.02, 0.5));
+        move(volt + PID(get_heading(), 0, 1, 0.02, 0.5, prevErrorDist, integralDist), 
+                volt - PID(get_heading(), 0, 1, 0.02, 0.5, prevErrorDist, integralDist));
         pros::delay(15);
     }
     move(MOTOR_BRAKE_HOLD, MOTOR_BRAKE_HOLD);
