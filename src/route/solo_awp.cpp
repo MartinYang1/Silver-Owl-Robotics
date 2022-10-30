@@ -27,25 +27,25 @@ void solo_awp() {
     move_straight(-5.0, &center);
 
     // pick up next 3 discs and shoot them
-    intake=100;
+    intake=127;
     turn(-25, 25, -124, &center);
-    move_straight(60.0, 35, &center);
+    move_straight(60.0, 30, &center);
     master.print(0, 0, "%s", "completed");
     pros::delay(20);
     
-    turn(25,-25, -45 - (int)(center.heading),&center);
+    turn(35,-35, -50 - (int)(center.heading),&center);
     flywheel_piston.set_value(1); delay(1200); flywheel_piston.set_value(0);
-    turn(25,-25, -135 - (int)(center.heading),&center);
+    turn(-35,35, -134 - (int)(center.heading),&center);
     
-    // pick up stack of 3 discs and shoot them
-    move_straight(60.0, 25, &center);
-    turn(25,-25, -25 - (int)(center.heading),&center);
-    flywheel_piston.set_value(1); delay(1200); flywheel_piston.set_value(0);
-    turn(25,-25, -135 - (int)(center.heading),&center);
+    // pick up stack of 3 discs and shoot them (maybe)
+    move_straight(75.0, 35, &center);
+    //turn(25,-25, -25 - (int)(center.heading),&center);
+    //flywheel_piston.set_value(1); delay(1200); flywheel_piston.set_value(0);
+    //turn(25,-25, -124 - (int)(center.heading),&center);
 
     // turn 2nd roller
-    move_straight(10.0, 25, &center);
-    turn(25,-25, -90 - (int)(center.heading),&center);
+    //move_straight(10.0, 25, &center);
+    turn(35,-35, -90 - (int)(center.heading),&center);
     move_straight(60); turn_roller(100);
     //turn()
 

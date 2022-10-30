@@ -17,16 +17,6 @@ void opcontrol() {
 		int power = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)*-1;
 		int turnRate = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)*-1;
 		move(power - turnRate, power + turnRate);
-
-		if (master.get_digital(DIGITAL_R1) )
- {
-			flywheel_piston.set_value(1);
-			intake=127;
-		}
-		else
-		{
-			flywheel_piston.set_value(0);
-		}
 		if(master.get_digital(DIGITAL_L2))
 		{
 			intake=-127;
@@ -39,6 +29,16 @@ void opcontrol() {
 		{
 			intake=0;
 		}
+		if (master.get_digital(DIGITAL_R1) )
+ {
+			flywheel_piston.set_value(1);
+			intake=127;
+		}
+		else
+		{
+			flywheel_piston.set_value(0);
+		}
+		
 	
 
 		if(master.get_digital(DIGITAL_UP) && master.get_digital (DIGITAL_DOWN) && master.get_digital (DIGITAL_RIGHT) && master.get_digital (DIGITAL_LEFT))
