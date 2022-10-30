@@ -6,8 +6,8 @@
 
 void opcontrol() {
 	flywheel = 127;
-    pros::delay(6000);
-	unsigned shootingSpeed = 2200;
+    pros::delay(3000);
+	unsigned shootingSpeed = 2150;
 	pros::Task flywheel_regulation(shoot, &shootingSpeed);
 	expander1_piston.set_value(0);
 	flywheel_piston.set_value(0);
@@ -29,15 +29,15 @@ void opcontrol() {
 		}
 		if(master.get_digital(DIGITAL_L2))
 		{
-			intake=0;
+			intake=-127;
 		}
 		else if(master.get_digital(DIGITAL_L1))
 		{
-			intake=-127;
+			intake=127;
 		}
 		else 
 		{
-			intake=127;
+			intake=0;
 		}
 	
 
