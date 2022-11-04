@@ -5,6 +5,7 @@
 #include "lib/scoring.hpp"
 
 void opcontrol() {
+	vector center;
 	flywheel = 127;
     pros::delay(3000);
 	unsigned shootingSpeed = 2150;
@@ -17,26 +18,29 @@ void opcontrol() {
 		int power = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)*-1;
 		int turnRate = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)*-1;
 		move(power - turnRate, power + turnRate);
-		if(master.get_digital(DIGITAL_L2))
+		if(master.get_digital(DIGITAL_L1))
 		{
 			intake=-127;
 		}
-		else if(master.get_digital(DIGITAL_L1))
-		{
-			intake=127;
-		}
-		else 
+		else if(master.get_digital(DIGITAL_L2))
 		{
 			intake=0;
 		}
-		if (master.get_digital(DIGITAL_R1) )
+		else 
+		{
+			intake=127;
+		}
+		if (master.get_digital(DIGITAL_R2))
  {
 			flywheel_piston.set_value(1);
-			intake=127;
 		}
 		else
 		{
 			flywheel_piston.set_value(0);
+		}
+		if (master.get_digital(DIGITAL_R1))
+ {
+			aim_shot(&center);
 		}
 		
 	
