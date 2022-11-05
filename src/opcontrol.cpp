@@ -5,9 +5,8 @@
 #include "lib/scoring.hpp"
 
 void opcontrol() {
-	flywheel = 127;
-    pros::delay(3000);
-	unsigned shootingSpeed = 2150;
+	
+	unsigned shootingSpeed = 2200;
 	pros::Task flywheel_regulation(shoot, &shootingSpeed);
 	expander1_piston.set_value(0);
 	flywheel_piston.set_value(0);
@@ -19,20 +18,20 @@ void opcontrol() {
 		move(power - turnRate, power + turnRate);
 		if(master.get_digital(DIGITAL_L2))
 		{
-			intake=-127;
+			intake=0;
 		}
 		else if(master.get_digital(DIGITAL_L1))
 		{
-			intake=127;
+			intake=-127;
 		}
 		else 
 		{
-			intake=0;
+			intake=127;
 		}
 		if (master.get_digital(DIGITAL_R1) )
- {
+ {			intake=127;
+ 			pros::delay(30);
 			flywheel_piston.set_value(1);
-			intake=127;
 		}
 		else
 		{

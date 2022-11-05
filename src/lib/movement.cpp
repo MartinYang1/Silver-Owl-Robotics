@@ -148,7 +148,7 @@ void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRA
 }
 
 void move_straight(const double desiredDist, const int volt, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
-    double currDist = get_dist_travelled(); c//onst double targetDist = currDist + desiredDist;
+    double currDist = get_dist_travelled(); //onst double targetDist = currDist + desiredDist;
     int prevErrorDist = 0, integralDist = 0;
     int prevErrorHeading = 0, integralHeading = 0;
     while (abs(currDist) < abs(desiredDist)) {
