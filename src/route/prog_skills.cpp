@@ -13,6 +13,6 @@ void prog_skills() {
     // initial setup
     unsigned timeElapsed = 0;
     unsigned shootSpeed = 3400;
-    setup_robot(timeElapsed, center2, shootSpeed);
+   // setup_robot(timeElapsed, center2, shootSpeed);
     delay(800);
 }

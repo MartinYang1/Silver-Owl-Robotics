@@ -12,9 +12,13 @@ vector center = {};
 void solo_awp() {
     // initial setup
     unsigned timeElapsed = 0;
-    unsigned shootSpeed = 3400;
-    setup_robot(timeElapsed, center, shootSpeed);
-    delay(800);
+    unsigned desiredSpeed = 3400;
+    setup_robot();
+    
+    pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
+    pros::Task track_time(stopwatch, &timeElapsed);
+    pros::Task track_position(odometry, &center);
+    delay(50);
     
     // shoot preloads and turn roller
     turn(-50, 50, -3, &center);

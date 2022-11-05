@@ -30,10 +30,9 @@ void move(const int leftVolt, const int rightVolt){
  * of the drive train in volts, from -127 to 127
  * @param desiredAngle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
  * and a postive angle turns the robot clockwise
+ * @param pCenter the pointer to the vector data structure for the robot
  */
  void turn(const int baseLeftVolt, const int baseRightVolt, const int desiredAngle, vector *pCentre) {
-    //  if (abs(leftVolt) > 127 || abs(rightVolt) > 127)
-    //      throw std::out_of_range;
     int prevErrorHeading = 0, integralHeading = 0;
     float currentAngle = get_heading(); const int targetAngle = currentAngle + desiredAngle;
     if (desiredAngle > 0) {
@@ -53,7 +52,8 @@ void move(const int leftVolt, const int rightVolt){
         }
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
-    pCentre->heading = get_heading(); pCentre->desiredHeading = get_heading();
+    pros::delay(100);
+    pCentre->heading = get_heading(); pCentre->desiredHeading = targetAngle;
 }
 // void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre){
 //     int pos = 0;
@@ -128,6 +128,7 @@ void move(const int leftVolt, const int rightVolt){
 /** Moves the robot a given distance forwards or backwards
  * 
  * @param desiredDist the distance to travel, in inches
+ * @param pCenter the pointer to the vector data structure for the robot
  * @param stopType the type of brake mechanism the robot uses
  */
 void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
@@ -148,7 +149,7 @@ void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRA
 }
 
 void move_straight(const double desiredDist, const int volt, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
-    double currDist = get_dist_travelled(); c//onst double targetDist = currDist + desiredDist;
+    double currDist = get_dist_travelled(); //onst double targetDist = currDist + desiredDist;
     int prevErrorDist = 0, integralDist = 0;
     int prevErrorHeading = 0, integralHeading = 0;
     while (abs(currDist) < abs(desiredDist)) {
@@ -160,6 +161,11 @@ void move_straight(const double desiredDist, const int volt, vector *pCenter, de
     move(stopType, stopType);
 }
 
+/** Moves the robot a given amount of time forwards or backwards
+ * 
+ * @param time the time to travel for, in seconds
+ * @param volt the voltage for the drive train motors
+*/
 void move_straight(const float time, const int volt) {
     static unsigned timeElapsed = 0;    // in milliseconds
     pros::Task track_time(stopwatch, &timeElapsed);
@@ -171,7 +177,7 @@ void move_straight(const float time, const int volt) {
     move(MOTOR_BRAKE_HOLD, MOTOR_BRAKE_HOLD);
 }
 
-/** Moves the robot until the light sensor
+/** Moves the robot forwards until the light sensor
  * detects the roller.
  * 
  * @param volt the voltage for the motors, from -127 to 127

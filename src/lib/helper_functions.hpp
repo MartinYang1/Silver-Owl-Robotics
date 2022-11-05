@@ -15,6 +15,6 @@ extern double get_move_voltage();
 extern double PID(double input, double target, double Kp, double Ki, double Kd, int &prevError, int &integral, int direction = 1);
 extern void odometry(void *param);
 extern void stopwatch(void *param);
-void setup_robot(unsigned &timeElapsed, vector &centre, unsigned &desiredSpeed);
+void setup_robot();
 
 #endif
