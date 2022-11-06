@@ -32,28 +32,50 @@ void move(const int leftVolt, const int rightVolt){
  * and a postive angle turns the robot clockwise
  * @param pCenter the pointer to the vector data structure for the robot
  */
- void turn(const int baseLeftVolt, const int baseRightVolt, const int desiredAngle, vector *pCentre) {
+
+void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, bool turnRight, vector *pCentre) {
     int prevErrorHeading = 0, integralHeading = 0;
-    float currentAngle = get_heading(); const int targetAngle = currentAngle + desiredAngle;
-    if (desiredAngle > 0) {
-        while (currentAngle < targetAngle) { 
-            currentAngle = get_heading();
-            move(baseLeftVolt + PID(currentAngle, targetAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
-                    baseRightVolt - PID(currentAngle, targetAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
+    int currAngle = imu_sensor.get_heading();
+    if (turnRight) {
+        while (currAngle < desiredAngle) { 
+            currAngle = imu_sensor.get_heading();
+            move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
+                    baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
             pros::delay(15);
         }
     }
     else {
-        while (currentAngle > targetAngle) { 
-            currentAngle = get_heading();
-            move(baseLeftVolt + PID(currentAngle, targetAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
-                    baseRightVolt - PID(currentAngle, targetAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
-            pros::delay(15);
+        if (0 <= currAngle && desiredAngle > currAngle) {
+            desiredAngle = -(currAngle + (360 - desiredAngle));
+            currAngle = 0; int prevAngle = currAngle;
+            while (currAngle > desiredAngle) {
+                                                        master.print(0 ,0, "%d", prevAngle);
+
+                currAngle += (imu_sensor.get_heading() - prevAngle);
+                move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
+                        baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
+                prevAngle = imu_sensor.get_heading();
+                pros::delay(15);
+            }
+        }
+        else if (currAngle < 360 && currAngle > desiredAngle) {
+            desiredAngle = desiredAngle - 360;
+            currAngle -= 360;  
+            while (currAngle > desiredAngle) {
+                master.print(0 ,0, "%d", currAngle);
+                currAngle = imu_sensor.get_heading() - 360;
+                move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
+                        baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
+                pros::delay(15);
+            }
+        }
+        else {
+            move(50, 50);
         }
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
     pros::delay(100);
-    pCentre->heading = get_heading(); pCentre->desiredHeading = targetAngle;
+    pCentre->heading = get_heading(); //pCentre->desiredHeading = targetAngle;
 }
 // void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre){
 //     int pos = 0;

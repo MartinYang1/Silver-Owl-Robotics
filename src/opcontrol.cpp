@@ -8,7 +8,7 @@ void opcontrol() {
 	flywheel = 127;
     pros::delay(3000);
 	unsigned shootingSpeed = 2150;
-	pros::Task flywheel_regulation(shoot, &shootingSpeed);
+	pros::Task regulateFlywheelSpeed(regulateFlywheel, &shootingSpeed);
 	expander1_piston.set_value(0);
 	flywheel_piston.set_value(0);
 	int intake_state=1;
@@ -40,7 +40,8 @@ void opcontrol() {
 		}
 		if (master.get_digital(DIGITAL_R1))
  {
-			aim_shot(&center);
+			vector center11 = {};
+			aim_shot(&center11);
 		}
 		
 	

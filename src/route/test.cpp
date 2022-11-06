@@ -7,9 +7,18 @@
 
 using namespace pros;
 
-//vector center = {};
+vector center3 = {};
 
 void test() {
+    setup_robot();
+    // turn(20, -20, 90, 1, &center3);   delay(200);  turn(20, -20, 180, 1, &center3); delay(200);
+    // turn(20, -20, 270, 1, &center3);
+
+    // delay(500);
+    // turn(20, -20, 300, 1, &center3);
+    // delay(200);
+        turn(-20, 20, 270, 0, &center3);//   delay(200);  turn(-20, 20, 180, -1, &center3); delay(200);
+    //turn(-20, 20, 90, -1, &center3);
     // unsigned timeElapsed = 0;
     // pros::Task track_time(stopwatch, &timeElapsed);
     // unsigned shootSpeed = 2600;
