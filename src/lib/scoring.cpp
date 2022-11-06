@@ -1,6 +1,3 @@
-#include <vector>
-#include <algorithm>
-
 #include "../include/main.h"
 #include "../globals/globals.hpp"
 
@@ -31,6 +28,11 @@ const unsigned turn_roller(const int rate) {
     return optical_sensor.get_hue();
 }
 
+/** Aims the flywheel shooter toward the center of the high goal (AIMBOT)
+ * using the vision sensor
+ * 
+ * @param pCenter the pointer to the vector data structure for the robot
+*/
 void aim_shot(vector *pCenter) {
     bool isAiming = false;
     while (!isAiming) {
@@ -51,7 +53,12 @@ void aim_shot(vector *pCenter) {
     pCenter->heading = get_heading();
 }
 
-void shoot(void *param) {
+/** Regulates the flywheel voltage 
+ * using PID to meet the desired RPM
+ * 
+ * @param param the desired RPM for the flywheel
+*/
+void regulateFlywheel(void *param) {
     unsigned desiredSpeed; double currSpeed = 0;
     int prevError = 0, integral = 0;
     flywheel = 127;
@@ -63,4 +70,15 @@ void shoot(void *param) {
         flywheel = 114+PID(currSpeed, desiredSpeed, 0.26, 0.04, 0.07, prevError, integral);
         pros::delay(35);
     }
+}
+
+/** Unlocks the gate to fire the discs in posession
+ * and then closes the gate
+ * 
+ * @param gateDelay the number of milliseconds to open the gate for
+*/
+void shoot(const unsigned gateDelay) {
+    flywheel_piston.set_value(1); 
+    pros::delay(gateDelay); 
+    flywheel_piston.set_value(0);
 }

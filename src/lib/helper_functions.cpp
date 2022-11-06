@@ -20,10 +20,9 @@ inline void reset_drive_train() {
     leftFrontMotor.tare_position(); rightMidMotor.tare_position();; rightFrontMotor.tare_position();
 }
 
-void setup_robot(unsigned &timeElapsed, vector &rCenter, unsigned &desiredSpeed) {
-    pros::Task regulate_shooting_speed(shoot, &desiredSpeed);
-    pros::Task track_time(stopwatch, &timeElapsed);
-
+/** Setups the robot for autonomous by resetting motors and sensors
+*/
+void setup_robot() {
     imu_sensor.reset();
     pros::delay(2000);
     imu_sensor.tare_heading();
@@ -33,8 +32,6 @@ void setup_robot(unsigned &timeElapsed, vector &rCenter, unsigned &desiredSpeed)
     intake.tare_position();
 
     pros::delay(50);
-    //pros::Task track_position(odometry, &rCenter);
-
     intake = 127;
 }
 
@@ -101,13 +98,21 @@ double PID(double input, double target, double Kp, double Ki, double Kd, int &pr
     return Kp * error + Kd * derivative + Ki * integral;
 }
 
+/** A stopwatch with a frequency of 1000Hz
+ * 
+ * @param param the pointer to the variable storing the time elapsed
+*/
 void stopwatch(void *param) {
     while (true) {
         *static_cast<unsigned*>(param) += 1;
         pros::delay(1);
     }
 }
-
+/** Calculates the position of the robot in the field
+ * as (x, y) coordinates
+ * 
+ * @param param the pointer to the vector data structure for the robot
+*/
 void odometry(void* param) {
     vector *pCenter = static_cast<vector*>(param);
     double L, R, deltaX, deltaY, alpha, hypotenuse;
