@@ -37,25 +37,40 @@ void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, boo
     int prevErrorHeading = 0, integralHeading = 0;
     int currAngle = imu_sensor.get_heading();
     if (turnRight) {
-        while (currAngle < desiredAngle) { 
-            currAngle = imu_sensor.get_heading();
-            move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
-                    baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
-            pros::delay(15);
+        if (currAngle < desiredAngle) {
+            while (currAngle < desiredAngle) { 
+                currAngle = imu_sensor.get_heading();
+                move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
+                        baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
+                pros::delay(15);
+            }
+        }
+        else if (currAngle > desiredAngle) {
+            desiredAngle = desiredAngle + (360 - currAngle);
+            currAngle = 0; int prevAngle = imu_sensor.get_heading();
+            while (currAngle > desiredAngle) {
+                                                        master.print(0 ,0, "%d", prevAngle);
+
+                currAngle += imu_sensor.get_heading() - prevAngle;
+                move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
+                        baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
+                prevAngle = imu_sensor.get_heading();
+                pros::delay(30);
+            }
         }
     }
     else {
         if (0 <= currAngle && desiredAngle > currAngle) {
             desiredAngle = -(currAngle + (360 - desiredAngle));
-            currAngle = 0; int prevAngle = currAngle;
+            currAngle = 0; int prevAngle = imu_sensor.get_heading();
             while (currAngle > desiredAngle) {
                                                         master.print(0 ,0, "%d", prevAngle);
 
-                currAngle += (imu_sensor.get_heading() - prevAngle);
+                currAngle += imu_sensor.get_heading() - prevAngle;
                 move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
                         baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
                 prevAngle = imu_sensor.get_heading();
-                pros::delay(15);
+                pros::delay(30);
             }
         }
         else if (currAngle < 360 && currAngle > desiredAngle) {
