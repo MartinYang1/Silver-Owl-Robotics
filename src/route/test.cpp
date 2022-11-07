@@ -7,25 +7,18 @@
 
 using namespace pros;
 
-vector center3 = {};
-
 void test() {
-    setup_robot();
-    // turn(20, -20, 90, 1, &center3);   delay(200);  turn(20, -20, 180, 1, &center3); delay(200);
-    // turn(20, -20, 270, 1, &center3);
+    vector center3 = {};
 
-    // delay(500);
-    // turn(20, -20, 300, 1, &center3);
-    // delay(200);
-        turn(-20, 20, 270, 0, &center3);//   delay(200);  turn(-20, 20, 180, -1, &center3); delay(200);
-    //turn(-20, 20, 90, -1, &center3);
-    // unsigned timeElapsed = 0;
-    // pros::Task track_time(stopwatch, &timeElapsed);
-    // unsigned shootSpeed = 2600;
-    //  setup_robot(timeElapsed, center, shootSpeed);
-    //  move_straight(24.0);
-    // pros::Task track_position(odometry, &center);
-    // turn(25, -25, 90, &center);
-    // turn(-25, 25, -179, &center);
-    // aim_shot();
+    setup_robot();
+    pros::Task track_position(odometry, &center3);
+    //move_straight(48.0, &center3);
+    turn(30, 20, 90, &center3);
+    track_position.remove();
+    
+    // 20 volts for spot turns, 30 volts for turning around a point
+    //turn(-20, 20, 340, &center3);
+    //turn(20, -20, 135, &center3);
+    // turn(-30, 0, 270, 0, &center3);
+    // turn(0, 30, 180, 0, &center3);
 }

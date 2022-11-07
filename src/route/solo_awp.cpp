@@ -10,14 +10,20 @@ using namespace pros;
 vector center = {};
 
 void solo_awp() {
-    // // initial setup
-    // unsigned timeElapsed = 0;
-    // unsigned desiredSpeed = 3400;
-    // setup_robot();
+    // initial setup
+    unsigned timeElapsed = 0;
+    unsigned desiredSpeed = 3400;
+    setup_robot();
     
-    // pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
-    // //pros::Task track_time(stopwatch, &timeElapsed);
-    // pros::Task track_position(odometry, &center);
+    pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
+    pros::Task track_time(stopwatch, &timeElapsed);
+    pros::Task track_position(odometry, &center);
+
+    
+    track_time.remove();
+    regulate_shooting_speed.remove();
+    track_position.remove();
+    master.print(0, 0, "%d", timeElapsed);
     // delay(50);
     
     // // shoot preloads and turn roller

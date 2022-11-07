@@ -5,7 +5,7 @@
 #include "lib/scoring.hpp"
 
 void opcontrol() {
-	unsigned shootingSpeed = 2150;
+	unsigned shootingSpeed = 2100;
 	pros::Task regulateFlywheelSpeed(regulateFlywheel, &shootingSpeed);
 	expander1_piston.set_value(0);
 	flywheel_piston.set_value(0);

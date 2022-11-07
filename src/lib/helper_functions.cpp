@@ -119,7 +119,6 @@ void odometry(void* param) {
     while (true) {
         L = leftFrontMotor.get_position() * motorToWheelRatio / 360 * (M_PI*wheelDiam);
         R = rightFrontMotor.get_position() * motorToWheelRatio / 360 * (M_PI*wheelDiam);
-        master.print(0, 0, "%f", pCenter->x);
         if (L==R) {
             deltaX = L * cos(pCenter->heading) - pCenter->x; deltaY = R * sin(pCenter->heading)-pCenter->y;
             pCenter->x += deltaX; pCenter->y += deltaY;
@@ -132,8 +131,6 @@ void odometry(void* param) {
 
             deltaX = hypotenuse * cos(pCenter->heading + alpha/2) - pCenter->x;
             deltaY = hypotenuse * sin(pCenter->heading + alpha/2) - pCenter->y;
-
-            pCenter->heading += alpha;
                         master.print(0, 10, "%f", pCenter->heading);
 
             pCenter->x += deltaX; pCenter->y += deltaY;

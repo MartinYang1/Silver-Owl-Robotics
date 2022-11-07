@@ -4,6 +4,7 @@
 #include "movement.hpp"
 #include "pros/motors.h"
 
+#include <cmath>
 #include <math.h>
 #include <vector>
 
@@ -33,64 +34,70 @@ void move(const int leftVolt, const int rightVolt){
  * @param pCenter the pointer to the vector data structure for the robot
  */
 
-void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, bool turnRight, vector *pCentre) {
+void turn(const int baseLeftVolt, const int baseRightVolt, double desiredAngle, vector *pCentre) {
     int prevErrorHeading = 0, integralHeading = 0;
-    int currAngle = imu_sensor.get_heading();
-    if (turnRight) {
+    double currAngle = imu_sensor.get_heading();
+    
+    if (baseLeftVolt > baseRightVolt) {
         if (currAngle < desiredAngle) {
             while (currAngle < desiredAngle) { 
-                currAngle = imu_sensor.get_heading();
+                currAngle = imu_sensor.get_heading();         
                 move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
                         baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
+                
                 pros::delay(15);
             }
         }
         else if (currAngle > desiredAngle) {
             desiredAngle = desiredAngle + (360 - currAngle);
-            currAngle = 0; int prevAngle = imu_sensor.get_heading();
-            while (currAngle > desiredAngle) {
-                                                        master.print(0 ,0, "%d", prevAngle);
-
+            currAngle = 0; double prevAngle = imu_sensor.get_heading();
+            
+            while (currAngle + 2 < desiredAngle) {
+                if (imu_sensor.get_heading() - prevAngle < -2) 
+                    prevAngle = imu_sensor.get_heading();
                 currAngle += imu_sensor.get_heading() - prevAngle;
+                
                 move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
                         baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
-                prevAngle = imu_sensor.get_heading();
-                pros::delay(30);
+                
+                prevAngle = imu_sensor.get_heading();  
+                pros::delay(15);
             }
         }
     }
     else {
         if (0 <= currAngle && desiredAngle > currAngle) {
             desiredAngle = -(currAngle + (360 - desiredAngle));
-            currAngle = 0; int prevAngle = imu_sensor.get_heading();
-            while (currAngle > desiredAngle) {
-                                                        master.print(0 ,0, "%d", prevAngle);
-
+            currAngle = 0; double prevAngle = imu_sensor.get_heading();
+            
+            while (currAngle - 2 > desiredAngle) {
+                if (imu_sensor.get_heading() - prevAngle > 2) 
+                    prevAngle = imu_sensor.get_heading();
                 currAngle += imu_sensor.get_heading() - prevAngle;
+                
                 move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
                         baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
+                
                 prevAngle = imu_sensor.get_heading();
-                pros::delay(30);
+                pros::delay(15);
             }
         }
         else if (currAngle < 360 && currAngle > desiredAngle) {
             desiredAngle = desiredAngle - 360;
             currAngle -= 360;  
+            
             while (currAngle > desiredAngle) {
-                master.print(0 ,0, "%d", currAngle);
                 currAngle = imu_sensor.get_heading() - 360;
                 move(baseLeftVolt + PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
                         baseRightVolt - PID(currAngle, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
+                
                 pros::delay(15);
             }
-        }
-        else {
-            move(50, 50);
         }
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
     pros::delay(100);
-    pCentre->heading = get_heading(); //pCentre->desiredHeading = targetAngle;
+    pCentre->heading = imu_sensor.get_heading(); pCentre->desiredHeading = desiredAngle;
 }
 // void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre){
 //     int pos = 0;
@@ -168,21 +175,26 @@ void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, boo
  * @param pCenter the pointer to the vector data structure for the robot
  * @param stopType the type of brake mechanism the robot uses
  */
-void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
+void move_straight(const double dest[2], vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
     double currDist = get_dist_travelled(); //const double targetDist = currDist + desiredDist;
     const unsigned baseVolt = 30;
     int prevErrorDist = 0, integralDist = 0;
     int prevErrorHeading = 0, integralHeading = 0;
-    while (abs(currDist) < abs(desiredDist)) {
-        const double volt = (desiredDist < 0) ? PID(currDist, desiredDist, 2.2, 0.1, 0.5, prevErrorDist, integralDist) - baseVolt
-                                            : PID(currDist, desiredDist, 2.2, 0.1, 0.5, prevErrorDist, integralDist) + baseVolt;
-        move(volt + PID(get_heading(), pCenter->desiredHeading, 1.1, 0.02, 0.7, prevErrorHeading, integralHeading), 
-                volt - PID(get_heading(), pCenter->desiredHeading, 1.1, 0.02, 0.7, prevErrorHeading, integralHeading));
+
+    const unsigned desiredDist = sqrt(pow(dest[0] - pCenter->x, 2) + pow(dest[1] - pCenter->y, 2));
+    double currDi
+    while (pCenter->x < dest[0] && pCenter->y < dest[1]) {
+        
+        const double volt = (desiredDist < 0) ? PID(currDist, desiredDist, 2, 0, -0.2, prevErrorDist, integralDist) - baseVolt
+                                            : PID(currDist, desiredDist, 2, 0, -0.2, prevErrorDist, integralDist) + baseVolt;
+        move(volt + PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
         currDist = get_dist_travelled();
         pros::delay(15);
     }
     move(stopType, stopType);
-    pCenter->heading = get_heading();
+    pros::delay(200);
+    pCenter->heading = imu_sensor.get_heading();
 }
 
 void move_straight(const double desiredDist, const int volt, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
@@ -190,12 +202,14 @@ void move_straight(const double desiredDist, const int volt, vector *pCenter, de
     int prevErrorDist = 0, integralDist = 0;
     int prevErrorHeading = 0, integralHeading = 0;
     while (abs(currDist) < abs(desiredDist)) {
-        move(volt + PID(get_heading(), pCenter->heading, 1.1, 0.02, 0.7, prevErrorHeading, integralHeading), 
-                volt - PID(get_heading(), pCenter->heading, 1.1, 0.02, 0.7, prevErrorHeading, integralHeading));
+        move(volt + PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
         currDist = get_dist_travelled();
         pros::delay(15);
     }
     move(stopType, stopType);
+    pros::delay(200);
+    pCenter->heading = imu_sensor.get_heading();
 }
 
 /** Moves the robot a given amount of time forwards or backwards
