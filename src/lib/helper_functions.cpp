@@ -130,8 +130,7 @@ void odometry(void* param) {
             hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
             deltaX = hypotenuse * cos(pCenter->heading + alpha/2) - pCenter->x;
-            deltaY = hypotenuse * sin(pCenter->heading + alpha/2) - pCenter->y;
-                        master.print(0, 10, "%f", pCenter->heading);
+            deltaY = - hypotenuse * sin(pCenter->heading + alpha/2) - pCenter->y;
 
             pCenter->x += deltaX; pCenter->y += deltaY;
         }

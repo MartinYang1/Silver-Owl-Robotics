@@ -175,21 +175,17 @@ void turn(const int baseLeftVolt, const int baseRightVolt, double desiredAngle, 
  * @param pCenter the pointer to the vector data structure for the robot
  * @param stopType the type of brake mechanism the robot uses
  */
-void move_straight(const double dest[2], vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
-    double currDist = get_dist_travelled(); //const double targetDist = currDist + desiredDist;
+void move_straight(const double dest[2], int moveDirection, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
     const unsigned baseVolt = 30;
     int prevErrorDist = 0, integralDist = 0;
     int prevErrorHeading = 0, integralHeading = 0;
 
-    const unsigned desiredDist = sqrt(pow(dest[0] - pCenter->x, 2) + pow(dest[1] - pCenter->y, 2));
-    double currDi
-    while (pCenter->x < dest[0] && pCenter->y < dest[1]) {
-        
-        const double volt = (desiredDist < 0) ? PID(currDist, desiredDist, 2, 0, -0.2, prevErrorDist, integralDist) - baseVolt
-                                            : PID(currDist, desiredDist, 2, 0, -0.2, prevErrorDist, integralDist) + baseVolt;
+    double distToTravel = sqrt(pow(dest[0] - pCenter->x, 2) + pow(dest[1] - pCenter->y, 2));
+    while (distToTravel >= 0) {   
+        const double volt = (PID(distToTravel, 0, 2, 0, -0.2, prevErrorDist, integralDist, -1) + baseVolt) * moveDirection;
         move(volt + PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
                 volt - PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
-        currDist = get_dist_travelled();
+        distToTravel = sqrt(pow(dest[0] - pCenter->x, 2) + pow(dest[1] - pCenter->y, 2));
         pros::delay(15);
     }
     move(stopType, stopType);
@@ -197,20 +193,20 @@ void move_straight(const double dest[2], vector *pCenter, decltype(MOTOR_BRAKE_B
     pCenter->heading = imu_sensor.get_heading();
 }
 
-void move_straight(const double desiredDist, const int volt, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
-    double currDist = get_dist_travelled(); //onst double targetDist = currDist + desiredDist;
-    int prevErrorDist = 0, integralDist = 0;
-    int prevErrorHeading = 0, integralHeading = 0;
-    while (abs(currDist) < abs(desiredDist)) {
-        move(volt + PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
-                volt - PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
-        currDist = get_dist_travelled();
-        pros::delay(15);
-    }
-    move(stopType, stopType);
-    pros::delay(200);
-    pCenter->heading = imu_sensor.get_heading();
-}
+// void move_straight(const double desiredDist, const int volt, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
+//     double currDist = get_dist_travelled(); //onst double targetDist = currDist + desiredDist;
+//     int prevErrorDist = 0, integralDist = 0;
+//     int prevErrorHeading = 0, integralHeading = 0;
+//     while (abs(currDist) < abs(desiredDist)) {
+//         move(volt + PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
+//                 volt - PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+//         currDist = get_dist_travelled();
+//         pros::delay(15);
+//     }
+//     move(stopType, stopType);
+//     pros::delay(200);
+//     pCenter->heading = imu_sensor.get_heading();
+// }
 
 /** Moves the robot a given amount of time forwards or backwards
  * 

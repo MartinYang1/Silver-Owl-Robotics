@@ -7,10 +7,10 @@
 
 using namespace pros;
 
-vector center = {};
-
 void solo_awp() {
     // initial setup
+    vector center = {};
+
     unsigned timeElapsed = 0;
     unsigned desiredSpeed = 3400;
     setup_robot();
@@ -18,8 +18,8 @@ void solo_awp() {
     pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
     pros::Task track_time(stopwatch, &timeElapsed);
     pros::Task track_position(odometry, &center);
-
-    
+    const double a[2] = {0, 40};
+    move_straight(a, -1, &center, MOTOR_BRAKE_BRAKE);
     track_time.remove();
     regulate_shooting_speed.remove();
     track_position.remove();
