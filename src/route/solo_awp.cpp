@@ -18,8 +18,23 @@ void solo_awp() {
     pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
     pros::Task track_time(stopwatch, &timeElapsed);
     pros::Task track_position(odometry, &center);
-    const double a[2] = {0, 40};
-    move_straight(a, -1, &center, MOTOR_BRAKE_BRAKE);
+    // shoot preloads and turn roller
+    turn(-20, 20, 357, &center);
+    flywheel_piston.set_value(1); delay(800); flywheel_piston.set_value(0);
+    pros::delay(50);
+    turn(20, -20, 0, &center);
+    delay(50);
+
+    move_straight(60); turn_roller(100); delay(100);
+    move_straight(-5.0, &center);
+    track_time.remove();
+    master.print(0, 0, "%d", timeElapsed);
+
+    //pick up next 3 discs and shoot them
+    desiredSpeed = 2000; intake=127;
+    turn(-20, 20, 236, &center);
+    move_straight(60.0, 22, &center);
+    pros::delay(20);
     track_time.remove();
     regulate_shooting_speed.remove();
     track_position.remove();

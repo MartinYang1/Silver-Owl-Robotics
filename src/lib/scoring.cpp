@@ -62,7 +62,7 @@ void regulateFlywheel(void *param) {
     unsigned desiredSpeed; double currSpeed = 0;
     int prevError = 0, integral = 0;
     flywheel = 127;
-    pros::delay(2000);
+    pros::delay(1500);
     while (true) {
         desiredSpeed = *static_cast<unsigned*>(param);
         //master.print(0, 0, "%f", currSpeed);

@@ -10,8 +10,8 @@ struct vector {
 };
 
 extern void move(const int leftVolt, const int rightVolt);
-extern void move_straight(const double dest[2], int moveDirection, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType);
-//extern void move_straight(const double desiredDist, const int volt, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType = MOTOR_BRAKE_BRAKE);
+extern void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType = MOTOR_BRAKE_BRAKE);
+extern void move_straight(const double desiredDist, const int volt, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType = MOTOR_BRAKE_BRAKE);
 extern void move_straight(const float time, const int volt);
 extern void move_straight(const int volt);
 
