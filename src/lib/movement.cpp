@@ -22,18 +22,13 @@ void move(const int leftVolt, const int rightVolt){
     rightFrontMotor = rightVolt; rightMidMotor = rightVolt; rightBackMotor = rightVolt;
 }
 
-/** Turns the robot to a desired angle,
- * relative to its starting pos when the gyro sensor was calibrated
+/** Turns the robot to an absolute angle
  * 
- * @param baseLeftVolt the base voltage for the motors on the left side 
- * of the drive train in volts, from -127 to 127
- * @param baseRightVolt the voltage for the motors on the right side 
- * of the drive train in volts, from -127 to 127
- * @param desiredAngle in degrees, to 2 decimal places. A negative angle turns the robot counter-clockwise
- * and a postive angle turns the robot clockwise
+ * @param baseLeftVolt the base voltage for the left motors in volts, from -127 to 127
+ * @param baseRightVolt the voltage for the right motors in volts, from -127 to 127
+ * @param desiredAngle in degrees in the interval (0, 360]
  * @param pCenter the pointer to the vector data structure for the robot
  */
-
 void turn(const int baseLeftVolt, const int baseRightVolt, double desiredAngle, vector *pCentre) {
     int prevErrorHeading = 0, integralHeading = 0;
     pCentre->desiredHeading = desiredAngle;
@@ -100,75 +95,6 @@ void turn(const int baseLeftVolt, const int baseRightVolt, double desiredAngle, 
     pros::delay(100);
     pCentre->heading = imu_sensor.get_heading(); 
 }
-// void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre){
-//     int pos = 0;
-//     int R = abs(desiredAngle) / 360;
-//     int r = desiredAngle % 360;
-//     float p = imu_sensor.get_heading();
-//         pros::delay(20);
-//     int s = sgn(desiredAngle);
-//     float current_angle = imu_sensor.get_heading();
-//         pros::delay(40);
-//     float desiredAngleoof = current_angle + desiredAngle;
-//         pros::delay(20);
-//     float desiredAngle;
-//         pros::delay(20);
-//     if (desiredAngleoof > 360){
-//         desiredAngle = desiredAngleoof - 360;
-//             pros::delay(50);
-//     }
-//     else if (desiredAngleoof < 0){
-//         desiredAngle = desiredAngleoof + 360;
-//             pros::delay(50);
-//     }
-//     else{
-//         desiredAngle = desiredAngleoof;
-//             pros::delay(50);
-//     }
-   
-//     int revolutions = 0;
-//     while (revolutions < R){
-//             pros::delay(20);
-//         move(s*baseLeftVolt, -s*baseRightVolt);
-//         p = imu_sensor.get_heading();
-//             pros::delay(20);
-//         if (pos == 0) {
-//                 pros::delay(50);
-//             if (current_angle - 9 < p && p < current_angle + 9){
-//                 pos = 0;
-//                     pros::delay(20);
-//             }
-//             else{
-//                 pos = 1;
-//                     pros::delay(20);
-//             }
-//         }
-//         if (pos == 1){
-//             if (current_angle - 9 < p && p < current_angle + 9){
-//                     revolutions ++;
-//                     pos = 0 ;
-//                         pros::delay(20);
-//             }
-//             else{
-//                   pos = 1;
-//                       pros::delay(20);
-//             }
-//         }
-//     }
-//         pros::delay(20);
-//     move(0, 0);
-//     p = imu_sensor.get_heading();
-//     int prevErrorHeading = 0, integralHeading = 0;
-//     while (p > desiredAngle+1 || p < desiredAngle-1) { 
-//         //master.print(0, 0, "%f", desiredAngle);
-//         p = imu_sensor.get_heading();
-//         move(baseLeftVolt + PID(p, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading), 
-//                      baseRightVolt - PID(p, desiredAngle, 0.5, 0, 0, prevErrorHeading, integralHeading));
- 
-// }
-//    move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
-//    pCentre -> heading = desiredAngle;
-// }
 
 /** Moves the robot a given distance forwards or backwards
  * 
@@ -177,10 +103,10 @@ void turn(const int baseLeftVolt, const int baseRightVolt, double desiredAngle, 
  * @param stopType the type of brake mechanism the robot uses
  */
 void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
-    double prevLeftPos, prevRightPos;
+    const unsigned baseVolt = 30;
+    double prevLeftPos = 0, prevRightPos = 0;   // the previous motor encoder value of each side of the drive train
     double currDist = 0;
     
-    const unsigned baseVolt = 30;
     int prevErrorDist = 0, integralDist = 0;
     int prevErrorHeading = 0, integralHeading = 0;
     while (abs(currDist) < abs(desiredDist)) {
@@ -199,21 +125,28 @@ void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRA
         prevLeftPos = leftMidMotor.get_position(), prevRightPos = rightMidMotor.get_position();
         pros::delay(15);
     }
+
     move(stopType, stopType);
     pros::delay(200);
     pCenter->heading = imu_sensor.get_heading();
 }
 
 void move_straight(const double desiredDist, const int volt, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
-    double currDist = get_dist_travelled(); //onst double targetDist = currDist + desiredDist;
+    double prevLeftPos = 0, prevRightPos = 0;   // the previous motor encoder value of each side of the drive train
+    double currDist = 0;
+
     int prevErrorDist = 0, integralDist = 0;
     int prevErrorHeading = 0, integralHeading = 0;
     while (abs(currDist) < abs(desiredDist)) {
         move(volt + PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
                 volt - PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
-        currDist = get_dist_travelled();
+        currDist += (leftMidMotor.get_position()-prevLeftPos + rightMidMotor.get_position()-prevRightPos)/2 
+                    * motorToWheelRatio/360*(M_PI*wheelDiam);
+        
+        prevLeftPos = leftMidMotor.get_position(), prevRightPos = rightMidMotor.get_position();
         pros::delay(15);
     }
+
     move(stopType, stopType);
     pros::delay(200);
     pCenter->heading = imu_sensor.get_heading();
