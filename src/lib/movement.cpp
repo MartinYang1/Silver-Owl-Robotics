@@ -36,6 +36,7 @@ void move(const int leftVolt, const int rightVolt){
 
 void turn(const int baseLeftVolt, const int baseRightVolt, double desiredAngle, vector *pCentre) {
     int prevErrorHeading = 0, integralHeading = 0;
+    pCentre->desiredHeading = desiredAngle;
     double currAngle = imu_sensor.get_heading();
     
     if (baseLeftVolt > baseRightVolt) {
@@ -97,7 +98,7 @@ void turn(const int baseLeftVolt, const int baseRightVolt, double desiredAngle, 
     }
     move(MOTOR_BRAKE_BRAKE, MOTOR_BRAKE_BRAKE);
     pros::delay(100);
-    pCentre->heading = imu_sensor.get_heading(); pCentre->desiredHeading = desiredAngle;
+    pCentre->heading = imu_sensor.get_heading(); 
 }
 // void turn(const int baseLeftVolt, const int baseRightVolt, int desiredAngle, vector *pCentre){
 //     int pos = 0;

@@ -81,6 +81,8 @@ void autonomous() {
 			solo_awp(); break;
 		case S_RED8: S_BLUE8:
 			prog_skills(); break;
+		case B_RED3: B_BLUE3:
+			close_a(); break;
 	}
 
 }

@@ -13,6 +13,7 @@ extern void big3();
 extern void big6c();
 extern void runSkills();
 extern void autonTest();
+extern void close_a();
 extern void test();
 extern void solo_awp();
 extern void prog_skills();

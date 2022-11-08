@@ -38,10 +38,10 @@ void aim_shot(vector *pCenter) {
     while (!isAiming) {
         pros::vision_object_s_t goal = vision_sensor.get_by_size(0);
         double centre = goal.x_middle_coord;
-        if (centre > 200){
+        if (centre > 130){
             move(-40, 40);
         }
-        else if (centre < 190){
+        else if (centre < 150){
             move(40, -40);
         }
         else{
@@ -62,12 +62,12 @@ void regulateFlywheel(void *param) {
     unsigned desiredSpeed; double currSpeed = 0;
     int prevError = 0, integral = 0;
     flywheel = 127;
-    pros::delay(1500);
+    pros::delay(1920);
     while (true) {
         desiredSpeed = *static_cast<unsigned*>(param);
         //master.print(0, 0, "%f", currSpeed);
         currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
-        flywheel = 114+PID(currSpeed, desiredSpeed, 0.26, 0.04, 0.07, prevError, integral);
+        flywheel = 113+PID(currSpeed, desiredSpeed, 0.34, 0.06, 0.07, prevError, integral);
         pros::delay(35);
     }
 }

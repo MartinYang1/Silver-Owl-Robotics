@@ -40,8 +40,7 @@ void setup_robot() {
  * @return the distance travelled by the motors, in inches
  */
 double get_dist_travelled() {
-    double degreesTravelled = (leftBackMotor.get_position() + rightBackMotor.get_position()
-            + leftFrontMotor.get_position() + rightFrontMotor.get_position()) / 4;
+    double degreesTravelled = (leftBackMotor.get_position() + rightBackMotor.get_position()) / 2;
     return degreesTravelled * motorToWheelRatio / 360 * (M_PI*wheelDiam);
 }
 

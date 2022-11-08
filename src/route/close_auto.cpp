@@ -7,7 +7,7 @@
 
 using namespace pros;
 
-void solo_awp() {
+void close_a() {
     // initial setup
     vector center = {};
 
@@ -19,10 +19,10 @@ void solo_awp() {
     pros::Task track_time(stopwatch, &timeElapsed);
     pros::Task track_position(odometry, &center);
     // shoot preloads and turn roller
-    move_straight(51); turn_roller(100); delay(400);
-    move_straight(-3.7, &center);
-    intake=117;
-    turn(-25, 25, 355, &center);
+    move_straight(51); turn_roller(100); delay(1600);
+    move_straight(-3.3, &center);
+    intake=107;
+    turn(-25, 25, 354, &center);
     flywheel_piston.set_value(1); delay(1300); flywheel_piston.set_value(0);
     pros::delay(50);
 
@@ -30,13 +30,11 @@ void solo_awp() {
 
     //pick up next 3 discs and shoot them
     desiredSpeed = 2600; 
-    intake = 117;
-    turn(-20, 20, 232, &center);
+    intake = 127;
+    turn(-20, 20, 234, &center);
     pros::delay(100);
-    move_straight(33.0,52, &center);
-    pros::delay(350);
-    move_straight(8.0, 50, &center);
-    pros::delay(20);
+    move_straight(42.0,46, &center);
+    pros::delay(310);
 
     // delay(50);
     
@@ -57,28 +55,28 @@ void solo_awp() {
     // move_straight(60.0, 22, &center);
     // pros::delay(20);
     
-    turn(35,-35, 312, &center);
+    turn(35,-35, 310, &center);
     move_straight(-3, &center);
     pros::delay(500);
     flywheel_piston.set_value(1); delay(1200); flywheel_piston.set_value(0);
-    turn(-35,35, 232,&center);
-    pros::delay(80);
-    
-    // pick up stack of 3 discs and shoot them (maybe)
-    move_straight(75.0, 35, &center);
-    turn(25,-25, 308, &center);
-    pros::delay(80);
-    flywheel_piston.set_value(1); delay(1200); flywheel_piston.set_value(0);
-    turn(-25,25, 239, &center);
-    pros::delay(80);
-
-    // turn 2nd roller
-    pros::delay(100);
-    // move_straight(75.0, 35, &center);
+    // turn(-35,35, 232,&center);
     // pros::delay(80);
-    // turn(35,-35, 270, &center);
-    pros::delay(80);
-    move_straight(60); turn_roller(100);
+    
+    // // pick up stack of 3 discs and shoot them (maybe)
+    // move_straight(75.0, 35, &center);
+    // turn(25,-25, 308, &center);
+    // pros::delay(80);
+    // flywheel_piston.set_value(1); delay(1200); flywheel_piston.set_value(0);
+    // turn(-25,25, 239, &center);
+    // pros::delay(80);
+
+    // // turn 2nd roller
+    // pros::delay(100);
+    // // move_straight(75.0, 35, &center);
+    // // pros::delay(80);
+    // // turn(35,-35, 270, &center);
+    // pros::delay(80);
+    // move_straight(60); turn_roller(100);
 
 
     track_time.remove();
