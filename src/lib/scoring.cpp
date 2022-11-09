@@ -59,10 +59,12 @@ void aim_shot(vector *pCenter) {
  * @param param the desired RPM for the flywheel
 */
 void regulateFlywheel(void *param) {
-    unsigned desiredSpeed; double currSpeed = 0;
+    unsigned desiredSpeed = *static_cast<unsigned*>(param); double currSpeed = 0;
     int prevError = 0, integral = 0;
     flywheel = 127;
-    pros::delay(1920);
+    while (std::abs(flywheel.get_actual_velocity()) * motorToFlywheel < desiredSpeed)
+        pros::delay(15);
+    
     while (true) {
         desiredSpeed = *static_cast<unsigned*>(param);
         //master.print(0, 0, "%f", currSpeed);
