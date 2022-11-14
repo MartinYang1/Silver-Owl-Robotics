@@ -83,6 +83,9 @@ void autonomous() {
 			prog_skills(); break;
 		case B_RED3: B_BLUE3:
 			close_a(); break;
+		case B_RED6_C: B_BLUE6_C:
+			far_auto(); break;
+
 	}
 
 }

@@ -8,18 +8,39 @@
 using namespace pros;
 
 void test() {
-    vector center3 = {};
+    // initial setup
+    vector center = {};
 
-    //setup_robot();
-    //pros::Task track_position(odometry, &center3);
-    //move_straight(48.0, &center3);
-    //turn(30, 20, 90, &center3);
-    //track_position.remove();
+    unsigned timeElapsed = 0;
+    unsigned desiredSpeed = 3200;
+    setup_robot();
     
-    // 20 volts for spot turns, 30 volts for turning around a point
-    //turn(-20, 20, 340, &center3);
-    //turn(20, -20, 135, &center3);
-    // turn(-30, 0, 270, 0, &center3);
-    // turn(0, 30, 180, 0, &center3);
-    aim_shot(&center3);
+    pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
+    pros::Task track_time(stopwatch, &timeElapsed);
+    pros::Task track_position(odometry, &center);
+
+    // turn roller and shoot preloads
+    move_straight(22.0, &center);
+    turn(30, 0, 89, &center);
+    move_straight(51, &center); turn_roller(100); delay(400);
+    
+    while (desiredSpeed != INT16_MAX) {
+        delay(15);
+    }
+    indexer = 127;
+    shoot(1200);
+
+    //turn roller
+    //turn to aim for shots
+    //shoot
+    //turn to aim at row of 3 discs
+    //turn to shoot
+    //turn and drive to low zone 3 discs
+    
+
+
+    track_time.remove();
+    regulate_shooting_speed.remove();
+    track_position.remove();
+    master.print(0, 0, "%d", timeElapsed);
 }

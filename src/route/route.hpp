@@ -17,5 +17,6 @@ extern void close_a();
 extern void test();
 extern void solo_awp();
 extern void prog_skills();
+extern void far_auto();
 
 #endif

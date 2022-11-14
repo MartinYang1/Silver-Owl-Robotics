@@ -66,11 +66,12 @@ void regulateFlywheel(void *param) {
     {
         pros::delay(15);
     }
+    *static_cast<unsigned*>(param) = INT16_MAX;
     while (true) {
         desiredSpeed = *static_cast<unsigned*>(param);
         //master.print(0, 0, "%f", currSpeed);
         currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
-        flywheel = 113+PID(currSpeed, desiredSpeed, 0.34, 0.06, 0.07, prevError, integral);
+        flywheel = 113+PID(currSpeed, desiredSpeed, 0.34, 0.06, 0.12, prevError, integral);
         pros::delay(35);
     }
 }
@@ -81,7 +82,8 @@ void regulateFlywheel(void *param) {
  * @param gateDelay the number of milliseconds to open the gate for
 */
 void shoot(const unsigned gateDelay) {
-    flywheel_piston.set_value(1); 
+    flywheel_piston.set_value(1);
+    indexer = 109;
     pros::delay(gateDelay); 
     flywheel_piston.set_value(0);
 }

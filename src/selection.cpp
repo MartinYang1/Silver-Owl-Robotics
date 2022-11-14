@@ -2,7 +2,8 @@
 #include "selection.h"
 #include "globals/globals.hpp"
 
-static const char *btnmMap[] = {"test", "solo AWP", "prog skills", "\n", "alliance auto close", "just_shoot", "\n", "Do Nothing", ""};
+static const char *btnmMap[] = {"test", "solo AWP", "prog skills", "\n", "alliance auto close", 
+	"alliance auto far", "\n", "Do Nothing", ""};
 
 
 
@@ -26,7 +27,7 @@ lv_res_t redBtnmAction(lv_obj_t *btnm, const char *txt){
 	{
 		autonSelection = B_RED3;
 	}
-	if (strcmp(txt, "just_shoot") == 0)
+	if (strcmp(txt, "alliance auto far") == 0)
 	{
 		autonSelection = B_RED6_C;
 	}
@@ -61,7 +62,7 @@ lv_res_t blueBtnmAction(lv_obj_t *btnm, const char *txt)
 	{
 		autonSelection = B_BLUE3;
 	}
-	if (strcmp(txt, "low_shot") == 0)
+	if (strcmp(txt, "alliance auto far") == 0)
 	{
 		autonSelection = B_BLUE6_C;
 	}

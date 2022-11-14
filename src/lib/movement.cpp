@@ -104,7 +104,7 @@ void turn(const int baseLeftVolt, const int baseRightVolt, double desiredAngle, 
  */
 void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
     const unsigned baseVolt = 30;
-    double prevLeftPos = 0, prevRightPos = 0;   // the previous motor encoder value of each side of the drive train
+    double prevLeftPos = leftMidMotor.get_position(), prevRightPos = rightMidMotor.get_position();   // the previous motor encoder value of each side of the drive train
     double currDist = 0;
     
     int prevErrorDist = 0, integralDist = 0;
@@ -125,29 +125,34 @@ void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRA
         prevLeftPos = leftMidMotor.get_position(), prevRightPos = rightMidMotor.get_position();
         pros::delay(15);
     }
-
-    move(stopType, stopType);
+    if (stopType == MOTOR_BRAKE_BRAKE)
+        move(stopType, stopType);
     pros::delay(200);
     pCenter->heading = imu_sensor.get_heading();
 }
 
 void move_straight(const double desiredDist, const int volt, vector *pCenter, decltype(MOTOR_BRAKE_BRAKE) stopType) {
-    double prevLeftPos = 0, prevRightPos = 0;   // the previous motor encoder value of each side of the drive train
+    double prevLeftPos = leftMidMotor.get_position(), prevRightPos = rightMidMotor.get_position();   // the previous motor encoder value of each side of the drive train
     double currDist = 0;
 
     int prevErrorDist = 0, integralDist = 0;
     int prevErrorHeading = 0, integralHeading = 0;
     while (abs(currDist) < abs(desiredDist)) {
-        move(volt + PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
-                volt - PID(imu_sensor.get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+        if (pCenter->desiredHeading > 180)
+            move(volt + PID(get_heading(), pCenter->desiredHeading-360, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading-360, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+        else
+            move(volt + PID(get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+        
         currDist += (leftMidMotor.get_position()-prevLeftPos + rightMidMotor.get_position()-prevRightPos)/2 
                     * motorToWheelRatio/360*(M_PI*wheelDiam);
         
         prevLeftPos = leftMidMotor.get_position(), prevRightPos = rightMidMotor.get_position();
         pros::delay(15);
     }
-
-    move(stopType, stopType);
+    if (stopType == MOTOR_BRAKE_BRAKE)
+        move(stopType, stopType);
     pros::delay(200);
     pCenter->heading = imu_sensor.get_heading();
 }
@@ -173,12 +178,18 @@ void move_straight(const float time, const int volt) {
  * 
  * @param volt the voltage for the motors, from -127 to 127
  */
-void move_straight(const int volt) {
-    int prevErrorDist = 0, integralDist = 0;
+void move_straight(const int volt, vector* pCenter) {
+    int prevErrorHeading = 0, integralHeading = 0;
     while (optical_sensor.get_proximity() < 255) {
-        move(volt + PID(get_heading(), 0, 1, 0.02, 0.5, prevErrorDist, integralDist), 
-                volt - PID(get_heading(), 0, 1, 0.02, 0.5, prevErrorDist, integralDist));
+        if (pCenter->desiredHeading > 180)
+            move(volt + PID(get_heading(), pCenter->desiredHeading-360, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading-360, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+        else
+            move(volt + PID(get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
         pros::delay(15);
     }
     move(MOTOR_BRAKE_HOLD, MOTOR_BRAKE_HOLD);
+    pros::delay(100);
+    pCenter->heading = imu_sensor.get_heading();
 }
