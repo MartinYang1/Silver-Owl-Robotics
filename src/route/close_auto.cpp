@@ -12,28 +12,33 @@ void close_a() {
     vector center = {};
 
     unsigned timeElapsed = 0;
-    unsigned desiredSpeed = 3200;
-    setup_robot();
-    
+    unsigned desiredSpeed = 3250;
     pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
     pros::Task track_time(stopwatch, &timeElapsed);
+    setup_robot();
+    
+
     pros::Task track_position(odometry, &center);
     // shoot preloads and turn roller
     move_straight(51, &center); turn_roller(100); delay(1600);
     move_straight(-3.3, &center);
-    intake=107;
+    intake=0;
     turn(-25, 25, 354, &center);
-    flywheel_piston.set_value(1); delay(1300); flywheel_piston.set_value(0);
+     while (desiredSpeed != INT16_MAX) {
+        delay(15);
+    }
+    desiredSpeed = 3250;
+    pros::delay(450);
+    shoot(750);
     pros::delay(50);
 
-    master.print(0, 0, "%d", timeElapsed);
+
 
     //pick up next 3 discs and shoot them
-    desiredSpeed = 2600; 
-    intake = 127;
+    desiredSpeed = 2575; 
     turn(-20, 20, 236, &center);
     pros::delay(100);
-    move_straight(42.0,46, &center);
+    move_straight(42.0,56, &center);
     pros::delay(310);
 
     // delay(50);
@@ -59,15 +64,15 @@ void close_a() {
     move_straight(-6.0, &center);
     pros::delay(500);
     flywheel_piston.set_value(1); delay(1300); flywheel_piston.set_value(0);
-
+    master.print(0, 0, "%d", timeElapsed);
     //get 3 discs from low zone
-    turn(-25,25, 280, &center);
-    move_straight(27,50, &center);
-    turn(0,-30,0,&center);
-    move_straight(45,50,&center);
-    move_straight(-45,-50,&center);
-    turn(-25,25,315,&center);
-    flywheel_piston.set_value(1); delay(1300); flywheel_piston.set_value(0);
+    turn(-25,25, 277, &center);
+    move_straight(47,50, &center);
+    // turn(0,-30,0,&center);
+    // move_straight(45,50,&center);
+    // move_straight(-45,-50,&center);
+    // turn(-25,25,315,&center);
+    // flywheel_piston.set_value(1); delay(1300); flywheel_piston.set_value(0);
 
 
 

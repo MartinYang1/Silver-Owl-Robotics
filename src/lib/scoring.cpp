@@ -18,10 +18,12 @@ const unsigned turn_roller(const int rate) {
     pros::delay(50);
 
     unsigned short currHue = optical_sensor.get_hue();
-    while (currHue - 30 <= optical_sensor.get_hue() && optical_sensor.get_hue() <= currHue + 30) {
+    while (currHue - 10 <= optical_sensor.get_hue() && optical_sensor.get_hue() <= currHue + 10) {
         roller = rate;
         pros::delay(15);
     }
+    roller = -rate;
+    pros::delay(80);
     roller = MOTOR_BRAKE_BRAKE;
     optical_sensor.set_led_pwm(0);
     pros::delay(50);
@@ -72,6 +74,20 @@ void regulateFlywheel(void *param) {
         //master.print(0, 0, "%f", currSpeed);
         currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
         flywheel = 113+PID(currSpeed, desiredSpeed, 0.34, 0.06, 0.12, prevError, integral);
+        pros::delay(35);
+    }
+}
+void regulateFlywheel_2(void *param) {
+    unsigned desiredSpeed = *static_cast<unsigned*>(param); double currSpeed = 0;
+    int prevError = 0, integral = 0;
+    flywheel = 127;
+    pros::delay(1700);
+    *static_cast<unsigned*>(param) = INT16_MAX;
+    while (true) {
+        desiredSpeed = *static_cast<unsigned*>(param);
+        //master.print(0, 0, "%f", currSpeed);
+        currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
+        flywheel = 113+PID(currSpeed, desiredSpeed, 0.335, 0.06, 0.12, prevError, integral);
         pros::delay(35);
     }
 }

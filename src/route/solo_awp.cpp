@@ -12,7 +12,7 @@ void solo_awp() {
     vector center = {};
 
     unsigned timeElapsed = 0;
-    unsigned desiredSpeed = 3080;
+    unsigned desiredSpeed = 3250;
     pros::Task track_time(stopwatch, &timeElapsed);
     pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
     setup_robot();
@@ -22,14 +22,17 @@ void solo_awp() {
     // shoot preloads and turn roller
     move_straight(51, &center); turn_roller(100); delay(400);
     move_straight(-3.4, &center);
-    turn(-25, 25, 353.5, &center);
+    turn(-25, 25, 355, &center);
     delay(30);
+    pros::delay(2500);
     while (desiredSpeed != INT16_MAX) {
         delay(15);
     }
+    desiredSpeed = 3250;
+    pros::delay(250);
     shoot(1000);
     //pick up next 3 discs and shoot them
-    desiredSpeed = 2700; 
+    desiredSpeed = 2500; 
     intake = 127;
     turn(-25, 25, 234, &center);
     move_straight(51,58, &center, MOTOR_BRAKE_COAST);
