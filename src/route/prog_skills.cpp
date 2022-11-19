@@ -12,7 +12,7 @@ void prog_skills() {
     vector center = {};
 
     unsigned timeElapsed = 0;
-    unsigned desiredSpeed = 3250;
+    unsigned desiredSpeed = 2770;
     pros::Task track_time(stopwatch, &timeElapsed);
     pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
     setup_robot();
@@ -22,24 +22,24 @@ void prog_skills() {
     // shoot preloads and turn roller
     move_straight(51, &center); turn_roller(70); delay(600); turn_roller(70);
     move_straight(-3.4, &center);
-    turn(-25, 25, 353, &center);
+    turn(-25, 25, 359, &center);
     delay(30);
         while (desiredSpeed != INT16_MAX) {
         delay(15);
     }
-    desiredSpeed = 3250;
+    desiredSpeed = 2760;
     pros::delay(650);
     shoot(1000);
     //pick up next 3 discs and shoot them
-    desiredSpeed = 2085; 
+    desiredSpeed = 2000; 
     intake = 127;
-    turn(-25, 25, 235, &center);
+    turn(-25, 25, 239, &center);
     move_straight(47,54, &center, MOTOR_BRAKE_COAST);
     pros::delay(180);
     
     turn(-21,21, 127.3, &center);
     shoot(1050);
-    desiredSpeed = 2960; 
+    desiredSpeed = 2600; 
     intake = 127;
     turn(23,-23, 222,&center);
     pros::delay(40);
@@ -78,13 +78,6 @@ void prog_skills() {
     turn(35,-35, 87, &center);
     pros::delay(80);
     move_straight(60, &center); turn_roller(70); pros::delay(600); turn_roller(70);
-
-    desiredSpeed = 2250; 
-    move_straight(-48.0, -60, &center);
-    turn(-17,17, 105, &center);
-    shoot(1050);
-    turn(20,-20, 90, &center);
-    move_straight(40.0, &center);
 
     turn(-20,20, 45, &center);
 

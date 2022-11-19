@@ -18,8 +18,11 @@ const unsigned turn_roller(const int rate) {
     pros::delay(50);
 
     unsigned short currHue = optical_sensor.get_hue();
-    while (currHue - 10 <= optical_sensor.get_hue() && optical_sensor.get_hue() <= currHue + 10) {
+    
+    unsigned timeElapsed = 0;
+    while ((currHue - 10 <= optical_sensor.get_hue() && optical_sensor.get_hue() <= currHue + 10) && timeElapsed < 3300) {
         roller = rate;
+        timeElapsed += 15;
         pros::delay(15);
     }
     roller = -rate;
