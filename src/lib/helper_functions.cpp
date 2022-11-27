@@ -119,19 +119,20 @@ void odometry(void* param) {
         L = leftFrontMotor.get_position() * motorToWheelRatio / 360 * (M_PI*wheelDiam);
         R = rightFrontMotor.get_position() * motorToWheelRatio / 360 * (M_PI*wheelDiam);
         if (L==R) {
-            deltaX = L * cos(pCenter->heading) - pCenter->x; deltaY = R * sin(pCenter->heading)-pCenter->y;
+            deltaY = L * cos(pCenter->heading) - pCenter->y; deltaX = R * sin(pCenter->heading)-pCenter->x;
             pCenter->x += deltaX; pCenter->y += deltaY;
-            //master.print(0, 0, "%f", pCenter->x);
+            master.print(0, 0, "%f", pCenter->y);
         }
         else {
             // the angle turned
             alpha = (R - L) / robotWidth;
             hypotenuse = 2 * (L/alpha + robotWidth/2) * sin(alpha/2);
 
-            deltaX = hypotenuse * cos(pCenter->heading + alpha/2) - pCenter->x;
-            deltaY = hypotenuse * sin(pCenter->heading + alpha/2) - pCenter->y;
+            deltaY = hypotenuse * cos(pCenter->heading + alpha/2) - pCenter->y;
+            deltaX = hypotenuse * sin(pCenter->heading + alpha/2) - pCenter->x;
 
             pCenter->x += deltaX; pCenter->y += deltaY;
+            master.print(0, 0, "%f", pCenter->y);
         }
         pros::delay(10);
     }
