@@ -43,7 +43,7 @@ void far_auto() {
     turn(-29,29,150,&center);
     delay(50);
     shoot(800);
-    // desiredSpeed = 2600;
+    // desiredSpeed = 2720;
     // move_straight(1, 61.0, &center);
     // turn(-29,29,90,&center);
     // //pickup discs next to the goal

@@ -76,7 +76,24 @@ void regulateFlywheel(void *param) {
         desiredSpeed = *static_cast<unsigned*>(param);
         //master.print(0, 0, "%f", currSpeed);
         currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
-        flywheel = 113+PID(currSpeed, desiredSpeed, 0.34, 0.06, 0.12, prevError, integral);
+        flywheel = 113+PID(currSpeed, desiredSpeed, 0.34, 0.1, 0.14, prevError, integral);
+        pros::delay(35);
+    }
+}
+void regulateFlywheel_o(void *param) {
+    unsigned desiredSpeed = *static_cast<unsigned*>(param); double currSpeed = 0;
+    int prevError = 0, integral = 0;
+    flywheel = 127;
+    while (std::abs(flywheel.get_actual_velocity()) * motorToFlywheel < desiredSpeed)
+    {
+        pros::delay(15);
+    }
+    *static_cast<unsigned*>(param) = INT16_MAX;
+    while (true) {
+        desiredSpeed = *static_cast<unsigned*>(param);
+        //master.print(0, 0, "%f", currSpeed);
+        currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
+        flywheel = 110+PID(currSpeed, desiredSpeed, 0.43, 0.05, 0.14, prevError, integral);
         pros::delay(35);
     }
 }
