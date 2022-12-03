@@ -9,6 +9,7 @@ void opcontrol() {
 	pros::Task regulateFlywheelSpeed(regulateFlywheel, &shootingSpeed);
 	expander1_piston.set_value(0);
 	expander2_piston.set_value(0);
+	leveler.set_value(1);
 
 	flywheel_piston.set_value(0);
 	int intake_state=1;
@@ -32,17 +33,21 @@ void opcontrol() {
 		}
 		if (master.get_digital(DIGITAL_R2) )
  {
-			flywheel_piston.set_value(1);
+			flywheel_piston.set_value(0);
 			intake=127;
 		}
 		else
 		{
-			flywheel_piston.set_value(0);
+			flywheel_piston.set_value(1);
 		}
 		if (master.get_digital(DIGITAL_R1))
  {
-			//vector center11 = {};
-			//aim_shot(&center11);
+			leveler.set_value(0);
+			shootingSpeed=2700;
+		}
+		else
+		{
+			leveler.set_value(1);
 		}
 
 		if(master.get_digital(DIGITAL_UP) && master.get_digital (DIGITAL_DOWN) && master.get_digital (DIGITAL_RIGHT) && master.get_digital (DIGITAL_LEFT))
