@@ -20,13 +20,13 @@ const unsigned turn_roller(const int rate) {
     unsigned short currHue = optical_sensor.get_hue();
     
     unsigned timeElapsed = 0;
-    while ((currHue - 10 <= optical_sensor.get_hue() && optical_sensor.get_hue() <= currHue + 10) && timeElapsed < 3300) {
+    while ((currHue - 10 <= optical_sensor.get_hue() && optical_sensor.get_hue() <= currHue + 10) && timeElapsed < 2600) {
         roller = rate;
         timeElapsed += 15;
         pros::delay(15);
     }
     roller = -rate;
-    pros::delay(80);
+    pros::delay(180);
     roller = MOTOR_BRAKE_BRAKE;
     optical_sensor.set_led_pwm(0);
     pros::delay(50);
@@ -119,7 +119,7 @@ void regulateFlywheel_2(void *param) {
 */
 void shoot(const unsigned gateDelay) {
     flywheel_piston.set_value(1);
-    indexer = 109;
+    indexer = 117;
     pros::delay(gateDelay); 
     flywheel_piston.set_value(0);
 }

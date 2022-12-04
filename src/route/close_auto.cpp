@@ -12,10 +12,9 @@ void close_a() {
     vector center = {};
 
     unsigned timeElapsed = 0;
-    unsigned desiredSpeed = 2938;
+    unsigned desiredSpeed = 3300;
     pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
     pros::Task track_time(stopwatch, &timeElapsed);
-    setup_robot();
     
 
     pros::Task track_position(odometry, &center);
@@ -23,11 +22,11 @@ void close_a() {
     move_straight(51, &center); turn_roller(80); delay(900);
     move_straight(-3.3, &center);
     intake=0;
-    turn(-25, 25, 355, &center);
+    turn(-25, 25, 354, &center);
      while (desiredSpeed != INT16_MAX) {
         delay(15);
     }
-    desiredSpeed = 2938;
+    desiredSpeed = 3360;
     pros::delay(450);
     shoot(750);
     pros::delay(50);
@@ -36,8 +35,8 @@ void close_a() {
 
 
     //pick up next 3 discs and shoot them
-    desiredSpeed = 2674; 
-    turn(-20, 20, 240, &center);
+    desiredSpeed = 3550; 
+    turn(-23, 23, 236, &center);
     pros::delay(100);
     move_straight(43.5,41, &center);
     pros::delay(310);
@@ -61,8 +60,8 @@ void close_a() {
     // move_straight(60.0, 22, &center);
     // pros::delay(20);
     
-    turn(35,-35, 320, &center);
-    move_straight(-6.0, &center);
+    turn(35,-35, 319, &center);
+    move_straight(2.5, &center);
     pros::delay(500);
     flywheel_piston.set_value(1); delay(1300); flywheel_piston.set_value(0);
     master.print(0, 0, "%d", timeElapsed);

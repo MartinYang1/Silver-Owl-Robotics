@@ -11,36 +11,35 @@ void far_auto() {
     // initial setup
     vector center = {};
     unsigned timeElapsed = 0;
-    unsigned desiredSpeed = 2770;
+    unsigned desiredSpeed = 3370;
     pros::Task regulate_shooting_speed(regulateFlywheel, &desiredSpeed);
     pros::Task track_time(stopwatch, &timeElapsed);
-
-    setup_robot();
 
     pros::Task track_position(odometry, &center);
 
     // turn roller
-    move_straight(22.0, &center);
+    move_straight(17.8, &center);
     turn(35, 0, 89, &center);
     move_straight(51, &center); turn_roller(100); delay(100);
     
     // shoot preloads
-    move_straight(-4.0, &center);
+    move_straight(-3.0, &center);
     turn(29, -29, 93, &center);
     while (desiredSpeed != INT16_MAX) {
         delay(15);
     }
-    desiredSpeed = 2770;
+    desiredSpeed = 3570;
     delay(850);
     shoot(700);
     move_straight(5.0, 60.0,&center);
-    desiredSpeed = 2600;
+    desiredSpeed = 3300;
 
     // pick up row of 3 discs
     intake = 127;
-    turn(29,-29,220,&center);
+    turn(29,-29,217,&center);
     move_straight(69.3, 59.0, &center);
-    turn(-29,29,150,&center);
+    turn(-29,29,142,&center);
+    move_straight(2.0, 60.0,&center);
     delay(50);
     shoot(800);
     // desiredSpeed = 2720;

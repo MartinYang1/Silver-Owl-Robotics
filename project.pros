@@ -311,7 +311,7 @@
     "upload_options": {
       "description": "Mall of America program, all autonomous and driver",
       "icon": "clawbot",
-      "slot": 3
+      "slot": 1
     }
   }
 }

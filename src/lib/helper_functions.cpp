@@ -27,12 +27,9 @@ void setup_robot() {
     pros::delay(2000);
     imu_sensor.tare_heading();
     pros::delay(50);
-
     reset_drive_train();
     intake.tare_position();
-
     pros::delay(50);
-    intake = 127;
 }
 
 /** Gets the distance travelled in a linear path by the robot
