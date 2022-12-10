@@ -113,11 +113,11 @@ void move_straight(const double desiredDist, vector *pCenter, decltype(MOTOR_BRA
         const double volt = (desiredDist < 0) ? PID(currDist, desiredDist, 2, 0, -0.2, prevErrorDist, integralDist) - baseVolt
                                             : PID(currDist, desiredDist, 2, 0, -0.2, prevErrorDist, integralDist) + baseVolt;
         if (pCenter->desiredHeading > 180)
-            move(volt + PID(get_heading(), pCenter->desiredHeading-360, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
-                volt - PID(get_heading(), pCenter->desiredHeading-360, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+            move(volt + PID(get_heading(), pCenter->desiredHeading-360, 0.6, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading-360, 0.6, 0.01, 1, prevErrorHeading, integralHeading));
         else
-            move(volt + PID(get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
-                volt - PID(get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+            move(volt + PID(get_heading(), pCenter->desiredHeading, 0.6, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading, 0.6, 0.01, 1, prevErrorHeading, integralHeading));
 
         currDist += (leftMidMotor.get_position()-prevLeftPos + rightMidMotor.get_position()-prevRightPos)/2 
                     * motorToWheelRatio/360*(M_PI*wheelDiam);
@@ -139,11 +139,11 @@ void move_straight(const double desiredDist, const int volt, vector *pCenter, de
     int prevErrorHeading = 0, integralHeading = 0;
     while (abs(currDist) < abs(desiredDist)) {
         if (pCenter->desiredHeading > 180)
-            move(volt + PID(get_heading(), pCenter->desiredHeading-360, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
-                volt - PID(get_heading(), pCenter->desiredHeading-360, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+            move(volt + PID(get_heading(), pCenter->desiredHeading-360, 0.6, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading-360, 0.6, 0.01, 1, prevErrorHeading, integralHeading));
         else
-            move(volt + PID(get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
-                volt - PID(get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+            move(volt + PID(get_heading(), pCenter->desiredHeading, 0.6, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading, 0.6, 0.01, 1, prevErrorHeading, integralHeading));
         
         currDist += (leftMidMotor.get_position()-prevLeftPos + rightMidMotor.get_position()-prevRightPos)/2 
                     * motorToWheelRatio/360*(M_PI*wheelDiam);
@@ -182,11 +182,11 @@ void move_straight(const int volt, vector* pCenter) {
     int prevErrorHeading = 0, integralHeading = 0;
     while (optical_sensor.get_proximity() < 255) {
         if (pCenter->desiredHeading > 180)
-            move(volt + PID(get_heading(), pCenter->desiredHeading-360, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
-                volt - PID(get_heading(), pCenter->desiredHeading-360, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+            move(volt + PID(get_heading(), pCenter->desiredHeading-360, 0.6, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading-360, 0.6, 0.01, 1, prevErrorHeading, integralHeading));
         else
-            move(volt + PID(get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading), 
-                volt - PID(get_heading(), pCenter->desiredHeading, 0.9, 0.01, 1, prevErrorHeading, integralHeading));
+            move(volt + PID(get_heading(), pCenter->desiredHeading, 0.6, 0.01, 1, prevErrorHeading, integralHeading), 
+                volt - PID(get_heading(), pCenter->desiredHeading, 0.6, 0.01, 1, prevErrorHeading, integralHeading));
         pros::delay(15);
     }
     move(MOTOR_BRAKE_HOLD, MOTOR_BRAKE_HOLD);

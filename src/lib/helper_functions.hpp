@@ -13,6 +13,7 @@ extern double get_move_speed();
 extern double get_move_voltage();
 
 extern double PID(double input, double target, double Kp, double Ki, double Kd, int &prevError, int &integral, int direction = 1);
+extern double PID2(double input, double target, double Kp, double Ki, double Kd, int &prevError, int &integral, int direction = 1);
 extern void odometry(void *param);
 extern void stopwatch(void *param);
 void setup_robot();

@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Code Code",
+    "project_name": "prog skills???",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -311,7 +311,7 @@
     "upload_options": {
       "description": "Regular Code",
       "icon": "clawbot",
-      "slot": 1
+      "slot": 3
     }
   }
 }

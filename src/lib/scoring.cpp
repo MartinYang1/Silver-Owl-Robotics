@@ -16,12 +16,12 @@ const double motorToFlywheel = 36;
 const unsigned turn_roller(const int rate) {
     optical_sensor.set_led_pwm(100);
     pros::delay(100);
-    move(20, 20);
+    move(18, 18);
 
     unsigned short currHue = optical_sensor.get_hue();
     unsigned short stHue = optical_sensor.get_hue();
     unsigned timeElapsed = 0;
-    while ((stHue - 10 <= currHue && currHue <= stHue + 10) && timeElapsed < 1700) {
+    while ((stHue - 10 <= currHue && currHue <= stHue + 10) && timeElapsed < 1600) {
         roller = rate;
         currHue = optical_sensor.get_hue();
         timeElapsed += 15;
@@ -30,6 +30,36 @@ const unsigned turn_roller(const int rate) {
     roller = -rate;
     optical_sensor.set_led_pwm(0);
     pros::delay(130);
+    roller = 0;
+    move(0, 0);
+    return optical_sensor.get_hue();
+}
+const unsigned turn_roller2(const int rate) {
+    optical_sensor.set_led_pwm(100);
+    pros::delay(100);
+    move(18, 18);
+
+    unsigned short currHue = optical_sensor.get_hue();
+    unsigned short stHue = optical_sensor.get_hue();
+    unsigned timeElapsed = 0;
+    
+   
+    while ((currHue >= 100) && timeElapsed < 2500) {
+        roller = rate;
+        currHue = optical_sensor.get_hue();
+        timeElapsed += 15;
+        pros::delay(15);
+    }
+    pros::delay(120);
+    while ((currHue <= 100) && timeElapsed < 3200) {
+        roller = rate;
+        currHue = optical_sensor.get_hue();
+        timeElapsed += 15;
+        pros::delay(15);
+    }
+    roller = -rate;
+    optical_sensor.set_led_pwm(0);
+    pros::delay(370);
     roller = 0;
     move(0, 0);
     return optical_sensor.get_hue();
@@ -78,7 +108,7 @@ void regulateFlywheel(void *param) {
         desiredSpeed = *static_cast<unsigned*>(param);
         //master.print(0, 0, "%f", currSpeed);
         currSpeed = std::abs(flywheel.get_actual_velocity()) * motorToFlywheel;
-        flywheel = 113+PID(currSpeed, desiredSpeed, 0.34, 0.1, 0.14, prevError, integral);
+        flywheel = 113+PID2(currSpeed, desiredSpeed, 0.34, 0.1, 0.14, prevError, integral);
         pros::delay(35);
     }
 }

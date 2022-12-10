@@ -94,6 +94,15 @@ double PID(double input, double target, double Kp, double Ki, double Kd, int &pr
     return Kp * error + Kd * derivative + Ki * integral;
 }
 
+double PID2(double input, double target, double Kp, double Ki, double Kd, int &prevError, int &integral, int direction) {    
+    double error = (target - input) * direction;
+    double derivative = error - prevError;  // only an approximation
+    integral = 0.5 * integral + error;  // only an approximation
+    prevError = error;
+
+    return Kp * error + Kd * derivative + Ki * integral;
+}
+
 /** A stopwatch with a frequency of 1000Hz
  * 
  * @param param the pointer to the variable storing the time elapsed
