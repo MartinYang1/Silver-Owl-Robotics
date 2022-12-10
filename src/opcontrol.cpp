@@ -50,15 +50,25 @@ void opcontrol() {
 		{
 			expander1_piston.set_value(1);
 			expander2_piston.set_value(1);
+			side_piston.set_value(1);
+			side2_piston.set_value(1);
 			regulateFlywheelSpeed.remove();
 			pros::delay(500);
 			flywheel_state = 0;
 		}
-		else
+		else if(master.get_digital_new_press(DIGITAL_A) && master.get_digital (DIGITAL_B) && master.get_digital (DIGITAL_X) && master.get_digital (DIGITAL_Y))
 		{
+			side_piston.set_value(1);
+			side2_piston.set_value(1);
+			regulateFlywheelSpeed.remove();
+			pros::delay(500);
+			flywheel_state = 0;
+		}
+		else{
 			expander1_piston.set_value(0);
 			expander2_piston.set_value(0);
+			side_piston.set_value(0);
+			side2_piston.set_value(0);
 		}
-		
 	}
 }

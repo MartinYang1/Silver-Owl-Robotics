@@ -25,6 +25,8 @@ pros::Optical optical_sensor(20);
 // pneumatics pistons
 pros::ADIDigitalOut expander1_piston(8);
 pros::ADIDigitalOut expander2_piston(3);
+pros::ADIDigitalOut side_piston(4);
+pros::ADIDigitalOut side2_piston(5);
 pros::ADIDigitalOut leveler(2);
 pros::ADIDigitalOut flywheel_piston(1,1);  // the gate for the flywheel
 
