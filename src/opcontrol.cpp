@@ -5,7 +5,7 @@
 #include "lib/scoring.hpp"
 
 void opcontrol() {
-	unsigned shootingSpeed = 2320;
+	unsigned shootingSpeed = 2200;
 	pros::Task regulateFlywheelSpeed(regulateFlywheel_o, &shootingSpeed);
 	expander1_piston.set_value(0);
 	expander2_piston.set_value(0);
@@ -15,7 +15,7 @@ void opcontrol() {
 	int intake_state=1;
 	int flywheel_state = 1;
 	while (true) {
-		
+		shootingSpeed = 2455;
 		int power = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)*-1;
 		int turnRate = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)*-1;
 		move(power - turnRate, power + turnRate);
@@ -40,19 +40,11 @@ void opcontrol() {
 			intake=127;
 		}
 		if (flywheel_state == 1){
-		if (master.get_digital(DIGITAL_R1))
- 		{
-			leveler.set_value(0);
-			shootingSpeed=3420;
-		}
-		else if (master.get_digital(DIGITAL_X))
-		{
-			leveler.set_value(1);
-			shootingSpeed = 2320;
-		}
+			shootingSpeed = 2455;
 		}
 		else{
 		flywheel = 0;
+		shootingSpeed = 0;
 		}
 		if(master.get_digital_new_press(DIGITAL_UP) && master.get_digital (DIGITAL_DOWN) && master.get_digital (DIGITAL_RIGHT) && master.get_digital (DIGITAL_LEFT))
 		{

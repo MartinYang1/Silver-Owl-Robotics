@@ -15,21 +15,23 @@ const double motorToFlywheel = 36;
  */
 const unsigned turn_roller(const int rate) {
     optical_sensor.set_led_pwm(100);
-    pros::delay(50);
+    pros::delay(100);
+    move(20, 20);
 
     unsigned short currHue = optical_sensor.get_hue();
-    
+    unsigned short stHue = optical_sensor.get_hue();
     unsigned timeElapsed = 0;
-    while ((currHue - 10 <= optical_sensor.get_hue() && optical_sensor.get_hue() <= currHue + 10) && timeElapsed < 2600) {
+    while ((stHue - 10 <= currHue && currHue <= stHue + 10) && timeElapsed < 1700) {
         roller = rate;
+        currHue = optical_sensor.get_hue();
         timeElapsed += 15;
         pros::delay(15);
     }
     roller = -rate;
-    pros::delay(180);
-    roller = MOTOR_BRAKE_BRAKE;
     optical_sensor.set_led_pwm(0);
-    pros::delay(50);
+    pros::delay(130);
+    roller = 0;
+    move(0, 0);
     return optical_sensor.get_hue();
 }
 

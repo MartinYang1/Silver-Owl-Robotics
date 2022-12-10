@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Indianna River",
+    "project_name": "Code Code",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -309,7 +309,7 @@
       }
     },
     "upload_options": {
-      "description": "Mall of America program, all autonomous and driver",
+      "description": "Regular Code",
       "icon": "clawbot",
       "slot": 1
     }

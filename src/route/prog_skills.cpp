@@ -23,7 +23,7 @@ void prog_skills() {
     }
     desiredSpeed = 2200;
     pros::delay(150);
-    shoot(1000);
+    shoot(1300);
 // first roller
     leveler.set_value(0);
     desiredSpeed = 3350;
@@ -32,17 +32,17 @@ void prog_skills() {
     move_straight(51, &center); turn_roller(100); delay(100); turn_roller(100);
 // Second Roller
     move_straight(-15.0, &center);
-    turn(-23, 23, 2, &center);
+    turn(-25, 25, 2, &center);
     move_straight(51, &center); turn_roller(100); delay(100); turn_roller(100);
 // Second Shot (and Pick up)
     intake = 127;
     move_straight(-2.0, &center);
-    turn(-23, 23, 237, &center);
+    turn(-25, 25, 237, &center);
     pros::delay(100);
     move_straight(49.0,43, &center);
     turn(30,-30, 320, &center);
     move_straight(2.5, &center);
-    shoot(1000);
+    shoot(1300);
 // Third Shot (and pick up)
     intake = 127;
     move_straight(-2.0, &center);
@@ -51,10 +51,10 @@ void prog_skills() {
     turn(-22,22, 225.5,&center);
     pros::delay(100);
     move_straight(67.0, 64.0, &center);
-    turn(-24,24, 177, &center);
+    turn(-25,25, 177, &center);
     pros::delay(100);
     move_straight(-20.0, -54.0, &center);
-    shoot(1000);
+    shoot(1300);
 // Third Roller
     move_straight(36.0, 54.0, &center);
     turn(-20,20, 273, &center);
