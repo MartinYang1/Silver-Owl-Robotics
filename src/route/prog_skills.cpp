@@ -25,14 +25,13 @@ void prog_skills() {
     pros::delay(150);
     shoot(1300);
 // first roller
-    desiredSpeed = 2700;
-    move_straight(42.0, &center);
-    turn(35, 0, 89, &center);
+    desiredSpeed = 2640;
+    move_straight(43.7, &center);
+    turn(35, 0, 91, &center);
     move_straight(51, &center); turn_roller2(90); 
 // Second Roller
-    intake = 127;
-    flywheel_piston.set_value(1);
     move_straight(-15.0, &center);
+    intake = 127;
     turn(-25, 25, 2, &center);
     move_straight(51, &center); turn_roller2(90);
     flywheel_piston.set_value(0);
@@ -58,12 +57,13 @@ void prog_skills() {
     move_straight(-20.0, -54.0, &center);
     shoot(1300);
 // Third Roller
-    move_straight(36.0, 54.0, &center);
-    turn(20,-20, 273, &center);
+    move_straight(38.0, 54.0, &center);
+    turn(21,-21, 273, &center);
     pros::delay(100);
     move_straight(51, &center); turn_roller2(90); 
 // Fourth Roller
     move_straight(-16.5, &center);
+    intake = 127;
     turn(-22, 22, 183, &center);
     move_straight(51, &center); turn_roller2(90); 
 // Fourth Shot
@@ -72,8 +72,8 @@ void prog_skills() {
     move_straight(-2.2, &center);
     turn(-23, 23, 55, &center);
     move_straight(36.0, 54.0, &center);
-    turn(-23, 23, 284, &center);
-    move_straight(-9.8, &center);
+    turn(-22, 22, 397, &center);
+    move_straight(-9.8, -55.0, &center);
     shoot(1000);
 // Fifth Shot
     intake = 127;

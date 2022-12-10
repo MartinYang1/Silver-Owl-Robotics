@@ -37,20 +37,20 @@ const unsigned turn_roller(const int rate) {
 const unsigned turn_roller2(const int rate) {
     optical_sensor.set_led_pwm(100);
     pros::delay(100);
-    move(18, 18);
+    move(12, 12);
 
     unsigned short currHue = optical_sensor.get_hue();
     unsigned short stHue = optical_sensor.get_hue();
     unsigned timeElapsed = 0;
     
    
-    while ((currHue >= 100) && timeElapsed < 2500) {
+    while ((currHue >= 100) && timeElapsed < 2300) {
         roller = rate;
         currHue = optical_sensor.get_hue();
         timeElapsed += 15;
-        pros::delay(15);
     }
     pros::delay(120);
+    timeElapsed = 0;
     while ((currHue <= 100) && timeElapsed < 3200) {
         roller = rate;
         currHue = optical_sensor.get_hue();
