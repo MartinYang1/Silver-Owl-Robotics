@@ -1,0 +1,18 @@
+{
+	"project": {
+		"name": "silver_owl_robotics",
+		"slot": 3,
+		"description": "Empty V5 C++ Project",
+		"platform": "V5",
+		"creationDate": "Thu, 02 May 2024 21:06:46 GMT",
+		"language": "cpp",
+		"sdkVersion": "V5_20240223_11_00_00",
+		"cpp": {
+			"includePath": []
+		}
+	},
+	"extension": {
+		"version": "0.5.0",
+		"json": 1
+	}
+}
