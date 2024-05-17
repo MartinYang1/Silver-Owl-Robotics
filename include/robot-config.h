@@ -18,6 +18,9 @@ extern motor PU;
 extern inertial Gyro;
 extern digital_out LeftBackWing;
 
+extern const double wheelDiam;
+extern const double wheelToMotorRatio;
+
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  * 

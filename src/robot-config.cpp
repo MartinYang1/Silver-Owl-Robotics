@@ -23,6 +23,10 @@ motor PU = motor(PORT3, ratio6_1, true);
 inertial Gyro = inertial(PORT20);
 digital_out LeftBackWing = digital_out(Brain.ThreeWirePort.G);
 
+// Important variables
+const double wheelDiam = 3.25;
+const double wheelToMotorRatio = 3.0 / 5 / 0.8;
+
 // VEXcode generated functions
 // define variable for remote controller enable/disable
 bool RemoteControlCodeEnabled = true;

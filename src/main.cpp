@@ -62,6 +62,7 @@ int JX;
 //LIB SECT.
 #include "math.h"
 #include "screen_gui.hpp"
+#include "routes/routes.hpp"
 
 //General Sect;
 //This section includes all general codes for drive and auto
@@ -693,10 +694,7 @@ if(ASV==4)// Elim-Steal
 
 if(ASV==5)// empty
 {
-   
-   LeftBackWing.set(true);
-   wait(500,msec);
-   LeftBackWing.set(false);
+   test();
 }
 
 
