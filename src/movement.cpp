@@ -5,6 +5,8 @@
 #include "helper_functions.hpp"
 #include "movement.hpp"
 
+#include <iostream>
+
 using namespace vex;
 
 int turninverse=1;//change this to -1 if turning is inversed
@@ -41,9 +43,9 @@ void Zeroing(bool dist, bool HDG)
 ChassisDataSet ChassisUpdate()
 {
   ChassisDataSet CDS;
-  CDS.Left=get_dist_travelled((LF.position(degrees)+LM.position(degrees)+LB.position(degrees))/3);
-  CDS.Right=get_dist_travelled((RF.position(degrees)+RM.position(degrees)+RB.position(degrees))/3);
-  CDS.Avg=get_dist_travelled((double)(CDS.Left+CDS.Right)/2);
+  CDS.Left=get_dist_travelled((LF.position(degrees)+LM.position(degrees)+LB.position(degrees))/3.0);
+  CDS.Right=get_dist_travelled((RF.position(degrees)+RM.position(degrees)+RB.position(degrees))/3.0);
+  CDS.Avg=(CDS.Left+CDS.Right)/2;
   CDS.Diff=CDS.Left-CDS.Right;
   CDS.HDG=Gyro.heading(degrees);
 
@@ -141,6 +143,7 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
 
   while(fabs(SensorVals.Avg) <= fabs(dist))
   {
+    //std::cout << SensorVals.Avg << " " << dist << std::endl;
 if(fabs(CSpeed)<fabs((double)Speed))
 {
   CSpeed+=Speed/AccT*0.02;

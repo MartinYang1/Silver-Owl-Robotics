@@ -1,6 +1,7 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
+extern int turninverse;
 extern int JB;
 extern int PB;
 extern int PX;

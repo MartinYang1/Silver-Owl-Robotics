@@ -12,6 +12,7 @@
 
 #include "screen_gui.hpp"
 #include "movement.hpp"
+#include "routes/routes.hpp"
 
 using namespace vex;
 
@@ -242,52 +243,7 @@ Zeroing(true,true);
 //can start editing if nessary
 if(ASV==1)//Quali close 6 triball auto 
 {
-  RunRoller(-100);
-  wait(80,msec);
-  RunRoller(100);
-  MoveEncoderPID(TestPara, -100 , 50 ,0.2,0,true);
-  MoveEncoderPID(TestPara, 100 , 560 ,0.2,0,true);
-  //TurnMaxTimePID(TestPara,-38,0.3,true);
-  RightBackWing.set(true);
-  MoveEncoderPID(TestPara, 80 , 365 ,0.5,-38,true);
-  //wait(100,msec);
-  RightBackWing.set(false);  
-  MoveEncoderPID(TestPara, 90 , 90 ,0.5,-38,true);
-  //TurnMaxTimePID(TestPara,-85,0.3,true);
-  MoveTimePID(TestPara, 100, 0.7,0.2,-85,true);
-  RunRoller(0);
-  TurnMaxTimePID(TestPara,90,0.5,true);
-  MoveTimePID(TestPara, -100, 0.7,0.2,90,true);
-  MoveEncoderPID(TestPara,100 , 140 ,0.2,90,true);
-  //TurnMaxTimePID(TestPara,16,0.2,true);
-  RunRoller(100);
-  MoveEncoderPID(TestPara,-100 , 850 ,0.3,20,true);//turn and grab first field ball
-  TurnMaxTimePID(TestPara,165,0.5,true);
-  RunRoller(-100);
-  MoveEncoderPID(TestPara,-100 , 145 ,0.3,165,true);
-  wait(100,msec);
-  RunRoller(100);
-  TurnMaxTimePID(TestPara, 44,0.5,true);
-  MoveEncoderPID(TestPara,-70 , 410 ,0.3,44,true);
-  TurnMaxTimePID(TestPara, 17,0.2,true);
-  RightBackWing.set(true);
-  wait(100,msec);
-  RunRoller(0);
-  MoveTimePID(TestPara,100 , 1 ,0.3,17,true);
-  MoveEncoderPID(TestPara,-100 , 65 ,0.3,0,true);
-  RightBackWing.set(false);
-  //TurnMaxTimePID(TestPara, -177,0.5,true);
-  //wait(100,msec);
-  MoveTimePID(TestPara,-100 , 1.3 ,0.3,179,true);
-  MoveEncoderPID(TestPara,100 , 200 ,0.3,179,true);
-  // Wing.set(true);
-  // RunRoller(0);
-  // MoveTimePID(TestPara, -100, 1,0.2,-177,true);
-  // Wing.set(false);
-  // MoveEncoderPID(TestPara,100 , 200 ,0.3,-175,true);
-  // RunRoller(0);
-
-  //共产党好！！！
+  test();
 }
 
 if(ASV==2)// awp mid steal
@@ -295,7 +251,7 @@ if(ASV==2)// awp mid steal
   RunRoller(-100);
   wait(70,msec);
   RunRoller(100);
-  MoveEncoderPID(TestPara, -100 , 770 ,0.2 ,12,true);
+  MoveEncoderPID(TestPara, -100 , 22 ,0.2 ,12,true);
   wait(100,msec);
   RunRoller(0);
   MoveEncoderPID(TestPara, 100 , 400 ,0.2 ,10,true);
@@ -377,7 +333,7 @@ if(ASV==4)// Elim-Steal
 
 if(ASV==5)// empty
 {
-   test();
+   //test();
 }
 
 
