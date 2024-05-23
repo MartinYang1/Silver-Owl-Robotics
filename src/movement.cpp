@@ -186,6 +186,12 @@ void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
   {
   SensorVals=ChassisUpdate();
   LGV=SensorVals.HDG-DeltaAngle;
+  if(LGV>180) LGV=LGV-360;
+  PVal=KVals.kp*LGV;
+  IVal=IVal+KVals.ki*LGV*0.02;
+  DVal=KVals.kd*(LGV-PrevE);
+
+  Correction=PVal+IVal+DVal/0.02;
 
   Move(-CSpeed-Correction,-CSpeed+Correction);
   PrevE=LGV;
