@@ -7,6 +7,9 @@ void test() {
 
     MoveEncoderPID(TestPara, -100 , 24 ,0.2,0,true);
     TurnMaxTimePID(TestPara, 90, 0.4, true);
-    MoveEncoderPID(TestPara, 80 , 40 ,0.2,0,true);
+    MoveEncoderPID(TestPara, 80 , 10 ,0.2,90,true);
+    TurnMaxTimePID(TestPara, 60, 0.4, true);
+    MoveEncoderPID(TestPara, -50 , 10 ,0.2,60,true);
+
     //MoveEncoderPID(TestPara, 100 , 560 ,0.2,0,true);
 }
