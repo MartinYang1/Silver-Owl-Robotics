@@ -128,6 +128,15 @@ PU.spin(forward,(double)Pow/100.0*10.1,volt);
 }
 
 int PrevE;//Error at t-1
+
+/** Moves the robot forward or backward. Negative speed moves
+ * the robot forward. Positive value moves it backward. (Ik it's fucked up)
+ * @param KVals the PID constants
+ * @param Speed the speed, from -100 to 100
+ * @param dist distance travelled, in inches
+ * @param ABSHDG absolute heading of the robot
+ * @param brake Brake at end, or coast
+ */
 void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double ABSHDG,bool brake){
   double CSpeed=0;
   Zeroing(true,false);
@@ -169,6 +178,13 @@ if(fabs(CSpeed)<fabs((double)Speed))
   else CStop();
 }
 
+/** Moves the robot forward or backward. Negative speed moves
+ * the robot forward. Positive value moves it backward. (Ik it's fucked up)
+ * @param KVals the PID constants
+ * @param DeltaAngle the absolute heading to turn to
+ * @param TE time to calculate turn (not time to turn)
+ * @param brake Brake at end, or coast
+ */
 void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
   double CSpeed=0;
   Zeroing(true,false);
