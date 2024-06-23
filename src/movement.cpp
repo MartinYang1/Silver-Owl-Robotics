@@ -134,6 +134,7 @@ int PrevE;//Error at t-1
  * @param KVals the PID constants
  * @param Speed the speed, from -100 to 100
  * @param dist distance travelled, in inches
+ * @param AccT time to max speed (s)
  * @param ABSHDG absolute heading of the robot
  * @param brake Brake at end, or coast
  */
