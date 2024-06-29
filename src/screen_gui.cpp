@@ -1,7 +1,7 @@
 #include "screen_gui.hpp"
 #include "vex.h"
 
-void DisplayASL(void)
+void DisplayAutoSelector(void)
 {
 
   Brain.Screen.clearScreen();
@@ -73,15 +73,15 @@ void DisplayWords(void)
 /*  function is only called once after the V5 has been powered on and        */
 /*  not every time that the robot is disabled.                               */
 /*---------------------------------------------------------------------------*/
-int ASV;
+int AutoSelectorVal;
 
 void UpdateDynamic(void)
 {
-  DisplayASL();
+  DisplayAutoSelector();
   DisplayWords();
   Brain.Screen.setFillColor("#39FF14");
 Brain.Screen.setPenColor(black);
-if(ASV==1){
+if(AutoSelectorVal==1){
 Brain.Screen.drawRectangle(1,25,100,50);
   Brain.Screen.setCursor(3,3);
   Brain.Screen.print("6 Ball");
@@ -98,7 +98,7 @@ Brain.Screen.setFont(monoM);
 
 }
 
-if(ASV==2){
+if(AutoSelectorVal==2){
 Brain.Screen.drawRectangle(375,25,100,50);
     Brain.Screen.setCursor(3,40);
   Brain.Screen.print("StealAWP");
@@ -115,7 +115,7 @@ Brain.Screen.setFont(monoM);
   Brain.Screen.setFillColor("#39FF14");
 }
 
-if(ASV==3){
+if(AutoSelectorVal==3){
   Brain.Screen.drawRectangle(1,100,100,50);
   Brain.Screen.setCursor(7,3);
   Brain.Screen.print("5 Ball");
@@ -132,7 +132,7 @@ Brain.Screen.setFont(monoM);
   Brain.Screen.setFillColor("#39FF14");
 }
 
-if(ASV==4){
+if(AutoSelectorVal==4){
 Brain.Screen.drawRectangle(375,100,100,50);
   Brain.Screen.setCursor(7,40);
   Brain.Screen.print("Elim-Steal");
@@ -150,7 +150,7 @@ Brain.Screen.setFont(monoM);
 
 }
 
-if(ASV==5){
+if(AutoSelectorVal==5){
   Brain.Screen.drawRectangle(1,175,100,50);
       Brain.Screen.setCursor(11,3);
   Brain.Screen.print("GS-AWP");
@@ -167,7 +167,7 @@ Brain.Screen.setFont(monoM);
 
 }
 
-if(ASV==6){
+if(AutoSelectorVal==6){
 Brain.Screen.drawRectangle(375,175,175,50);
 Brain.Screen.setCursor(11,40);
 Brain.Screen.print("ML-AWP");
@@ -183,7 +183,7 @@ Brain.Screen.setFont(monoM);
 
   }
 
-if(ASV==7){
+if(AutoSelectorVal==7){
   Brain.Screen.drawRectangle(187,175,100,50);
   Brain.Screen.setCursor(11,22);
   Brain.Screen.print("Skills");

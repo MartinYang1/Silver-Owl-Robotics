@@ -9,7 +9,7 @@
 
 using namespace vex;
 
-int turninverse=1;//change this to -1 if turning is inversed
+int turninverse=-1;//change this to -1 if turning is inversed
 
 int JB;
 int PB;
@@ -168,7 +168,7 @@ if(fabs(CSpeed)<fabs((double)Speed))
 
   Correction=PVal+IVal+DVal/0.02;
 
-  Move(-CSpeed-Correction,-CSpeed+Correction);
+  Move(CSpeed-Correction,CSpeed+Correction);
   PrevE=LGV;
   wait(20, msec);
   }
@@ -210,7 +210,7 @@ void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
 
   Correction=PVal+IVal+DVal/0.02;
 
-  Move(-CSpeed-Correction,-CSpeed+Correction);
+  Move(CSpeed-Correction,CSpeed+Correction);
   PrevE=LGV;
   wait(20, msec);
   }

@@ -1,10 +1,9 @@
 #ifndef SCREEN_GUI_H
 #define SCREEN_GUI_H
 
-extern int ASV;
+extern int AutoSelectorVal;
 
-extern void DisplayASL();
+extern void DisplayAutoSelector();
 extern void DisplayWords();
 extern void UpdateDynamic();
-
 #endif
