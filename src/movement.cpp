@@ -112,21 +112,6 @@ Roller.setMaxTorque(100,percent);
 Roller.spin(forward,(double)val/100.0*12,volt);
 }
 
-void BreakArm()
-{
-LM.setStopping(hold);
-RM.setStopping(hold);
-LM.stop();
-RM.stop();
-}
-
-
-void RunPuncher(int Pow)
-{
-PU.setMaxTorque(100,percent);
-PU.spin(forward,(double)Pow/100.0*10.1,volt);
-}
-
 int PrevE;//Error at t-1
 
 /** Moves the robot forward or backward. Negative speed moves

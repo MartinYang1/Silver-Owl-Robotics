@@ -2,7 +2,7 @@
 #include "../helper_functions.hpp"
 #include "vex.h"
 //PID Straight and turn arguments:
-// MoveEncoderPID(TestPara, motor speed, encoder travel distance (encoder degrees), time to full speed(sec), relative heading(to starting position), braking?)
+// MoveEncoderPID(TestPara, motor speed, encoder travel distance (inches), time to full speed(sec), relative heading(to starting position), braking?)
 // TurnMaxTimePID(TestPara, Desired Heading -180 to 180, time out to calculate turn, Braking?)
 // MoveTimePID(TestPara, motor speed, time traveled (sec), time to full speed, heading, false);
 
@@ -10,12 +10,26 @@ void test() {
     // declare initial conditions
     //PIDDataSet TestPara={4,0.1,0.2};
     PIDDataSet TestPara={1.5,0.1,0.15};
-    MoveEncoderPID(TestPara, 100 , 65 ,0.4,0,true);
+    Clamp.set(false);
+    Tilt.set(false);
+    wait(1000,msec);
+    MoveEncoderPID(TestPara, 100, 31 , 0.4,0,true);
+    MoveEncoderPID(TestPara, 30, 7, 0.4,0,true);
+    Clamp.set(true);
+    wait(1000,msec);
+    MoveEncoderPID(TestPara, 100, 0.2, 0.4,0, true);
+    Tilt.set(true);
+    MoveEncoderPID(TestPara, 100, 5, 0.4, 0, true);
+    TurnMaxTimePID(TestPara, -135, 0.4, true);
+    RunRoller(-100);
+    wait(1000,msec);
+    MoveEncoderPID(TestPara, -100, 24, 0.4, -105, true);
+    /*MoveEncoderPID(TestPara, 100 , 65 ,0.4,0,true);
     TurnMaxTimePID(TestPara, 90, 0.4, true);
     MoveEncoderPID(TestPara, 100 , 50 ,0.4,90,true);
     wait(1000,msec);
     MoveEncoderPID(TestPara, -100 , 90 ,0.4,90,true);
-        MoveEncoderPID(TestPara, -100 , 90 ,0.4,0,true);
+        MoveEncoderPID(TestPara, -100 , 90 ,0.4,0,true);*/
 
     // // moves forward
     // MoveEncoderPID(TestPara, -100 , 24 ,0.2,0,true);
@@ -24,7 +38,7 @@ void test() {
     // // Move backwards at 80 power, 10 inches, 0.2s to max speed, 
     // MoveEncoderPID(TestPara, 80 , 10 ,0.2,90,true);
     // // Turn to 60 degrees, 0.4s for calculations, braking
-    // TurnMaxTimePID(TestPara, 60, 0.4, true);
+    // TurnMaxTimePID(TestPara, 0, 0.4, true);
     // // Move foward at 50 power, for 10 inches, 0.2 to accelerate to max speed, absolute heading, braking
     // MoveEncoderPID(TestPara, -50 , 10 ,0.2,60,true);
 

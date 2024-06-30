@@ -216,20 +216,7 @@ Brain.Screen.print("AUTO CONFIRMED");
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  /*int LGV;
-  int ABSHDG=60;
-  Brain.Screen.clearScreen();
-    Brain.Screen.setCursor(5,17);
-    ChassisDataSet TCDS;
-    while(true){
-      TCDS=ChassisUpdate();
-          Brain.Screen.setCursor(5,20);
-        Brain.Screen.print("%d-------------",(int)LGV);
-   LGV=TCDS.HDG-ABSHDG;
-  if(LGV>180) LGV=LGV-360;
-    }*/
   
-
 //PID Straight and turn arguments:
 // MoveEncoderPID(TestPara, motor speed, encoder travel distance (inches), time to full speed(sec), relative heading(to starting position), braking?)
 // TurnMaxTimePID(TestPara, Desired Heading -180 to 180, time out to calculate turn, Braking?)
@@ -239,9 +226,8 @@ void autonomous(void) {
 PIDDataSet TestPara={4,0.1,0.2};
 Zeroing(true,true);
 
-
-
 //can start editing if nessary
+//Put Auto route function into if statements to use autoselector
 if(AutoSelectorVal==1)//Quali close 6 triball auto 
 {
   test();
@@ -308,7 +294,7 @@ int ATask(void)
   double pow;
     while(true)
   {
-    pow=((Controller1.ButtonR2.pressing()-Controller1.ButtonR1.pressing())*100);
+    pow=((Controller1.ButtonR2.pressing()-Controller1.ButtonR1.pressing())*100);//Calculate intake power, if button pressed, button.pressing returns 1
     RunRoller(-pow);
     
   
@@ -325,7 +311,7 @@ int PTask(void)
 {
     while(true)
     {
-
+      //Toggles Tilt
     if(XTaskActiv==0&&Controller1.ButtonX.pressing()&&ButtonPressingX==0)
     {
       ButtonPressingX=1;
@@ -341,8 +327,8 @@ int PTask(void)
       XTaskActiv=0;
       Tilt.set(false);
     }
-
-
+    //----------------------
+      //Toggles Clamp
     if(YTaskActiv==0&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
     {
       ButtonPressingY=1;
@@ -375,7 +361,7 @@ int PTask(void)
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
-  EXIT=true;
+  EXIT=true;//Force Exit Autosel once drivercontrol began.
   // User control code here, inside the loop
   while (1) {
     // This is the main execution loop for the user control program.
