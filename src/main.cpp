@@ -36,6 +36,8 @@ bool SP;
 bool EXIT;
 void pre_auton(void) {
    EXIT=false;
+  Tilt.set(true);
+  Clamp.set(true);
   PX=0;
   JX=0;
   AutoSelectorVal=0;
@@ -235,7 +237,7 @@ if(AutoSelectorVal==1)//Quali close 6 triball auto
 
 if(AutoSelectorVal==2)// awp mid steal
 {
-
+  test2();
 
 }
 
